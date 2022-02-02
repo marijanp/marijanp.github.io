@@ -7,7 +7,7 @@ let
   haskellPkgs = pkgs.haskell-nix.cabalProject {
     src = pkgs.haskell-nix.haskellLib.cleanGit {
       name = "marijanp-github-io";
-      src = ./marijanp.github.io;
+      src = ./.;
     };
     compiler-nix-name = "ghc8107";
   };
