@@ -1,7 +1,10 @@
-<ul>
+<table class="table table-hover">
+  <tbody>
     $for(posts)$
-        <li>
-            <a href="$url$">$title$</a> - $date$
-        </li>
+      <tr">
+        <td>$date$</td>
+        <td><a href="$url$">$title$</a></td>
+      </tr>
     $endfor$
-</ul>
+  </tbody>
+</table>
