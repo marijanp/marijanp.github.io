@@ -2,14 +2,14 @@
   description = "marijanp's website";
 
   inputs = {
+    flake-utils.url = "github:numtide/flake-utils";
     haskellNix.url = "github:input-output-hk/haskell.nix";
     nixpkgs.follows = "haskellNix/nixpkgs-2111";
   };
 
-  outputs = { self, nixpkgs, haskellNix }:
-    let
-      pkgs = import nixpkgs {
-        system = "x86_64-linux";
+  outputs = { self, flake-utils, nixpkgs, haskellNix }:
+    flake-utils.lib.eachSystem [ "x86_64-darwin" ] (system:
+      let
         overlays = [ haskellNix.overlay (final: prev: {
           marijanp = final.haskell-nix.cabalProject {
             src = ./.;
@@ -21,10 +21,11 @@
             };
           };
         })];
-      };
-      flake = pkgs.marijanp.flake { };
-    in flake // {
-      devShells.x86_64-linux.marijanp = flake.devShell;
-      defaultPackage.x86_64-linux = flake.packages."marijanp-github-io:exe:site";
-    };
+        pkgs = import nixpkgs { inherit system overlays; };
+        flake = pkgs.marijanp.flake { };
+      in flake // {
+        devShells.marijanp = flake.devShell;
+        defaultPackage = flake.packages."marijanp-github-io:exe:site";
+      }
+    );
 }
