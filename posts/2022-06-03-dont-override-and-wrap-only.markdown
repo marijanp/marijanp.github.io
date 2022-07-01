@@ -28,7 +28,7 @@ If `demo` itself was not changed in any way but `demo-wrapped` was modified e.g.
 To avoid this, a much better approach is to do the following:
 ```
 demo-wrapped-better = pkgs.runCommand "demo-wrapped-better" {
-  buildInputs = [ pkgs.makeWrapper ];
+    buildInputs = [ pkgs.makeWrapper ];
   }
   ''
       mkdir -p $out/bin
