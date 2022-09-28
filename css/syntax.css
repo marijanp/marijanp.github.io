@@ -1,5 +1,9 @@
-code {
+code, pre, kbd, samp {
   font-family: 'Roboto Mono', monospace;
+}
+
+pre {
+  max-width: 74ch;
 }
 
 pre code {
