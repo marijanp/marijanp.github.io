@@ -10,6 +10,7 @@ pre code {
   background-color: #ecf0f1;
   /* border: 5px solid2c3e50; */
   display: block;
+  overflow: auto;
   padding: 8px;
   margin-bottom: 2em;
 }
