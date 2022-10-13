@@ -1,8 +1,8 @@
 {
-  description = "marijanp's website";
+  description = "marijan's website";
 
   inputs = {
-    haskellNix.url = "github:input-output-hk/haskell.nix/c6b80fe119af19c9c40ffadd41579ff8db675aab";
+    haskellNix.url = "github:input-output-hk/haskell.nix/112669d1ba96fa2a1c75478d12d6f38ee2bd3ee6";
     nixpkgs.follows = "haskellNix/nixpkgs-unstable";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -20,9 +20,9 @@
           overlays = [
             haskellNix.overlay
             (final: prev: {
-              marijanp = final.haskell-nix.cabalProject {
+              website = final.haskell-nix.cabalProject {
                 src = ./.;
-                compiler-nix-name = "ghc923";
+                compiler-nix-name = "ghc924";
                 shell.tools = {
                   cabal = { };
                   hlint = { };
@@ -32,12 +32,12 @@
             })
           ];
           pkgs = import nixpkgs { inherit system overlays; };
-          haskellNixFlake = pkgs.marijanp.flake { };
+          haskellNixFlake = pkgs.website.flake { };
         in
         # remove devShell as it's not supported by flake-parts
-        pkgs.lib.recursiveUpdate (builtins.removeAttrs haskellNixFlake [ "devShell" ]) {
-          packages.default = haskellNixFlake.packages."marijanp-github-io:exe:site";
-          devShells.marijanp = haskellNixFlake.devShell;
+        pkgs.lib.recursiveUpdate (builtins.removeAttrs haskellNixFlake [ "devShell" "hydraJobs" ]) {
+          packages.default = haskellNixFlake.packages."website:exe:site";
+          devShells.website = haskellNixFlake.devShell;
         };
     };
 }
