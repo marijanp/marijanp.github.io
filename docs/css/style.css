@@ -1,1 +1,1 @@
-main :is(p,ul,ol,dl){max-width:70ch}
+main :is(p,ul,ol,dl,table){max-width:70ch}
