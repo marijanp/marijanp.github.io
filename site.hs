@@ -14,6 +14,10 @@ main = hakyllWith (defaultConfiguration { destinationDirectory = "docs" }) $ do
         route   idRoute
         compile compressCssCompiler
 
+    match "js/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+
     match (fromList ["about.markdown"]) $ do
         route   $ setExtension "html"
         compile $ pandocCompiler
