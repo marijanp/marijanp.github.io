@@ -36,6 +36,24 @@
         in
         # remove devShell as it's not supported by flake-parts
         pkgs.lib.recursiveUpdate (builtins.removeAttrs haskellNixFlake [ "devShell" "hydraJobs" ]) {
+          apps.srht-deploy = {
+            type = "app";
+            program = "${pkgs.writeShellApplication {
+              name = "srht-deploy";
+              runtimeInputs = [ pkgs.gnutar pkgs.gnupg pkgs.curl ];
+              text = ''
+                echo "Decrypting access-token"
+                TOKEN=$(gpg --decrypt ${./secrets/sourcehut-pages-access-token.gpg})
+                echo "Compressing $1"
+                tar -C "$1" -cvz . > site.tar.gz
+                echo "Uploading ..."
+                curl --oauth2-bearer "$TOKEN" \
+                  -Fcontent=@site.tar.gz \
+                  https://pages.sr.ht/publish/marijan.srht.site
+                echo "Done"
+              '';
+            }}/bin/srht-deploy";
+          };
           packages.default = haskellNixFlake.packages."website:exe:site";
           devShells.website = haskellNixFlake.devShell;
         };
