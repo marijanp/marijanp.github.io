@@ -49,7 +49,7 @@
                 echo "Uploading ..."
                 curl --oauth2-bearer "$TOKEN" \
                   -Fcontent=@site.tar.gz \
-                  https://pages.sr.ht/publish/marijan.srht.site
+                  https://pages.sr.ht/publish/marijan.pro
                 echo "Done"
               '';
             }}/bin/srht-deploy";
