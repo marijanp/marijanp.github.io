@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Marijan's homepage - haskell.nix - How to reliably add runtime dependencies</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar nav-transparent navbar-expand-lg navbar-light">
+        <div class="container">
+          <a class="navbar-brand" title="marijan" href="https://marijan.pro/">
+            <!-- <img src="/images/haskell-logo.png" height="40px"> -->
+            marijan
+          </a>
+          <!-- mobile navbar toggle button -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <!-- navigation items -->
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item"><a class="nav-link" href="../">Home</a></li>
+              <li class="nav-item"><a class="nav-link" href="../about.html">About</a></li>
+              <li class="nav-item"><a class="nav-link" href="../archive.html">Archive</a></li>
+            </ul>
+            <!-- external links -->
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item" style="font-size: 22px">
+                <a href="https://git.sr.ht/~marijan/" class="ms-3 text-dark"><i class="far fa-circle"></i></a>
+              </li>
+              <li class="nav-item" style="font-size: 22px">
+                <a href="https://github.com/marijanp" class="ms-3 text-dark"><i class="fab fa-github"></i></a>
+              </li>
+              <li class="nav-item" style="font-size: 22px">
+                <a href="https://linkedin.com/in/marijanp" class="ms-3 text-dark btn-linkedin"><i class="fab fa-linkedin"></i></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container">
+      <main role="main">
+        <h1>haskell.nix - How to reliably add runtime dependencies</h1>
+        <article>
+  <section class="header">
+    Posted on October 19, 2022
+    
+      by Marijan
+    
+  </section>
+  <br>
+  <section>
+    <p>Assuming you use <code>haskell.nix</code> and have created a Haskell program that requires another executable to be present in the environment i.e. the <code>PATH</code> variable.</p>
+<p>Using Nix, you can <a href="https://nixos.wiki/wiki/Nix_Cookbook#Wrapping_packages">wrap</a> your executable (<a href="../posts/2022-06-03-dont-override-and-wrap-only.html">related post</a>), which is the standard technique to ensure that your program will be distributed together with that executable.</p>
+<p>This standard approach, in combination with <code>haskell.nix</code>, could look like this:</p>
+<pre><code>{
+  description = &quot;naive&quot;;
+
+  inputs = {
+    flake-parts.url = &quot;github:hercules-ci/flake-parts&quot;;
+    haskellNix.url = &quot;github:input-output-hk/haskell.nix/112669d1ba96fa2a1c75478d12d6f38ee2bd3ee6&quot;;
+    nixpkgs.follows = &quot;haskellNix/nixpkgs-unstable&quot;;
+  };
+
+  outputs = { self, flake-parts, nixpkgs, haskellNix, ... }:
+    flake-parts.lib.mkFlake { inherit self; } {
+      systems = [ &quot;x86_64-linux&quot; ];
+      perSystem = { config, self', inputs', pkgs, system, ... }:
+        let
+          projectName = &quot;example&quot;;
+
+          overlays = [
+            haskellNix.overlay
+            (final: prev: {
+              ${projectName} = final.haskell-nix.cabalProject {
+                src = ../example;
+                compiler-nix-name = &quot;ghc924&quot;;
+              };
+            })
+          ];
+          pkgs = import nixpkgs { inherit system overlays; };
+          haskellNixFlake = pkgs.${projectName}.flake { };
+
+          wrappedExample = pkgs.runCommand &quot;demo-wrapped-better&quot;
+            {
+              buildInputs = [ pkgs.makeWrapper ];
+            }
+            ''
+              mkdir -p $out/bin
+              makeWrapper ${self'.packages.&quot;example:exe:example&quot;}/bin/example $out/bin/example \
+                --set PATH ${pkgs.lib.makeBinPath [ pkgs.hello ]}
+            '';
+        in
+        # remove attributes which are not supported by flake-parts
+        pkgs.lib.recursiveUpdate
+          (builtins.removeAttrs haskellNixFlake [ &quot;devShell&quot; &quot;hydraJobs&quot; ])
+          {
+            devShells.default = haskellNixFlake.devShell;
+
+            apps.example = {
+              type = &quot;app&quot;;
+              program = &quot;${wrappedExample}/bin/example&quot;;
+            };
+          };
+    };
+}</code></pre>
+<p>We unify the <code>haskell.nix</code>-generated <code>flake</code> attribute set that contains: the generated library, executable, and test outputs, with our flake output attribute set, which in turn outputs the wrapped app called <code>example</code>.</p>
+<p>Running <code>nix flake show --allow-input-from-derivation</code> we get the following output:</p>
+<pre><code>├───apps
+│   └───x86_64-linux
+│       ├───example: app
+│       ├───&quot;example:exe:example&quot;: app
+│       └───&quot;example:test:example-test&quot;: app
+├───checks
+│   └───x86_64-linux
+│       └───&quot;example:test:example-test&quot;: derivation 'example-test-example-test-0.1.0.0-check'
+├───darwinModules: unknown
+├───devShells
+│   └───x86_64-linux
+│       └───default: development environment 'ghc-shell-for-example'
+├───formatter
+├───legacyPackages
+│   └───x86_64-linux omitted (use '--legacy' to show)
+├───nixosConfigurations
+├───nixosModules
+├───overlays
+└───packages
+    └───x86_64-linux
+        ├───&quot;example:exe:example&quot;: package 'example-exe-example-0.1.0.0'
+        ├───&quot;example:lib:example&quot;: package 'example-lib-example-0.1.0.0'
+        └───&quot;example:test:example-test&quot;: package 'example-test-example-test-0.1.0.0'</code></pre>
+<p>These flake outputs we get from <code>haskell.nix</code> are desirable as we don’t want to define everything ourselves. And this brings the problem to the surface when we use the standard approach to wrap our executable: take a closer look at the outputs!</p>
+<p>Some flake outputs are not wrapped with the required runtime dependencies, namely <code>apps.x86_64-linux."example:exe:example"</code> and <code>packages.x86_64-linux."example:exe:example"</code>.</p>
+<p>Since we do not want users to accidentally use one of the output executables without all the required runtime dependencies, we would need to replace all the unwrapped executable outputs with the wrapped executable.
+That means removing the attribute from <code>haskell.nix's</code> flake outputs and redefining them in our flake outputs.</p>
+<p>This process of removing and adding new outputs is very error-prone. And it gets tedious the more apps our potentially huge monorepo exports. It would be better if <code>haskell.nix</code> would take our runtime dependencies into account when generating the flake outputs.</p>
+<p>Fortunately, we can do that using <code>haskell.nix's</code> module options:</p>
+<pre><code>{
+  description = &quot;better&quot;;
+
+  inputs = {
+    flake-parts.url = &quot;github:hercules-ci/flake-parts&quot;;
+    flake-parts.inputs.nixpkgs.follows = &quot;nixpkgs&quot;;
+    haskellNix.url = &quot;github:input-output-hk/haskell.nix/112669d1ba96fa2a1c75478d12d6f38ee2bd3ee6&quot;;
+    nixpkgs.follows = &quot;haskellNix/nixpkgs-unstable&quot;;
+  };
+
+  outputs = { self, flake-parts, nixpkgs, haskellNix, ... }:
+    flake-parts.lib.mkFlake { inherit self; } {
+      systems = [ &quot;x86_64-linux&quot; ];
+      perSystem = { config, self', inputs', pkgs, system, ... }:
+        let
+          projectName = &quot;example&quot;;
+
+          overlays = [
+            haskellNix.overlay
+            (final: prev: {
+              ${projectName} = final.haskell-nix.cabalProject {
+                src = ../example;
+                compiler-nix-name = &quot;ghc924&quot;;
+                modules = [
+                  {
+                    packages = {
+                      example.components.exes.example = {
+                        build-tools = [ pkgs.makeWrapper ];
+                        postInstall = ''
+                          wrapProgram $out/bin/example --set PATH ${pkgs.lib.makeBinPath [ pkgs.hello ]}
+                        '';
+                      };
+                    };
+                  }
+                ];
+              };
+            })
+          ];
+          pkgs = import nixpkgs { inherit system overlays; };
+          haskellNixFlake = pkgs.${projectName}.flake { };
+        in
+        pkgs.lib.recursiveUpdate
+          (builtins.removeAttrs haskellNixFlake [ &quot;devShell&quot; &quot;hydraJobs&quot; ]) # remove attributes which are not supported by flake-parts
+          {
+            devShells.default = haskellNixFlake.devShell;
+          };
+    };
+}</code></pre>
+<p>This way, the generated <code>haskell.nix</code> flake output will contain our wrapped executables reliably without the extra work of redefining outputs.</p>
+<p>The working flakes and the <code>example</code> Cabal package can be found <a href="https://git.sr.ht/~marijan/website/tree/main/item/examples/haskell-nix/wrap">here</a>.</p>
+  </section>
+</article>
+
+      </main>
+    </div>
+
+    <footer class="py-3 my-4 border-top"> 
+      <div class="container d-flex flex-wrap justify-content-between align-items-center">
+        <div class="col-md-4 d-flex align-items-center">
+          <div>
+            <h3>
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International" class="text-dark" style="text-decoration: none;">
+                <i class="fa-brands fa-creative-commons"></i>
+                <i class="fa-brands fa-creative-commons-by"></i>
+                <i class="fa-brands fa-creative-commons-nc"></i>
+                <i class="fa-brands fa-creative-commons-sa"></i>
+              </a>
+            </h3>
+            Except where otherwise noted, the content on this site is licenced under <a rel="license" itemprop="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"><abbr itemprop="license" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International">CC BY-NC-SA 4.0</abbr></a>. Attribute to <strong itemprop="author">Marijan</strong> including a link to this </a><a href="https://marijan.pro/">site</a>.
+          </div>
+        </div>
+        <div class="nav col-md-4 justify-content-end">
+          <div>
+          Get connected:
+          <ul class="list-unstyled d-flex">
+            <li class="nav-item" style="font-size: 22px">
+              <a href="https://git.sr.ht/~marijan/" class="text-dark"><i class="far fa-circle"></i></a>
+            </li>
+            <li class="nav-item" style="font-size: 22px">
+              <a href="https://github.com/marijanp" class="ms-3 text-dark"><i class="fab fa-github"></i></a>
+            </li>
+            <li class="nav-item" style="font-size: 22px">
+              <a href="https://linkedin.com/in/marijanp" class="ms-3 text-dark btn-linkedin"><i class="fab fa-linkedin"></i></a>
+            </li>
+          </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script defer src="../js/fontawesome.min.js"></script>
+</html>

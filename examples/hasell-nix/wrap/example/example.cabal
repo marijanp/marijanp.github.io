@@ -1,0 +1,62 @@
+cabal-version:      2.4
+name:               example
+version:            0.1.0.0
+
+author:             Marijan Petričević
+maintainer:         marijan.petricevic94@gmail.com
+
+library
+  default-language: Haskell2010
+  ghc-options:
+    -Wall -Werror -Wcompat -fwarn-redundant-constraints
+    -fwarn-incomplete-uni-patterns -fwarn-tabs
+    -fwarn-incomplete-record-updates -fwarn-identities
+    -fplugin=Polysemy.Plugin -fno-warn-missing-home-modules
+
+  hs-source-dirs:   src
+  exposed-modules:
+    MyLib
+
+  build-depends:
+    , base
+    , polysemy
+    , polysemy-plugin
+
+executable example
+  default-language: Haskell2010
+  ghc-options:
+    -Wall -Werror -Wcompat -fwarn-redundant-constraints
+    -fwarn-incomplete-uni-patterns -fwarn-tabs
+    -fwarn-incomplete-record-updates -fwarn-identities -threaded
+    -fplugin=Polysemy.Plugin -fno-warn-missing-home-modules -rtsopts
+    -with-rtsopts=-N +RTS -H2G -A32M -RTS
+
+  hs-source-dirs:   app
+  main-is:          Main.hs
+
+  build-depends:
+    , example
+    , base
+    , polysemy
+    , polysemy-plugin
+    , process
+
+test-suite example-test
+  default-language: Haskell2010
+  ghc-options:
+    -Wall -Werror -Wcompat -fwarn-redundant-constraints
+    -fwarn-incomplete-uni-patterns -fwarn-tabs
+    -fwarn-incomplete-record-updates -fwarn-identities -threaded
+    -fplugin=Polysemy.Plugin -fno-warn-missing-home-modules -rtsopts
+    -with-rtsopts=-N +RTS -H2G -A32M -RTS
+
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   test
+  main-is:          MyLibTest.hs
+  build-depends:
+    , example
+    , base
+    , hspec
+    , polysemy
+    , polysemy-plugin
+
