@@ -2,10 +2,6 @@ code, pre, kbd, samp {
   font-family: 'Roboto Mono', monospace;
 }
 
-pre {
-  max-width: 74ch;
-}
-
 pre code {
   background-color: #ecf0f1;
   /* border: 5px solid2c3e50; */
