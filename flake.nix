@@ -2,40 +2,28 @@
   description = "marijan's website";
 
   inputs = {
-    haskellNix.url = "github:input-output-hk/haskell.nix/112669d1ba96fa2a1c75478d12d6f38ee2bd3ee6";
-    nixpkgs.follows = "haskellNix/nixpkgs-unstable";
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    horizon-platform.url = "git+https://gitlab.homotopic.tech/horizon/horizon-platform";
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = { self, flake-parts, nixpkgs, haskellNix, ... }:
+  outputs = { self, flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit self; } {
       systems = [ "x86_64-linux" ];
       imports = [
       ];
       perSystem = { config, self', inputs', pkgs, system, ... }:
         let
-          overlays = [
-            haskellNix.overlay
-            (final: prev: {
-              website = final.haskell-nix.cabalProject {
-                src = ./.;
-                compiler-nix-name = "ghc924";
-                shell.tools = {
-                  cabal = { };
-                  hlint = { };
-                  haskell-language-server = { };
-                };
-              };
-            })
-          ];
-          pkgs = import nixpkgs { inherit system overlays; };
-          haskellNixFlake = pkgs.website.flake { };
+          haskellPackages = 
+            with pkgs.haskell.lib.compose; inputs'.horizon-platform.legacyPackages.extend
+              (self: _: {
+                lrucache = self.callHackage "lrucache" "1.2.0.1" { };
+                time-locale-compat = self.callHackage "time-locale-compat" "0.1.1.5" { };
+                hakyll = doJailbreak (self.callHackage "hakyll" "4.15.1.1" { });
+                website = self.callCabal2nix "website" ./. { };
+              });
         in
-        # remove devShell as it's not supported by flake-parts
-        pkgs.lib.recursiveUpdate (builtins.removeAttrs haskellNixFlake [ "devShell" "hydraJobs" ]) {
+        {
           apps.srht-deploy = {
             type = "app";
             program = "${pkgs.writeShellApplication {
@@ -54,8 +42,12 @@
               '';
             }}/bin/srht-deploy";
           };
-          packages.default = haskellNixFlake.packages."website:exe:site";
-          devShells.website = haskellNixFlake.devShell;
-        };
+          packages.default = haskellPackages.website;
+          devShells.default = haskellPackages.shellFor {
+            packages = p: [ p.website ];
+            withHoogle = false;
+            nativeBuildInputs = [ ];
+          };
     };
+  };
 }
