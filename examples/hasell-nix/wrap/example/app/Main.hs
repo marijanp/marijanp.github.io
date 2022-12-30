@@ -7,4 +7,3 @@ main :: IO ()
 main = do
   callProcess "hello" []
   someFunc
-

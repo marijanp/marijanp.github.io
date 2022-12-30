@@ -187,7 +187,23 @@
       "inputs": {
         "flake-parts": "flake-parts",
         "horizon-platform": "horizon-platform",
-        "nixpkgs": "nixpkgs_4"
+        "nixpkgs": "nixpkgs_4",
+        "treefmt-nix": "treefmt-nix"
+      }
+    },
+    "treefmt-nix": {
+      "locked": {
+        "lastModified": 1672170030,
+        "narHash": "sha256-hvTMwlutePPQ4eNMVHiI0crixCyeSTKJIDhLD/66t2g=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "c97bb3db343ccd2f04dd4e5fa8750e821560e9ca",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "type": "github"
       }
     }
   },

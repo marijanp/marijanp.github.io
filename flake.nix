@@ -5,16 +5,18 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     horizon-platform.url = "git+https://gitlab.homotopic.tech/horizon/horizon-platform";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
-  outputs = { self, flake-parts, ... }:
+  outputs = { self, flake-parts, treefmt-nix, ... }:
     flake-parts.lib.mkFlake { inherit self; } {
       systems = [ "x86_64-linux" ];
       imports = [
+        treefmt-nix.flakeModule
       ];
       perSystem = { config, self', inputs', pkgs, system, ... }:
         let
-          haskellPackages = 
+          haskellPackages =
             with pkgs.haskell.lib.compose; inputs'.horizon-platform.legacyPackages.extend
               (self: _: {
                 lrucache = self.callHackage "lrucache" "1.2.0.1" { };
@@ -24,6 +26,27 @@
               });
         in
         {
+          treefmt = {
+            projectRootFile = ".git/config";
+            programs.nixpkgs-fmt.enable = true;
+            programs.cabal-fmt.enable = true;
+            settings.formatter = {
+              "fourmolu" = {
+                command = pkgs.haskellPackages.fourmolu;
+                options = [
+                  "--ghc-opt"
+                  "-XImportQualifiedPost"
+                  "--ghc-opt"
+                  "-XTypeApplications"
+                  "--mode"
+                  "inplace"
+                  "--check-idempotence"
+                ];
+                includes = [ "*.hs" ];
+              };
+            };
+          };
+
           apps.srht-deploy = {
             type = "app";
             program = "${pkgs.writeShellApplication {
@@ -48,6 +71,6 @@
             withHoogle = false;
             nativeBuildInputs = [ ];
           };
+        };
     };
-  };
 }
