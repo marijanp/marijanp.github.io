@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    horizon-platform.url = "git+https://gitlab.homotopic.tech/horizon/horizon-platform";
+    horizon-platform.url = "git+https://gitlab.homotopic.tech/horizon/horizon-platform?rev=046c7305362aa0b3445539f9d78e648dd65167b7";
     flake-parts.url = "github:hercules-ci/flake-parts";
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
@@ -18,10 +18,7 @@
         let
           haskellPackages =
             with pkgs.haskell.lib.compose; inputs'.horizon-platform.legacyPackages.extend
-              (self: _: {
-                lrucache = self.callHackage "lrucache" "1.2.0.1" { };
-                time-locale-compat = self.callHackage "time-locale-compat" "0.1.1.5" { };
-                hakyll = doJailbreak (self.callHackage "hakyll" "4.15.1.1" { });
+              (_: _: {
                 website = self.callCabal2nix "website" ./. { };
               });
         in
@@ -61,6 +58,7 @@
                 curl --oauth2-bearer "$TOKEN" \
                   -Fcontent=@site.tar.gz \
                   https://pages.sr.ht/publish/marijan.pro
+                rm site.tar.gz
                 echo "Done"
               '';
             }}/bin/srht-deploy";
