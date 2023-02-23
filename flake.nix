@@ -4,8 +4,10 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     horizon-platform.url = "git+https://gitlab.homotopic.tech/horizon/horizon-platform?rev=046c7305362aa0b3445539f9d78e648dd65167b7";
+    horizon-platform.inputs.nixpkgs.follows = "nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
     treefmt-nix.url = "github:numtide/treefmt-nix";
+    treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, flake-parts, treefmt-nix, ... }:
@@ -18,7 +20,7 @@
         let
           haskellPackages =
             with pkgs.haskell.lib.compose; inputs'.horizon-platform.legacyPackages.extend
-              (_: _: {
+              (self: _: {
                 website = self.callCabal2nix "website" ./. { };
               });
         in
