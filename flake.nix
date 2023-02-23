@@ -10,8 +10,8 @@
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, flake-parts, treefmt-nix, ... }:
-    flake-parts.lib.mkFlake { inherit self; } {
+  outputs = inputs@{ self, flake-parts, treefmt-nix, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
       imports = [
         treefmt-nix.flakeModule
