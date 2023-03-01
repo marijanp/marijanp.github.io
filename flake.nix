@@ -54,14 +54,15 @@
               text = ''
                 echo "Decrypting access-token"
                 TOKEN=$(gpg --decrypt ${./secrets/sourcehut-pages-access-token.gpg})
-                echo "Compressing $1"
-                tar -C "$1" -cvz . > site.tar.gz
-                echo "Uploading ..."
+                ${self'.packages.default}/bin/website build
+                echo "Compressing website data (docs directory) ..."
+                tar -C docs -cvz . > site.tar.gz
+                echo "Deploying website ..."
                 curl --oauth2-bearer "$TOKEN" \
                   -Fcontent=@site.tar.gz \
                   https://pages.sr.ht/publish/marijan.pro
                 rm site.tar.gz
-                echo "Done"
+                echo "Done."
               '';
             }}/bin/srht-deploy";
           };
