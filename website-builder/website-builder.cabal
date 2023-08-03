@@ -1,9 +1,10 @@
-name:       website
+name:       website-builder
 version:    0.1.0.0
 build-type: Simple
 
 executable website
-  main-is:          site.hs
+  main-is:          Main.hs
+  hs-source-dirs:   app
   build-depends:
       base
     , hakyll

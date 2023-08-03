@@ -19,9 +19,9 @@
       perSystem = { config, self', inputs', pkgs, system, ... }:
         let
           haskellPackages =
-            with pkgs.haskell.lib.compose; inputs'.horizon-platform.legacyPackages.extend
+            inputs'.horizon-platform.legacyPackages.extend
               (self: _: {
-                website = self.callCabal2nix "website" ./. { };
+                website-builder = self.callCabal2nix "website-builder" ./website-builder { };
               });
         in
         {
@@ -54,7 +54,7 @@
               text = ''
                 echo "Decrypting access-token"
                 TOKEN=$(gpg --decrypt ${./secrets/sourcehut-pages-access-token.gpg})
-                ${self'.packages.default}/bin/website build
+                ${self'.packages.website-builder}/bin/website-builder build
                 echo "Compressing website data (docs directory) ..."
                 tar -C docs -cvz . > site.tar.gz
                 echo "Deploying website ..."
@@ -66,9 +66,11 @@
               '';
             }}/bin/srht-deploy";
           };
-          packages.default = haskellPackages.website;
+          packages = {
+            inherit (haskellPackages) website-builder;
+          };
           devShells.default = haskellPackages.shellFor {
-            packages = p: [ p.website ];
+            packages = p: [ p.website-builder ];
             withHoogle = false;
             nativeBuildInputs = [ ];
           };

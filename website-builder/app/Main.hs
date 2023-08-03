@@ -19,7 +19,7 @@ main = hakyllWith (defaultConfiguration {destinationDirectory = "docs"}) $ do
     route idRoute
     compile copyFileCompiler
 
-  match (fromList ["about.markdown"]) $ do
+  match (fromList ["pages/about.markdown"]) $ do
     route $ setExtension "html"
     compile $
       pandocCompiler
@@ -48,7 +48,7 @@ main = hakyllWith (defaultConfiguration {destinationDirectory = "docs"}) $ do
         >>= loadAndApplyTemplate "templates/default.html" archiveCtx
         >>= relativizeUrls
 
-  match "index.html" $ do
+  match "pages/index.html" $ do
     route idRoute
     compile $ do
       posts <- recentFirst =<< loadAll "posts/*"
