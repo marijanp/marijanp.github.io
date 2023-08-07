@@ -10,71 +10,45 @@
     <script defer src="/js/fontawesome.min.js" ></script>
   </head>
   <body>
+    <div class="max-w-5xl m-auto">
     <header>
       <nav class="navbar bg-base-100">
         <div class="navbar-start">
-          <a class="btn btn-ghost normal-case" title="marijan" href="https://marijan.pro/">
+          <a class="btn btnghost normal-case" title="marijan" href="https://marijan.pro/">
             marijan
           </a>
-          <div class="hidden md:flex">
-            <ul class="menu menu-horizontal px-1">
-              <li><a href="/index.html">Home</a></li>
-              <li><a href="/pages/about.html">About</a></li>
-              <li><a href="/pages/archive.html">Archive</a></li>
-            </ul>
-          </div>
+          <ul class="menu menu-horizontal px-1">
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/pages/about.html">About</a></li>
+            <li><a href="/pages/archive.html">Archive</a></li>
+          </ul>
         </div>
         <div class="navbar-end">
           <div class="hidden md:flex">
             <!-- external links -->
             <ul class="menu menu-horizontal px-1">
               <li style="font-size: 22px">
-                <a href="https://git.sr.ht/~marijan/" class="ms-3 text-dark"><i class="far fa-circle"></i></a>
+                <a href="https://git.sr.ht/~marijan/" class="ms-3"><i class="far fa-circle"></i></a>
               </li>
               <li style="font-size: 22px">
-                <a href="https://github.com/marijanp" class="ms-3 text-dark"><i class="fab fa-github"></i></a>
+                <a href="https://github.com/marijanp" class="ms-3"><i class="fab fa-github"></i></a>
               </li>
               <li style="font-size: 22px">
-                <a href="https://linkedin.com/in/marijanp" class="ms-3 text-dark btn-linkedin"><i class="fab fa-linkedin"></i></a>
-              </li>
-            </ul>
-          </div>
-          <div class="dropdown dropdown-end">
-            <button tabindex="0" class="btn btn-square btn-ghost md:hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-            <ul tabindex="0" class="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52 mt-4">
-              <li><a href="/index.html">Home</a></li>
-              <li><a href="/pages/about.html">About</a></li>
-              <li><a href="/pages/archive.html">Archive</a></li>
-            <!-- external links -->
-              <li style="font-size: 22px">
-                <a href="https://git.sr.ht/~marijan/" class="ms-3 text-dark"><i class="far fa-circle"></i></a>
-              </li>
-              <li style="font-size: 22px">
-                <a href="https://github.com/marijanp" class="ms-3 text-dark"><i class="fab fa-github"></i></a>
-              </li>
-              <li style="font-size: 22px">
-                <a href="https://linkedin.com/in/marijanp" class="ms-3 text-dark btn-linkedin"><i class="fab fa-linkedin"></i></a>
+                <a href="https://linkedin.com/in/marijanp" class="ms-3 btn-linkedin"><i class="fab fa-linkedin"></i></a>
               </li>
             </ul>
           </div>
         </div>
       </nav>
     </header>
-    <main>
-      <div class="flex flex-h">
-      <div class="m-auto">
+      <div class="max-w-prose m-auto px-1">
         <h2 class="text-xl mb-6">$title$</h2>
-        <div class="max-w-prose">
-          $body$
-        </div>
-        </div>
+        $body$
       </div>
     </main>
     <div class="divider"></div>
     <footer class="footer footer-center bg-base-100 text-accent-content"> 
-        <div class="max-w-prose">
+        <div>
           <span class="footer-title text-2xl">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International" class="text-dark" style="text-decoration: none;">
               <i class="fa-brands fa-creative-commons"></i>
@@ -102,5 +76,6 @@
           </ul>
         </div>
     </footer>
+  </div>
   </body>
 </html>

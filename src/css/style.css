@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.navbar-start {
+  width: 70%;
+  justify-content: flex-start;
+}
+.navbar-center {
+  flex-shrink: 0;
+}
+.navbar-end {
+  width: 30%;
+  justify-content: flex-end;
+}
