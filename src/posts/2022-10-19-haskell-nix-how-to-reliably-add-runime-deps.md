@@ -66,6 +66,7 @@ This standard approach, in combination with `haskell.nix`, could look like this:
 We unify the `haskell.nix`-generated `flake` attribute set that contains: the generated library, executable, and test outputs, with our flake output attribute set, which in turn outputs the wrapped app called `example`.
 
 Running `nix flake show --allow-input-from-derivation` we get the following output:
+
 ```
 ├───apps
 │   └───x86_64-linux
@@ -102,6 +103,7 @@ That means removing the attribute from `haskell.nix's` flake outputs and redefin
 This process of removing and adding new outputs is very error-prone. And it gets tedious the more apps our potentially huge monorepo exports. It would be better if `haskell.nix` would take our runtime dependencies into account when generating the flake outputs.
 
 Fortunately, we can do that using `haskell.nix's` module options:
+
 ```
 {
   description = "better";
@@ -156,4 +158,3 @@ Fortunately, we can do that using `haskell.nix's` module options:
 This way, the generated `haskell.nix` flake output will contain our wrapped executables reliably without the extra work of redefining outputs.
 
 The working flakes and the `example` Cabal package can be found [here](https://git.sr.ht/~marijan/website/tree/main/item/examples/haskell-nix/wrap).
-

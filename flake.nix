@@ -31,6 +31,7 @@
           treefmt = {
             projectRootFile = ".git/config";
             programs.nixpkgs-fmt.enable = true;
+            programs.prettier.enable = true;
             programs.cabal-fmt.enable = true;
             settings.formatter = {
               "fourmolu" = {
