@@ -3,10 +3,11 @@
 
 import Data.Monoid (mappend)
 import Hakyll
+import Main.Utf8
 
 --------------------------------------------------------------------------------
 main :: IO ()
-main = hakyllWith (defaultConfiguration{destinationDirectory = "docs"}) $ do
+main = withUtf8 $ hakyllWith (defaultConfiguration{destinationDirectory = "docs"}) $ do
     match "images/*" $ do
         route idRoute
         compile copyFileCompiler
@@ -34,7 +35,7 @@ main = hakyllWith (defaultConfiguration{destinationDirectory = "docs"}) $ do
                 >>= loadAndApplyTemplate "templates/default.html" postCtx
                 >>= relativizeUrls
 
-    create ["archive.html"] $ do
+    create ["pages/archive.html"] $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
@@ -48,7 +49,7 @@ main = hakyllWith (defaultConfiguration{destinationDirectory = "docs"}) $ do
                 >>= loadAndApplyTemplate "templates/default.html" archiveCtx
                 >>= relativizeUrls
 
-    match "pages/index.html" $ do
+    match "index.html" $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"

@@ -1,0 +1,6 @@
+{
+  "name": "website",
+  "dependencies": {
+    "daisyui": "3.0.20"
+  }
+}
