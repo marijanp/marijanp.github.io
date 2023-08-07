@@ -57,9 +57,8 @@
               text = ''
                 echo "Decrypting access-token"
                 TOKEN=$(gpg --decrypt ${./secrets/sourcehut-pages-access-token.gpg})
-                ${lib.getExe self'.packages.website-builder} build
                 echo "Compressing website data (docs directory) ..."
-                tar -C docs -cvz . > site.tar.gz
+                tar -C ${self'.packages.dist} -cvz . > site.tar.gz
                 echo "Deploying website ..."
                 curl --oauth2-bearer "$TOKEN" \
                   -Fcontent=@site.tar.gz \
