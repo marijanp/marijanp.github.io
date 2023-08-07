@@ -5,5 +5,5 @@ import System.Process (callProcess)
 
 main :: IO ()
 main = do
-  callProcess "hello" []
-  someFunc
+    callProcess "hello" []
+    someFunc
