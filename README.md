@@ -1,6 +1,14 @@
-# Building the site
+# Building
 From the root directory of this project execute:
 ```
-nix run .#"website:exe:site" -- build
+nix build .#dist
 ```
-This will build the website and place the result into the `docs` directory, which will be deployed by GitHub Actions.
+The result directory will be a symlink to the dist directory in the Nix store.
+
+# Deploying
+
+From the root directory of this project execute:
+```
+nix run .#srht-deploy
+```
+Will query you for the password used to encrypt the sorucehut deployment secret, and on valid input deploy the `dist` directory to sourcehut pages.
