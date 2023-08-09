@@ -4,7 +4,7 @@ author: Marijan
 ---
 To create a Qemu image of a NixOS-Configuration you can use a function called [make-disk-image](https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/make-disk-image.nix) in the following way:
 
-```
+```nix
 {
   description = "My Qemu images";
   inputs = {

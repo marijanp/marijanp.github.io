@@ -4,8 +4,21 @@
 import Data.Monoid (mappend)
 import Hakyll
 import Main.Utf8
+import Text.Pandoc.Highlighting (Style, breezeDark, styleToCss)
+import Text.Pandoc.Options      (ReaderOptions (..), WriterOptions (..))
 
 --------------------------------------------------------------------------------
+pandocCompilerSyntaxHighlight :: Compiler (Item String)
+pandocCompilerSyntaxHighlight =
+  pandocCompilerWith
+    defaultHakyllReaderOptions
+    defaultHakyllWriterOptions
+      { writerHighlightStyle   = Just pandocCodeStyle
+      }
+
+pandocCodeStyle :: Style
+pandocCodeStyle = breezeDark
+
 main :: IO ()
 main = withUtf8 $ hakyllWith (defaultConfiguration{destinationDirectory = "docs"}) $ do
     match "images/*" $ do
@@ -30,10 +43,15 @@ main = withUtf8 $ hakyllWith (defaultConfiguration{destinationDirectory = "docs"
     match "posts/*" $ do
         route $ setExtension "html"
         compile $
-            pandocCompiler
+            pandocCompilerSyntaxHighlight
                 >>= loadAndApplyTemplate "templates/post.html" postCtx
                 >>= loadAndApplyTemplate "templates/default.html" postCtx
                 >>= relativizeUrls
+
+    create ["css/syntax.css"] $ do
+      route idRoute
+      compile $ do
+        makeItem $ styleToCss pandocCodeStyle
 
     create ["pages/archive.html"] $ do
         route idRoute

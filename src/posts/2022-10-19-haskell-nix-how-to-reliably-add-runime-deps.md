@@ -9,7 +9,7 @@ Using Nix, you can [wrap](https://nixos.wiki/wiki/Nix_Cookbook#Wrapping_packages
 
 This standard approach, in combination with `haskell.nix`, could look like this:
 
-```
+```nix
 {
   description = "naive";
 
@@ -67,7 +67,7 @@ We unify the `haskell.nix`-generated `flake` attribute set that contains: the ge
 
 Running `nix flake show --allow-input-from-derivation` we get the following output:
 
-```
+```bash
 ├───apps
 │   └───x86_64-linux
 │       ├───example: app
@@ -104,7 +104,7 @@ This process of removing and adding new outputs is very error-prone. And it gets
 
 Fortunately, we can do that using `haskell.nix's` module options:
 
-```
+```nix
 {
   description = "better";
 

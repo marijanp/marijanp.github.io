@@ -18,7 +18,7 @@ Obviously the module system allows you to change configurations, and there is a 
 So what I've ended up doing is the following:
 
 `socket-listener` being the NixOs module i.e. systemd service that listens on a socket.
-```
+```nix
 services.socket-listener = {
   enable = true;
   socketPath = "/run/socket-listener/socket-listener.socket";

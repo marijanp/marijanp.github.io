@@ -11,7 +11,7 @@ E.g. we want a program named `demo` to be packaged such that `hello` is availabl
 ### Wrong solution
 
 What I used to do was the following:
-```
+```nix
 demo = <some package>;
 demo-wrapped = demo.overrideAttrs (oldAttrs: rec {
   buildInputs = oldAttrs.buildInputs or [] ++ [ pkgs.makeWrapper ];
@@ -33,7 +33,7 @@ For me this was not the case, therefore one should not use `overrideAttrs` just 
 
 ### Better solution
 To avoid the problem mentioned above, a much better approach is to do the following:
-```
+```nix
 demo-wrapped-better = pkgs.runCommand "demo-wrapped-better" {
     buildInputs = [ pkgs.makeWrapper ];
   }
