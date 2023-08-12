@@ -1,77 +1,94 @@
 ---
-title: NixOS - A PostgreSQL NixOS-Container
+title: NixOS - A PostgreSQL <s>Docker</s> NixOS container
 author: Marijan
+description: Enhance Database Development with Rust sqlx and PostgreSQL using NixOS Containers. Benefit from streamlined dependency management, reduced system impact, and enhanced reproducibility. Learn how NixOS containers compare to conventional setups and Docker-like technologies. Find a detailed instruction on creating and running a NixOS container instance.
 ---
 
-Recently, I was trying out several different database driver implementations for Rust. [sqlx](https://github.com/launchbadge/sqlx) sounded especially interesting to me since it enables compile-time verification of queries against the current database-schema state (produced by a series of migrations).
+Recently, I was trying out several different database driver implementations for Rust. <a class="link" href="https://github.com/launchbadge/sqlx">sqlx</a> sounded especially interesting to me since it enables compile-time verification of queries against the present database-schema state (produced by a series of migrations).
 
-But this feature comes with a price: I need to have a [PostgreSQL](https://www.postgresql.org/) server running, that the verifier can connect to.
+</br>
+However, this powerful feature does come with a trade-off: the necessity of maintaining an active <a class="link" href="https://www.postgresql.org/">PostgreSQL</a> server that the verifier can communicate with.
 
-Instead of polluting my system by enabling the service, I decided to use NixOS containers.
+</br>
+In contrast to the conventional approach of enabling a PostgreSQL service system-wide, I opted to leverage the capabilities of <a class="link" href="https://nixos.wiki/wiki/NixOS_Containers">NixOS containers</a>.
 
-I've created a new flake output in my projects flake and added the following:
+</br>
+If you have experience with <a class="link" href="https://www.docker.com/">Docker</a> or comparable technologies, you'll discover that NixOS containers represent an enhanced solution compared to their counterparts. NixOS containers bring advantages like streamlined dependency management, reduced impact on your system (leveraging <a class="link" href="https://wiki.archlinux.org/title/systemd-nspawn">systemd-nspawn</a>), declarative configuration, and the ability to ensure reproducibility. To delve deeper into the benefits of Nix, visit the official <a class="link" href="https://nixos.org/">Nix & NixOS website</a>.
+
+</br>
+In the remainder of this post I'll explain what I did to obtain a running NixOS container instance serving a PostgreSQL service.
+I've created a new flake output in my projects flake called `nixosConfigurations.postgres-container`:
 
 ```nix
-nixosConfigurations = {
-  postgres-container = inputs.nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
-    modules = [
-      ({ pkgs, config, ... }:
-        let
-          cfg = {
-            pgUser = "helloworld";
-            pgUserPassword = "helloworld";
-            pgUserPasswordMd5 = "md58be363cf63c20050aaad7dbe737acd73";
-            pgDb = "helloworld";
-          };
-        in
-        {
-          boot.isContainer = true;
-
-          users.users.${cfg.pgUser} = {
-            name = cfg.pgUser;
-            group = cfg.pgUser;
-            isSystemUser = true;
-          };
-
-          users.groups.${cfg.pgUser} = { };
-
-          networking.firewall.allowedTCPPorts = [ config.services.postgresql.port ];
-
-          services.postgresql = {
-            enable = true;
-            enableTCPIP = true;
-            port = 5432;
-            ensureDatabases = [ cfg.pgDb ];
-            authentication = ''
-              #type database DBuser origin-address auth-method
-              # ipv4
-              host  all      ${cfg.pgUser}     0.0.0.0/0      md5
-              # ipv
-              host all       ${cfg.pgUser}     ::/0           md5
-            '';
-            ensureUsers = [
-              {
-                name = cfg.pgUser;
-                ensurePermissions = {
-                  "DATABASE \"${cfg.pgDb}\"" = "ALL PRIVILEGES";
-                };
-              }
-            ];
-            initialScript = pkgs.writeText "backend-init-script" ''
-              CREATE ROLE ${cfg.pgUser} WITH SUPERUSER LOGIN PASSWORD '${cfg.pgUserPasswordMd5}' CREATEDB;
-            '';
-          };
-        })
-    ];
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
-};
+  outputs = inputs@{ nixpkgs, ... }:
+    {
+      nixosConfigurations = {
+        postgres-container = inputs.nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ({ pkgs, config, ... }:
+              let
+                cfg = {
+                  pgUser = "helloworld";
+                  pgUserPassword = "helloworld";
+                  pgUserPasswordMd5 = "md58be363cf63c20050aaad7dbe737acd73";
+                  pgDb = "helloworld";
+                };
+              in
+              {
+                boot.isContainer = true;
+
+                users.users.${cfg.pgUser} = {
+                  name = cfg.pgUser;
+                  group = cfg.pgUser;
+                  isSystemUser = true;
+                };
+
+                users.groups.${cfg.pgUser} = { };
+
+                networking.firewall.allowedTCPPorts =
+                  [ config.services.postgresql.port ];
+
+                services.postgresql = {
+                  enable = true;
+                  enableTCPIP = true;
+                  port = 5432;
+                  ensureDatabases = [ cfg.pgDb ];
+                  authentication = ''
+                    #type database DBuser origin-address auth-method
+                    # ipv4
+                    host  all      ${cfg.pgUser}     0.0.0.0/0      md5
+                    # ipv
+                    host all       ${cfg.pgUser}     ::/0           md5
+                  '';
+                  ensureUsers = [
+                    {
+                      name = cfg.pgUser;
+                      ensurePermissions = {
+                        "DATABASE \"${cfg.pgDb}\"" = "ALL PRIVILEGES";
+                      };
+                    }
+                  ];
+                  initialScript = pkgs.writeText "backend-init-script" ''
+                    CREATE ROLE ${cfg.pgUser} WITH SUPERUSER LOGIN PASSWORD '${cfg.pgUserPasswordMd5}' CREATEDB;
+                  '';
+                };
+              })
+          ];
+        };
+      };
+    };
+}
 ```
 
 After adding this output you can use it in the following way using `nixos-container`:
-</br>
 
-1. Create a container called "postgres":
+</br>
+1. Create a container called "postgres", using the `nixosConfiguration.postgres-container` output of the current flake:
 
 ```bash
 sudo nixos-container create postgres --flake .#postgres-container
@@ -98,5 +115,4 @@ psql -h <IP address from step 3> -p 5432 -d helloworld -U helloworld -W
 `-W` will ask you for the password, which is `cfg.pgUserPassword` i.e. `helloworld`.
 
 </br>
-
 For obvious reasons you should not use this container in production.
