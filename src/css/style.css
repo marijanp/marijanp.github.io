@@ -12,3 +12,10 @@
   width: 30%;
   justify-content: flex-end;
 }
+div.sourceCode {
+  color: #cfcfc2;
+  background-color: #232629;
+  padding: 1em;
+  margin: 1em -1em;
+  width: calc(100% + 2em);
+}
