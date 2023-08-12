@@ -8,7 +8,12 @@
     <meta name="description" content="$description$" />
     $endif$
     <title>Marijan's homepage - $title$</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Marijan's blog"
+      href="/feed.xml"
+    />
     <link rel="stylesheet" type="text/css" href="/css/syntax.css" />
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
     <script defer src="/js/fontawesome.min.js"></script>
@@ -28,7 +33,7 @@
             <ul class="menu menu-horizontal px-1">
               <li><a href="/index.html">Home</a></li>
               <li><a href="/pages/about.html">About</a></li>
-              <li><a href="/pages/archive.html">Archive</a></li>
+              <li><a href="/pages/posts.html">Posts</a></li>
             </ul>
           </div>
           <div class="navbar-end">
@@ -58,10 +63,7 @@
         </nav>
       </header>
       <main>
-        <div class="max-w-prose m-auto px-1">
-          <h2 class="text-xl mb-6">$title$</h2>
-          $body$
-        </div>
+        <div class="max-w-prose m-auto px-1">$body$</div>
       </main>
       <div class="divider"></div>
       <footer class="footer footer-center bg-base-100 text-accent-content">

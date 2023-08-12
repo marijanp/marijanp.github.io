@@ -45,6 +45,7 @@ main = withUtf8 $ hakyllWith (defaultConfiguration{destinationDirectory = "docs"
         compile $
             pandocCompilerSyntaxHighlight
                 >>= loadAndApplyTemplate "templates/post.html" postCtx
+                >>= saveSnapshot "content" -- required for RSS feed
                 >>= loadAndApplyTemplate "templates/default.html" postCtx
                 >>= relativizeUrls
 
@@ -53,17 +54,17 @@ main = withUtf8 $ hakyllWith (defaultConfiguration{destinationDirectory = "docs"
         compile $ do
             makeItem $ styleToCss pandocCodeStyle
 
-    create ["pages/archive.html"] $ do
+    create ["pages/posts.html"] $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let archiveCtx =
                     listField "posts" postCtx (return posts)
-                        `mappend` constField "title" "Archives"
+                        `mappend` constField "title" "Posts"
                         `mappend` defaultContext
 
             makeItem ""
-                >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
+                >>= loadAndApplyTemplate "templates/posts.html" archiveCtx
                 >>= loadAndApplyTemplate "templates/default.html" archiveCtx
                 >>= relativizeUrls
 
@@ -82,8 +83,27 @@ main = withUtf8 $ hakyllWith (defaultConfiguration{destinationDirectory = "docs"
 
     match "templates/*" $ compile templateBodyCompiler
 
+    create ["feed.xml"] $ do
+        route idRoute
+        compile $ do
+            let feedCtx = postCtx `mappend` bodyField "body"
+            posts <-
+                fmap (take 10) . recentFirst
+                    =<< loadAllSnapshots "posts/*" "content"
+            renderRss feedConfiguration feedCtx posts
+
 --------------------------------------------------------------------------------
 postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y"
         `mappend` defaultContext
+
+feedConfiguration :: FeedConfiguration
+feedConfiguration =
+    FeedConfiguration
+        { feedTitle = "Marijan's blog"
+        , feedDescription = "Software Engineering, DevOps, Haskell, Nix, NixOS, Rust"
+        , feedAuthorName = "Marijan Petričević"
+        , feedAuthorEmail = "marijan.petricevic94@gmail.com"
+        , feedRoot = "https://marijan.pro"
+        }
