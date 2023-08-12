@@ -6,7 +6,7 @@ description: Discover how to optimize your Haskell program distribution using Ni
 
 Assuming you use `haskell.nix` and have created a Haskell program that requires another executable to be present in the environment i.e. the `PATH` variable.
 
-Using Nix, you can <a class="link" href="https://nixos.wiki/wiki/Nix_Cookbook#Wrapping_packages">wrap</a> your executable (<a class="link" href="/posts/2022-06-03-dont-override-and-wrap-only.html">related post</a>), which is the standard technique to ensure that your program will be distributed together with that executable.
+Using Nix, you can [wrap](https://nixos.wiki/wiki/Nix_Cookbook#Wrapping_packages) your executable ([see related post](/posts/2022-06-03-dont-override-and-wrap-only.html)), which is the standard technique to ensure that your program will be distributed together with that executable.
 
 This standard approach, in combination with `haskell.nix`, could look like this:
 
@@ -158,4 +158,4 @@ Fortunately, we can do that using `haskell.nix's` module options:
 
 This way, the generated `haskell.nix` flake output will contain our wrapped executables reliably without the extra work of redefining outputs.
 
-The working flakes and the `example` Cabal package can be found <a class="link" href="https://git.sr.ht/~marijan/website/tree/main/item/examples/haskell-nix/wrap">here</a>.
+The working flakes and the `example` Cabal package can be found [here](https://git.sr.ht/~marijan/website/tree/main/item/examples/haskell-nix/wrap).

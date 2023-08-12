@@ -1,6 +1,7 @@
 {
   "name": "website",
   "dependencies": {
-    "daisyui": "3.0.20"
+    "daisyui": "3.0.20",
+    "@tailwindcss/typography": "0.5.9"
   }
 }
