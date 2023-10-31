@@ -21,7 +21,7 @@ pandocCodeStyle = breezeDark
 
 main :: IO ()
 main = withUtf8 $ hakyllWith (defaultConfiguration{destinationDirectory = "docs"}) $ do
-    match "images/*" $ do
+    match "images/**" $ do
         route idRoute
         compile copyFileCompiler
 
