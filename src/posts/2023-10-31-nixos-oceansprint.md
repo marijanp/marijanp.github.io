@@ -17,7 +17,7 @@ But first, let me start with a big thank you to the event's organizers: Neyts Zu
 ## The Location
 
 As the name "Ocean Sprint" suggests, the location of the sprint was close to the ocean, more precisely on the Canary Island of Lanzarote at the Atlantic Ocean.
-The sprint's venue was a beautiful villa in the town of Tequise called [Niteo House](https://house.niteo.co/), providing enough space for 30 people and a water cooling solution for hackers (a pool), which is more than needed with outside temperatures of about 28°C (82.4°F).
+The sprint's venue was a beautiful villa in the town of Costa Teguise called [Niteo House](https://house.niteo.co/), providing enough space for 30 people and a water cooling solution for hackers (a pool), which is more than needed with outside temperatures of about 28°C (82.4°F).
 
 ## The Schedule
 
