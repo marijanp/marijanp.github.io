@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en" itemscope itemtype="http://schema.org/WebPage">
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" >
+    <meta http-equiv="x-ua-compatible" content="ie=edge" >
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
     $if(description)$
-    <meta name="description" content="$description$" />
+    <meta name="description" content="$description$" >
     $endif$
     <title>Marijan's homepage - $title$</title>
     <link
@@ -13,9 +13,10 @@
       type="application/rss+xml"
       title="Marijan's blog"
       href="/feed.xml"
-    />
-    <link rel="stylesheet" type="text/css" href="/css/style.css" />
-    <link rel="stylesheet" type="text/css" href="/css/syntax.css" />
+    >
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico" >
+    <link rel="stylesheet" type="text/css" href="/css/style.css" >
+    <link rel="stylesheet" type="text/css" href="/css/syntax.css" >
     <script defer src="/js/fontawesome.min.js"></script>
     <!-- Matomo -->
     <script src="https://marijan.pro/js/analytics.js"></script>
@@ -23,41 +24,44 @@
     <!-- End Matomo Code -->
   </head>
   <body>
-    <div class="max-w-prose m-auto">
-      <header>
-        <nav class="navbar bg-base-100">
-          <div class="navbar-start">
-            <ul class="menu menu-horizontal">
-              <li><a href="/index.html">Home</a></li>
-              <li><a href="/pages/posts.html">Posts</a></li>
-            </ul>
-          </div>
-          <div class="navbar-end">
-            <div>
-              <!-- external links -->
+      <header class="bg-base-100">
+        <div class="max-w-prose m-auto">
+          <nav class="navbar">
+            <div class="navbar-start">
               <ul class="menu menu-horizontal">
-                <li>
-                  <a href="https://git.sr.ht/~marijan/"
-                    ><i class="fa-regular fa-circle text-xl"></i
-                  ></a>
-                </li>
-                <li>
-                  <a href="https://github.com/marijanp"
-                    ><i class="fa-brands fa-github text-xl"></i
-                  ></a>
-                </li>
-                <li>
-                  <a href="https://linkedin.com/in/marijanp"
-                    ><i class="fa-brands fa-linkedin-in text-xl"></i
-                  ></a>
-                </li>
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/pages/posts.html">Posts</a></li>
               </ul>
             </div>
-          </div>
-        </nav>
+            <div class="navbar-end">
+              <div>
+                <!-- external links -->
+                <ul class="menu menu-horizontal">
+                  <li>
+                    <a href="https://git.sr.ht/~marijan/"
+                      ><i class="fa-regular fa-circle text-xl"></i
+                    ></a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/marijanp"
+                      ><i class="fa-brands fa-github text-xl"></i
+                    ></a>
+                  </li>
+                  <li>
+                    <a href="https://linkedin.com/in/marijanp"
+                      ><i class="fa-brands fa-linkedin-in text-xl"></i
+                    ></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
       </header>
       <main>
-        <div class="px-4 md:px-0">$body$</div>
+        <div class="max-w-prose m-auto">
+        <div class="pt-4 px-4 md:px-0">$body$</div>
+        </div>
       </main>
       <div class="divider"></div>
       <footer
@@ -115,6 +119,5 @@
           </ul>
         </div>
       </footer>
-    </div>
   </body>
 </html>

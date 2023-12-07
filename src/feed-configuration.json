@@ -1,0 +1,6 @@
+{ "title": "Marijan's Blog"
+, "description":"Software Engineering, DevOps, Haskell, Nix, NixOS, Rust"
+, "author_name": "Marijan Petričević"
+, "author_email_address": "marijan.petricevic94@gmail.com"
+, "root": "https://marijan.pro"
+}
