@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>Marijan's Blog</title>
+        <link>https://marijan.pro</link>
+        <description><![CDATA[Software Engineering, DevOps, Haskell, Nix, NixOS, Rust]]></description>
+        <atom:link href="https://marijan.pro/feed.xml" rel="self"
+                   type="application/rss+xml" />
+        <lastBuildDate>Tue, 31 Oct 2023 00:00:00 UT</lastBuildDate>
+        <item>
+    <title>NixOS Ocean Sprint October 2023 - A report</title>
+    <link>https://marijan.pro/posts/2023-10-31-nixos-oceansprint.html</link>
+    <description><![CDATA[A report about the NixOS Ocean Sprint which is the ideal opportunity to meet fellow contributors and users from the Nix community. People from all over the world gathered in one house on the sunny Canary Island of Lanzarote to contribute and share insights or discuss topics about the Nix ecosystem. In addition, in between coding sessions, there are plenty of exciting activities like diving, surfing, cycling, drumming, etc. one can do together with amazing people.]]></description>
+    <pubDate>Tue, 31 Oct 2023 00:00:00 UT</pubDate>
+    <guid>https://marijan.pro/posts/2023-10-31-nixos-oceansprint.html</guid>
+    <dc:creator>Marijan Petričević</dc:creator>
+</item>
+<item>
+    <title>NixOS - A PostgreSQL NixOS container (not Docker)</title>
+    <link>https://marijan.pro/posts/2023-08-09-postgres-nixos-container.html</link>
+    <description><![CDATA[Enhance Database Development with Rust sqlx and PostgreSQL using NixOS Containers. Benefit from streamlined dependency management, reduced system impact, and enhanced reproducibility. Learn how NixOS containers compare to conventional setups and Docker-like technologies. Find a detailed instruction on creating and running a NixOS container instance.]]></description>
+    <pubDate>Wed, 09 Aug 2023 00:00:00 UT</pubDate>
+    <guid>https://marijan.pro/posts/2023-08-09-postgres-nixos-container.html</guid>
+    <dc:creator>Marijan Petričević</dc:creator>
+</item>
+<item>
+    <title>haskell.nix - How to reliably add runtime dependencies</title>
+    <link>https://marijan.pro/posts/2022-10-19-haskell-nix-how-to-reliably-add-runime-deps.html</link>
+    <description><![CDATA[Discover how to optimize your Haskell program distribution using Nix with executable wrapping. Learn how to utilize 'haskell.nix' and proper wrapping techniques to ensure seamless distribution of your program alongside required dependencies. Explore a practical example and see how you can unify 'haskell.nix' outputs with flake outputs for wrapped executables.]]></description>
+    <pubDate>Wed, 19 Oct 2022 00:00:00 UT</pubDate>
+    <guid>https://marijan.pro/posts/2022-10-19-haskell-nix-how-to-reliably-add-runime-deps.html</guid>
+    <dc:creator>Marijan Petričević</dc:creator>
+</item>
+<item>
+    <title>NixOS - How to add a Qemu image of a NixOS-Configuration as a flake output</title>
+    <link>https://marijan.pro/posts/2022-09-26-nixos-how-to-add-a-qemu-image--as-a-flake-output.html</link>
+    <description><![CDATA[Learn to how add a Qemu image of your NixOS-Configuration as a flake output.]]></description>
+    <pubDate>Mon, 26 Sep 2022 00:00:00 UT</pubDate>
+    <guid>https://marijan.pro/posts/2022-09-26-nixos-how-to-add-a-qemu-image--as-a-flake-output.html</guid>
+    <dc:creator>Marijan Petričević</dc:creator>
+</item>
+<item>
+    <title>NixOS - How to modify systemd services you don't own</title>
+    <link>https://marijan.pro/posts/2022-08-26-nixos-how-to-modify-systemd-services-you-dont-own.html</link>
+    <description><![CDATA[Learn how to modify external systemd services in your NixOS configuration.]]></description>
+    <pubDate>Fri, 26 Aug 2022 00:00:00 UT</pubDate>
+    <guid>https://marijan.pro/posts/2022-08-26-nixos-how-to-modify-systemd-services-you-dont-own.html</guid>
+    <dc:creator>Marijan Petričević</dc:creator>
+</item>
+<item>
+    <title>Nix - Avoid overrideAttrs when wrapping an executable</title>
+    <link>https://marijan.pro/posts/2022-06-03-dont-override-and-wrap-only.html</link>
+    <description><![CDATA[Explore a nuanced issue with overrideAttrs causing unnecessary recompilations.]]></description>
+    <pubDate>Fri, 03 Jun 2022 00:00:00 UT</pubDate>
+    <guid>https://marijan.pro/posts/2022-06-03-dont-override-and-wrap-only.html</guid>
+    <dc:creator>Marijan Petričević</dc:creator>
+</item>
+
+    </channel>
+</rss>

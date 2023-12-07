@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="description" content="Explore a nuanced issue with overrideAttrs causing unnecessary recompilations.">
+    
+    <title>Marijan's homepage - Nix - Avoid overrideAttrs when wrapping an executable</title>
+    <link rel="alternate" type="application/rss+xml" title="Marijan's blog" href="../feed.xml">
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css">
+    <script defer src="../js/fontawesome.min.js"></script>
+    <!-- Matomo -->
+    <script src="https://marijan.pro/js/analytics.js"></script>
+    <script src="https://analytics.marijan.pro/matomo.js" async defer></script>
+    <!-- End Matomo Code -->
+  </head>
+  <body>
+      <header class="bg-base-100">
+        <div class="max-w-prose m-auto">
+          <nav class="navbar">
+            <div class="navbar-start">
+              <ul class="menu menu-horizontal">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../pages/posts.html">Posts</a></li>
+              </ul>
+            </div>
+            <div class="navbar-end">
+              <div>
+                <!-- external links -->
+                <ul class="menu menu-horizontal">
+                  <li>
+                    <a href="https://git.sr.ht/~marijan/"><i class="fa-regular fa-circle text-xl"></i></a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/marijanp"><i class="fa-brands fa-github text-xl"></i></a>
+                  </li>
+                  <li>
+                    <a href="https://linkedin.com/in/marijanp"><i class="fa-brands fa-linkedin-in text-xl"></i></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </header>
+      <main>
+        <div class="max-w-prose m-auto">
+        <div class="pt-4 px-4 md:px-0"><article class="prose overflow-scroll">
+  <h2>Nix - Avoid overrideAttrs when wrapping an executable</h2>
+  <p>Posted on June  3, 2022  by Marijan </p>
+  <p>Let’s say you created a program which requires another executable to be present in your environment i.e. in the <code>PATH</code> variable.</p>
+<p>Using Nix, there is a way to ensure that your program will only be distributed together with that executable by wrapping it.</p>
+<p>E.g. we want a program named <code>demo</code> to be packaged such that <code>hello</code> is available in the <code>PATH</code>.</p>
+<h3 id="wrong-solution">Wrong solution</h3>
+<p>What I used to do was the following:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>demo = &lt;some package&gt;;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>demo<span class="op">-</span>wrapped = demo.overrideAttrs <span class="op">(</span><span class="va">oldAttrs</span><span class="op">:</span> <span class="kw">rec</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">buildInputs</span> <span class="op">=</span> oldAttrs.buildInputs <span class="kw">or</span> <span class="op">[]</span> <span class="op">++</span> <span class="op">[</span> pkgs.makeWrapper <span class="op">];</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="va">postInstall</span> <span class="op">=</span> oldAttrs.postInstall <span class="kw">or</span> <span class="st">&quot;&quot;</span> <span class="op">+</span> <span class="st">''</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="st">    wrapProgram $out/bin/demo \</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="st">      --set PATH </span><span class="sc">${</span>pkgs.lib.makeBinPath <span class="op">[</span> pkgs.hello <span class="op">]</span><span class="sc">}</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="st">  ''</span><span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">})</span>;</span></code></pre></div>
+<p>But recently <a href="https://nix.how">Matthew</a> made me aware that my approach causes compilation of the wrapped executable (<code>demo</code>) to occur twice under certain circumstances.</p>
+<p>The reason for that is that <code>overrideAttrs</code> per definition runs through all phases again just to run the new customized phase (in this example: <code>postInstall</code>).</p>
+<p>If <code>demo</code> itself was not changed in any way but <code>demo-wrapped</code> was modified e.g. by logging a message to stdout, Nix would compile <code>demo</code> again just to run the updated <code>postInstall</code> phase instead of obtaining it either from a binary cache or from the local Nix store.</p>
+<p>The reason I used <code>wrapProgram</code> inside <code>overrideAttrs</code> was that I found an usage example of <code>makeWrapper</code> written like this in <code>nixpkgs</code> but with a subtle difference I didn’t recognize. In the usage example from <code>nixpkgs</code> recompilation was inevitable because there was a change in <code>overrideAttrs</code> that caused the result of the compilation of the binary to change completely. So the author decided to add <code>makeWrapper</code> along the way.
+For me this was not the case, therefore one should not use <code>overrideAttrs</code> just to wrap an executable.</p>
+<h3 id="better-solution">Better solution</h3>
+<p>To avoid the problem mentioned above, a much better approach is to do the following:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>demo<span class="op">-</span>wrapped<span class="op">-</span>better = pkgs.runCommand <span class="st">&quot;demo-wrapped-better&quot;</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">buildInputs</span> <span class="op">=</span> <span class="op">[</span> pkgs.makeWrapper <span class="op">];</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">''</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">      mkdir -p $out/bin</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">      makeWrapper </span><span class="sc">${</span>demo<span class="sc">}</span><span class="st">/bin/demo $out/bin/demo \</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">        --set PATH </span><span class="sc">${</span>pkgs.lib.makeBinPath <span class="op">[</span> pkgs.hello <span class="op">]</span><span class="sc">}</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">  ''</span>;</span></code></pre></div>
+<p>I would like to thank <a href="https://nix.how%22%3EMatthew">Matthew</a> for taking his time to explain me this subtle issue.</p>
+</article>
+</div>
+        </div>
+      </main>
+      <div class="divider"></div>
+      <footer class="footer footer-center bg-base-100 text-accent-content px-4 md:px-0">
+        <div>
+          <span class="footer-title text-2xl">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International" class="text-dark" style="text-decoration: none">
+              <i class="fa-brands fa-creative-commons"></i>
+              <i class="fa-brands fa-creative-commons-by"></i>
+              <i class="fa-brands fa-creative-commons-nc"></i>
+              <i class="fa-brands fa-creative-commons-sa"></i>
+            </a>
+          </span>
+          <p>
+            Except where otherwise noted, the content on this site is licenced
+            under
+            <a rel="license" itemprop="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"><abbr itemprop="license" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International">CC BY-NC-SA 4.0</abbr></a>. Attribute to <strong itemprop="author">Marijan</strong> including
+            a link to this <a href="https://marijan.pro/">site</a>.
+          </p>
+        </div>
+        <div>
+          <span class="footer-title">Get connected:</span>
+          <ul class="menu menu-horizontal">
+            <li>
+              <a href="https://git.sr.ht/~marijan/"><i class="fa-regular fa-circle text-xl"></i></a>
+            </li>
+            <li>
+              <a href="https://github.com/marijanp"><i class="fa-brands fa-github text-xl"></i></a>
+            </li>
+            <li>
+              <a href="https://linkedin.com/in/marijanp"><i class="fa-brands fa-linkedin-in text-xl"></i></a>
+            </li>
+          </ul>
+        </div>
+      </footer>
+  </body>
+</html>
