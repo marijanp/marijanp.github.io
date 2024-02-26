@@ -1,6 +1,16 @@
 {
   description = "marijan's website";
 
+  nixConfig = {
+    extra-substituters = [
+      "https://horizon.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "horizon.cachix.org-1:MeEEDRhRZTgv/FFGCv3479/dmJDfJ82G6kfUDxMSAw0="
+    ];
+    allow-import-from-derivation = true;
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
