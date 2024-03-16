@@ -52,11 +52,11 @@
         <div class="pt-4 px-4 md:px-0"><article class="prose overflow-scroll">
   <h2>NixOS - A PostgreSQL NixOS container (not Docker)</h2>
   <p>Posted on August  9, 2023  by Marijan </p>
-  <p>Recently, I was trying out several different database driver implementations for Rust. <a href="https://github.com/launchbadge/sqlx%22%3Esqlx">sqlx</a> sounded especially interesting to me since it enables compile-time verification of queries against the present database-schema state (produced by a series of migrations).</p>
+  <p>Recently, I was trying out several different database driver implementations for Rust. <a href="https://github.com/launchbadge/sqlx">sqlx</a> sounded especially interesting to me since it enables compile-time verification of queries against the present database-schema state (produced by a series of migrations).</p>
 <p>However, this powerful feature does come with a trade-off: the necessity of maintaining an active <a href="https://www.postgresql.org/">PostgreSQL</a> server that the verifier can communicate with.</p>
 <p>In contrast to the conventional approach of enabling a PostgreSQL service system-wide, I opted to leverage the capabilities of <a href="https://nixos.wiki/wiki/NixOS_Containers">NixOS containers</a>.</p>
 <p>If you have experience with <a href="https://www.docker.com/">Docker</a> or comparable technologies, you’ll discover that NixOS containers represent an enhanced solution compared to their counterparts.
-NixOS containers bring advantages like streamlined dependency management, reduced impact on your system (leveraging <a href="https://wiki.archlinux.org/title/systemd-nspawn%22%3Esystemd-nspawn">systemd-nspawn</a>), declarative configuration, and the ability to ensure reproducibility.
+NixOS containers bring advantages like streamlined dependency management, reduced impact on your system (leveraging <a href="https://wiki.archlinux.org/title/systemd-nspawn">systemd-nspawn</a>), declarative configuration, and the ability to ensure reproducibility.
 To delve deeper into the benefits of Nix, visit the official <a href="https://nixos.org/">Nix &amp; NixOS website</a>.</p>
 <p>In the remainder of this post I’ll explain what I did to obtain a running NixOS container instance serving a PostgreSQL service.
 I’ve created a new flake output in my projects flake called <code>nixosConfigurations.postgres-container</code>:</p>
