@@ -50,7 +50,7 @@
       <main>
         <div class="max-w-prose m-auto">
         <div class="pt-4 px-4 md:px-0"><article class="prose overflow-scroll">
-  <h2>haskell.nix - How to reliably add runtime dependencies</h2>
+  <h1>haskell.nix - How to reliably add runtime dependencies</h1>
   <p>Posted on October 19, 2022  by Marijan </p>
   <p>Assuming you use <code>haskell.nix</code> and have created a Haskell program that requires another executable to be present in the environment i.e. the <code>PATH</code> variable.</p>
 <p>Using Nix, you can <a href="https://nixos.wiki/wiki/Nix_Cookbook#Wrapping_packages">wrap</a> your executable (<a href="../posts/2022-06-03-dont-override-and-wrap-only.html">see related post</a>), which is the standard technique to ensure that your program will be distributed together with that executable.</p>
