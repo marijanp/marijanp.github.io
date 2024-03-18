@@ -8,4 +8,3 @@ function saveThemeState(){
   localStorage.setItem('themeState', checkbox.checked);
 }
 
-
