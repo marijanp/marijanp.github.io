@@ -2959,10 +2959,6 @@ html {
   margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
-.overflow-scroll {
-  overflow: scroll;
-}
-
 .rounded-box {
   border-radius: var(--rounded-box, 1rem);
 }
