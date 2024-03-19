@@ -3042,6 +3042,10 @@ html {
   transition-duration: 150ms;
 }
 
+.sourceCode{
+  overflow:scroll!important
+}
+
 @media (min-width: 768px) {
   .md\:h-72 {
     height: 18rem;

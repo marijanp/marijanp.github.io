@@ -440,11 +440,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1701966864,
-        "narHash": "sha256-DaVyKZ8b98TgkKKrxv0ovNuoTESW7Ta6mQRf5eQIxEo=",
+        "lastModified": 1710853655,
+        "narHash": "sha256-J/FaVjooVLail+Nst1K91oEvAIHjjlKUWzdfjnYob0I=",
         "ref": "refs/heads/main",
-        "rev": "5e53a0bbe42c1657949dae038aa00e774c55121d",
-        "revCount": 3,
+        "rev": "9e1457678ca83a6d9bfca075a8f3235cca4ae2a2",
+        "revCount": 5,
         "type": "git",
         "url": "https://git.sr.ht/~marijan/website-builder"
       },
