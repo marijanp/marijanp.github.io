@@ -21,13 +21,13 @@
     website-builder.url = "git+https://git.sr.ht/~marijan/website-builder";
   };
 
-  outputs = inputs@{ self, flake-parts, treefmt-nix, ... }:
+  outputs = inputs@{ flake-parts, treefmt-nix, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
       imports = [
         treefmt-nix.flakeModule
       ];
-      perSystem = { config, self', inputs', pkgs, system, lib, ... }:
+      perSystem = { self', inputs', pkgs, lib, ... }:
         {
           treefmt = {
             projectRootFile = ".git/config";
