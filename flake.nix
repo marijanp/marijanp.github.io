@@ -1,16 +1,6 @@
 {
   description = "marijan's website";
 
-  nixConfig = {
-    extra-substituters = [
-      "https://horizon.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "horizon.cachix.org-1:MeEEDRhRZTgv/FFGCv3479/dmJDfJ82G6kfUDxMSAw0="
-    ];
-    allow-import-from-derivation = true;
-  };
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -32,14 +22,24 @@
           treefmt = {
             projectRootFile = ".git/config";
             programs.nixpkgs-fmt.enable = true;
-            programs.prettier.enable = true;
+          };
+
+          apps.gh-deploy = {
+            type = "app";
+            program = "${lib.getExe (pkgs.writeShellApplication {
+              name = "gh-deploy";
+              runtimeInputs = [ pkgs.coreutils ];
+              text = ''
+                cp --no-preserve=mode -r ${self'.packages.dist}/* docs
+              '';
+            })}";
           };
 
           apps.srht-deploy = {
             type = "app";
-            program = "${pkgs.writeShellApplication {
+            program = "${lib.getExe (pkgs.writeShellApplication {
               name = "srht-deploy";
-              runtimeInputs = [ pkgs.gnutar pkgs.gnupg pkgs.curl ];
+              runtimeInputs = with pkgs; [ coreutils gnutar gnupg curl ];
               text = ''
                 echo "Decrypting access-token"
                 TOKEN=$(gpg --decrypt ${./secrets/sourcehut-pages-access-token.gpg})
@@ -52,7 +52,7 @@
                 rm site.tar.gz
                 echo "Done."
               '';
-            }}/bin/srht-deploy";
+            })}";
           };
           packages = {
             dist =
