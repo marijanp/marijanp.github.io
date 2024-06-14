@@ -2708,6 +2708,10 @@ html {
   margin: auto;
 }
 
+.block {
+  display: block;
+}
+
 .table {
   display: table;
 }
