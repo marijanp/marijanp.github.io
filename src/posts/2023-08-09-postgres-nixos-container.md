@@ -17,6 +17,8 @@ To delve deeper into the benefits of Nix, visit the official [Nix & NixOS websit
 In the remainder of this post I'll explain what I did to obtain a running NixOS container instance serving a PostgreSQL service.
 I've created a new flake output in my projects flake called `nixosConfigurations.postgres-container`:
 
+The example can be found on [Sourcehut](https://git.sr.ht/~marijan/website/tree/main/item/examples/nixos-container) or [GitHub](https://github.com/marijanp/marijanp.github.io/tree/main/examples/postgres-container).
+
 ```nix
 {
   inputs = {
@@ -25,7 +27,7 @@ I've created a new flake output in my projects flake called `nixosConfigurations
   outputs = inputs@{ nixpkgs, ... }:
     {
       nixosConfigurations = {
-        postgres-container = inputs.nixpkgs.lib.nixosSystem {
+        postgres-container = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ({ pkgs, config, ... }:
@@ -33,6 +35,8 @@ I've created a new flake output in my projects flake called `nixosConfigurations
                 cfg = {
                   pgUser = "helloworld";
                   pgUserPassword = "helloworld";
+                  # hash = $(echo -n "<pgUser><pgUserPassword>" | md5sum)
+                  # prefix with md5 i.e. "md5$hash"
                   pgUserPasswordMd5 = "md58be363cf63c20050aaad7dbe737acd73";
                   pgDb = "helloworld";
                 };
@@ -49,26 +53,24 @@ I've created a new flake output in my projects flake called `nixosConfigurations
                 users.groups.${cfg.pgUser} = { };
 
                 networking.firewall.allowedTCPPorts =
-                  [ config.services.postgresql.port ];
+                  [ config.services.postgresql.settings.port ];
 
                 services.postgresql = {
                   enable = true;
                   enableTCPIP = true;
-                  port = 5432;
+                  settings.port = 5432;
                   ensureDatabases = [ cfg.pgDb ];
                   authentication = ''
                     #type database DBuser origin-address auth-method
                     # ipv4
                     host  all      ${cfg.pgUser}     0.0.0.0/0      md5
-                    # ipv
+                    # ipv6
                     host all       ${cfg.pgUser}     ::/0           md5
                   '';
                   ensureUsers = [
                     {
                       name = cfg.pgUser;
-                      ensurePermissions = {
-                        "DATABASE \"${cfg.pgDb}\"" = "ALL PRIVILEGES";
-                      };
+                      ensureDBOwnership = true;
                     }
                   ];
                   initialScript = pkgs.writeText "backend-init-script" ''

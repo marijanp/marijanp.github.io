@@ -71,6 +71,7 @@ NixOS containers bring advantages like streamlined dependency management, reduce
 To delve deeper into the benefits of Nix, visit the official <a href="https://nixos.org/">Nix &amp; NixOS website</a>.</p>
 <p>In the remainder of this post I’ll explain what I did to obtain a running NixOS container instance serving a PostgreSQL service.
 I’ve created a new flake output in my projects flake called <code>nixosConfigurations.postgres-container</code>:</p>
+<p>The example can be found on <a href="https://git.sr.ht/~marijan/website/tree/main/item/examples/nixos-container">Sourcehut</a> or <a href="https://github.com/marijanp/marijanp.github.io/tree/main/examples/postgres-container">GitHub</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">inputs</span> <span class="op">=</span> <span class="op">{</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">nixpkgs</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">&quot;github:NixOS/nixpkgs/nixpkgs-unstable&quot;</span><span class="op">;</span></span>
@@ -78,7 +79,7 @@ I’ve created a new flake output in my projects flake called <code>nixosConfigu
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">outputs</span> <span class="op">=</span> inputs@<span class="op">{</span> <span class="va">nixpkgs</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>:</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="va">nixosConfigurations</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">postgres-container</span> <span class="op">=</span> inputs.nixpkgs.lib.nixosSystem <span class="op">{</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">postgres-container</span> <span class="op">=</span> nixpkgs.lib.nixosSystem <span class="op">{</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>          <span class="va">system</span> <span class="op">=</span> <span class="st">&quot;x86_64-linux&quot;</span><span class="op">;</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>          <span class="va">modules</span> <span class="op">=</span> <span class="op">[</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">({</span> <span class="va">pkgs</span><span class="op">,</span> <span class="va">config</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>:</span>
@@ -86,42 +87,42 @@ I’ve created a new flake output in my projects flake called <code>nixosConfigu
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                <span class="va">cfg</span> <span class="op">=</span> <span class="op">{</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                  <span class="va">pgUser</span> <span class="op">=</span> <span class="st">&quot;helloworld&quot;</span><span class="op">;</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                  <span class="va">pgUserPassword</span> <span class="op">=</span> <span class="st">&quot;helloworld&quot;</span><span class="op">;</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                  <span class="va">pgUserPasswordMd5</span> <span class="op">=</span> <span class="st">&quot;md58be363cf63c20050aaad7dbe737acd73&quot;</span><span class="op">;</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                  <span class="va">pgDb</span> <span class="op">=</span> <span class="st">&quot;helloworld&quot;</span><span class="op">;</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                <span class="op">};</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>              <span class="kw">in</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>              <span class="op">{</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>                <span class="va">boot</span>.<span class="va">isContainer</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                <span class="va">users</span>.<span class="va">users</span>.${<span class="va">cfg</span>.<span class="va">pgUser</span><span class="op">}</span> = <span class="op">{</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                  <span class="va">name</span> <span class="op">=</span> cfg.pgUser<span class="op">;</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                  <span class="va">group</span> <span class="op">=</span> cfg.pgUser<span class="op">;</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                  <span class="va">isSystemUser</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span>;</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>                users.groups.$<span class="op">{</span><span class="va">cfg</span>.<span class="va">pgUser</span><span class="op">}</span> = <span class="op">{</span> <span class="op">}</span>;</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># hash = $(echo -n &quot;&lt;pgUser&gt;&lt;pgUserPassword&gt;&quot; | md5sum)</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># prefix with md5 i.e. &quot;md5$hash&quot;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                  <span class="va">pgUserPasswordMd5</span> <span class="op">=</span> <span class="st">&quot;md58be363cf63c20050aaad7dbe737acd73&quot;</span><span class="op">;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>                  <span class="va">pgDb</span> <span class="op">=</span> <span class="st">&quot;helloworld&quot;</span><span class="op">;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                <span class="op">};</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>              <span class="kw">in</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>              <span class="op">{</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                <span class="va">boot</span>.<span class="va">isContainer</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                <span class="va">users</span>.<span class="va">users</span>.${<span class="va">cfg</span>.<span class="va">pgUser</span><span class="op">}</span> = <span class="op">{</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                  <span class="va">name</span> <span class="op">=</span> cfg.pgUser<span class="op">;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                  <span class="va">group</span> <span class="op">=</span> cfg.pgUser<span class="op">;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>                  <span class="va">isSystemUser</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span>;</span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>                networking.firewall.allowedTCPPorts =</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>                  <span class="op">[</span> config.services.postgresql.port <span class="op">]</span>;</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>                services.postgresql = <span class="op">{</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>                  <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                  <span class="va">enableTCPIP</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                  <span class="va">port</span> <span class="op">=</span> <span class="dv">5432</span><span class="op">;</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>                  <span class="va">ensureDatabases</span> <span class="op">=</span> <span class="op">[</span> cfg.pgDb <span class="op">];</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>                  <span class="va">authentication</span> <span class="op">=</span> <span class="st">''</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="st">                    #type database DBuser origin-address auth-method</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="st">                    # ipv4</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="st">                    host  all      </span><span class="sc">${</span>cfg.pgUser<span class="sc">}</span><span class="st">     0.0.0.0/0      md5</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="st">                    # ipv</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="st">                    host all       </span><span class="sc">${</span>cfg.pgUser<span class="sc">}</span><span class="st">     ::/0           md5</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="st">                  ''</span><span class="op">;</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>                  <span class="va">ensureUsers</span> <span class="op">=</span> <span class="op">[</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>                    <span class="op">{</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>                      <span class="va">name</span> <span class="op">=</span> cfg.pgUser<span class="op">;</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>                      <span class="va">ensurePermissions</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;</span>DATABASE <span class="sc">\&quot;${</span>cfg.pgDb<span class="sc">}\&quot;</span><span class="st">&quot;</span> <span class="op">=</span> <span class="st">&quot;ALL PRIVILEGES&quot;</span><span class="op">;</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>                      <span class="op">};</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>                users.groups.$<span class="op">{</span><span class="va">cfg</span>.<span class="va">pgUser</span><span class="op">}</span> = <span class="op">{</span> <span class="op">}</span>;</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>                networking.firewall.allowedTCPPorts =</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>                  <span class="op">[</span> config.services.postgresql.settings.port <span class="op">]</span>;</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                services.postgresql = <span class="op">{</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                  <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>                  <span class="va">enableTCPIP</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>                  <span class="va">settings</span>.<span class="va">port</span> <span class="op">=</span> <span class="dv">5432</span><span class="op">;</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>                  <span class="va">ensureDatabases</span> <span class="op">=</span> <span class="op">[</span> cfg.pgDb <span class="op">];</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>                  <span class="va">authentication</span> <span class="op">=</span> <span class="st">''</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="st">                    #type database DBuser origin-address auth-method</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="st">                    # ipv4</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="st">                    host  all      </span><span class="sc">${</span>cfg.pgUser<span class="sc">}</span><span class="st">     0.0.0.0/0      md5</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="st">                    # ipv6</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="st">                    host all       </span><span class="sc">${</span>cfg.pgUser<span class="sc">}</span><span class="st">     ::/0           md5</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="st">                  ''</span><span class="op">;</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>                  <span class="va">ensureUsers</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>                    <span class="op">{</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>                      <span class="va">name</span> <span class="op">=</span> cfg.pgUser<span class="op">;</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>                      <span class="va">ensureDBOwnership</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
 <span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
 <span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>                  <span class="op">];</span></span>
 <span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>                  <span class="va">initialScript</span> <span class="op">=</span> pkgs.writeText <span class="st">&quot;backend-init-script&quot;</span> <span class="st">''</span></span>
