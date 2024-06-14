@@ -71,7 +71,7 @@ NixOS containers bring advantages like streamlined dependency management, reduce
 To delve deeper into the benefits of Nix, visit the official <a href="https://nixos.org/">Nix &amp; NixOS website</a>.</p>
 <p>In the remainder of this post I’ll explain what I did to obtain a running NixOS container instance serving a PostgreSQL service.
 I’ve created a new flake output in my projects flake called <code>nixosConfigurations.postgres-container</code>:</p>
-<p>The example can be found on <a href="https://git.sr.ht/~marijan/website/tree/main/item/examples/nixos-container">Sourcehut</a> or <a href="https://github.com/marijanp/marijanp.github.io/tree/main/examples/postgres-container">GitHub</a>.</p>
+<p>The example can be found on <a href="https://git.sr.ht/~marijan/website/tree/main/item/examples/postgres-container">Sourcehut</a> or <a href="https://github.com/marijanp/marijanp.github.io/tree/main/examples/postgres-container">GitHub</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">inputs</span> <span class="op">=</span> <span class="op">{</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">nixpkgs</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">&quot;github:NixOS/nixpkgs/nixpkgs-unstable&quot;</span><span class="op">;</span></span>

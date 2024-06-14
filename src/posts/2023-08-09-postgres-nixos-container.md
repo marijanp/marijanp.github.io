@@ -17,7 +17,7 @@ To delve deeper into the benefits of Nix, visit the official [Nix & NixOS websit
 In the remainder of this post I'll explain what I did to obtain a running NixOS container instance serving a PostgreSQL service.
 I've created a new flake output in my projects flake called `nixosConfigurations.postgres-container`:
 
-The example can be found on [Sourcehut](https://git.sr.ht/~marijan/website/tree/main/item/examples/nixos-container) or [GitHub](https://github.com/marijanp/marijanp.github.io/tree/main/examples/postgres-container).
+The example can be found on [Sourcehut](https://git.sr.ht/~marijan/website/tree/main/item/examples/postgres-container) or [GitHub](https://github.com/marijanp/marijanp.github.io/tree/main/examples/postgres-container).
 
 ```nix
 {
