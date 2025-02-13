@@ -1,8 +1,11 @@
----
-title: haskell.nix - How to reliably add runtime dependencies
-author: Marijan
-description: Discover how to optimize your Haskell program distribution using Nix with executable wrapping. Learn how to utilize 'haskell.nix' and proper wrapping techniques to ensure seamless distribution of your program alongside required dependencies. Explore a practical example and see how you can unify 'haskell.nix' outputs with flake outputs for wrapped executables.
----
+<h1 id="title">haskell.nix - How to reliably add runtime dependencies</h1>
+<p>
+  <address>By <a rel="author">Marijan</a></address> on <time id="post-date" datetime="2022-10-19">2022-10-19</time>
+</p>
+
+<p id="excerpt">
+  Discover how to optimize your Haskell program distribution using Nix with executable wrapping. Learn how to utilize 'haskell.nix' and proper wrapping techniques to ensure seamless distribution of your program alongside required dependencies. Explore a practical example and see how you can unify 'haskell.nix' outputs with flake outputs for wrapped executables.
+</p>
 
 Assuming you use `haskell.nix` and have created a Haskell program that requires another executable to be present in the environment i.e. the `PATH` variable.
 

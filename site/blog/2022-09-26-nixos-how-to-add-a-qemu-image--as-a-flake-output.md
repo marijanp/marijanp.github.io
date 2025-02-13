@@ -1,13 +1,17 @@
----
-title: NixOS - How to add a Qemu image of a NixOS-Configuration as a flake output
-author: Marijan
-description: Learn to how add a Qemu image of your NixOS-Configuration as a flake output.
----
-To create a Qemu image of a NixOS-Configuration you can use a function called [make-disk-image](https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/make-disk-image.nix) in the following way:
+<h1 id="title">NixOS - How to add a QEMU image of a NixOS-Configuration as a flake output</h1>
+<p>
+  <address>By <a rel="author">Marijan</a></address> on <time id="post-date" datetime="2022-09-26">2022-09-26</time>
+</p>
+
+<p id="excerpt">
+  Learn to how add a QEMU image of your NixOS-Configuration as a flake output.
+</p>
+
+To create a QEMU image of a NixOS-Configuration you can use a function called [make-disk-image](https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/make-disk-image.nix) in the following way:
 
 ```nix
 {
-  description = "My Qemu images";
+  description = "My QEMU images";
   inputs = {
     nixpkgs.url = github:NixOS/nixpkgs/nixpkgs-unstable;
   };

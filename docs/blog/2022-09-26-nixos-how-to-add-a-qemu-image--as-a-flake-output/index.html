@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" itemscope="" itemtype="http://schema.org/WebPage">
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="alternate" type="application/rss+xml" title="Marijan's blog" href="/feed.xml">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="preload" href="/images/icons.svg" as="image" type="image/svg+xml">
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="/css/syntax.css">
+  <script src="https://marijan.pro/js/analytics.js"></script>
+  <script src="https://analytics.marijan.pro/matomo.js" async="" defer=""></script>
+  <script src="/js/theme-state.js"></script>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta name="robots" content="noai, noimageai">
+  <meta name="twitter:site" content="@marijanpe">
+  <title>
+   NixOS - How to add a QEMU image of a NixOS-Configuration as a flake output - Marijan's homepage
+  </title>
+  <meta content="Learn to how add a QEMU image of your NixOS-Configuration as a flake output." name="description">
+ </head>
+ <body>
+  <header class="bg-base-100">
+   <div class="max-w-prose m-auto">
+    <nav class="navbar">
+     <div class="navbar-start">
+      <ul class="menu menu-horizontal">
+       <li>
+        <a href="/index.html">Home</a>
+       </li>
+       <li>
+        <a href="/blog/">Posts</a>
+       </li>
+      </ul>
+     </div>
+     <div class="navbar-end">
+      <div>
+       <ul class="menu menu-horizontal text-xl">
+        <li>
+         <a href="https://git.sr.ht/~marijan/">
+                      
+         <svg class="icon" viewbox="0 0 24 24">
+          
+                        
+          <use href="/images/icons.svg#sourcehut"></use>
+          
+                      
+         </svg>
+         
+                    
+        </a>
+       </li>
+       <li>
+        <a href="https://github.com/marijanp">
+                      
+        <svg class="icon" viewbox="0 0 24 24">
+         
+                        
+         <use href="/images/icons.svg#github"></use>
+         
+                      
+        </svg>
+        
+                    
+       </a>
+      </li>
+      <li>
+       <a href="https://linkedin.com/in/marijanp">
+                      
+       <svg class="icon" viewbox="0 0 24 24">
+        
+                        
+        <use href="/images/icons.svg#linkedin"></use>
+        
+                      
+       </svg>
+       
+                    
+      </a>
+     </li>
+     <li>
+      <label class="swap swap-rotate">
+                      
+                      <input id="themeController" onclick="saveThemeState()" type="checkbox" class="theme-controller" value="dim">
+                      
+      <svg class="swap-on icon" viewbox="0 0 24 24">
+       
+                        
+       <use href="/images/icons.svg#moon"></use>
+       
+                      
+      </svg>
+      
+                      
+      <svg class="swap-off icon" viewbox="0 0 24 24">
+       
+                        
+       <use href="/images/icons.svg#sun"></use>
+       
+                      
+      </svg>
+      
+                    
+     </label>
+    </li>
+   </ul>
+  </div>
+ </div>
+</nav>
+</div>
+</header>
+<main>
+<div class="max-w-prose m-auto">
+<div id="content" class="pt-4 px-4 md:px-0">
+ <article class="prose">
+  <h1 id="title">
+   NixOS - How to add a QEMU image of a NixOS-Configuration as a flake output
+  </h1>
+  <p></p>
+  <address>
+   By <a rel="author">Marijan</a>
+  </address>
+  on <time id="post-date" datetime="2022-09-26">2022-09-26</time>
+  <p></p>
+  <p>
+   To create a QEMU image of a NixOS-Configuration you can use a
+function called <a href="https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/make-disk-image.nix">make-disk-image</a>
+in the following way:
+  </p>
+  <div class="sourceCode" id="cb1">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">description</span> <span class="op">=</span> <span class="st">"My QEMU images"</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">inputs</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">nixpkgs</span>.<span class="va">url</span> <span class="op">=</span> <span class="va">github</span><span class="op">:</span><span class="ss">NixOS/nixpkgs/nixpkgs-unstable</span><span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="va">outputs</span> <span class="op">=</span> <span class="op">{</span> <span class="va">self</span><span class="op">,</span> <span class="va">nixpkgs</span> <span class="op">}</span>: <span class="op">{</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">qemu-image</span> <span class="op">=</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="kw">let</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">system</span> <span class="op">=</span> <span class="st">"x86_64-linux"</span><span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">pkgs</span> <span class="op">=</span> nixpkgs.legacyPackages.$<span class="op">{</span><span class="va">system</span><span class="op">};</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">lib</span> <span class="op">=</span> pkgs.lib<span class="op">;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="kw">in</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="co"># see https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/make-disk-image.nix</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>      <span class="co"># for an overview of available parameters</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>      <span class="bu">import</span> <span class="st">"</span><span class="sc">${</span>nixpkgs<span class="sc">}</span><span class="st">/nixos/lib/make-disk-image.nix"</span> <span class="op">{</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">inherit</span> pkgs lib<span class="op">;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">format</span> <span class="op">=</span> <span class="st">"qcow2"</span><span class="op">;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">diskSize</span> <span class="op">=</span> <span class="st">"8000"</span><span class="op">;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="va">config</span> <span class="op">=</span> <span class="op">(</span><span class="bu">import</span> <span class="st">"</span><span class="sc">${</span>nixpkgs<span class="sc">}</span><span class="st">/nixos/lib/eval-config.nix"</span> <span class="op">{</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>          <span class="kw">inherit</span> pkgs system<span class="op">;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>          <span class="va">modules</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>            nixpkgs.nixosModules.notDetected</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">"</span><span class="sc">${</span>nixpkgs<span class="sc">}</span><span class="st">/nixos/modules/profiles/qemu-guest.nix"</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>            <span class="op">({</span> <span class="va">pkgs</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>: <span class="op">{</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>              <span class="va">fileSystems</span>.<span class="st">"</span>/<span class="st">"</span>.<span class="va">device</span> <span class="op">=</span> <span class="st">"/dev/disk/by-label/nixos"</span><span class="op">;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>              <span class="va">boot</span>.<span class="va">loader</span>.<span class="va">grub</span>.<span class="va">device</span> <span class="op">=</span> <span class="st">"/dev/vda"</span><span class="op">;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>              <span class="va">boot</span>.<span class="va">loader</span>.<span class="va">timeout</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>              <span class="va">users</span>.<span class="va">extraUsers</span>.<span class="va">root</span>.<span class="va">password</span> <span class="op">=</span> <span class="st">""</span><span class="op">;</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>              <span class="va">system</span>.<span class="va">stateVersion</span> <span class="op">=</span> <span class="st">"22.05"</span><span class="op">;</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>              <span class="va">imports</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>                <span class="ss">./nixos-configuration.nix</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>              <span class="op">];</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>            <span class="op">})</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>          <span class="op">];</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        <span class="op">})</span>.config<span class="op">;</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
+  </div>
+ </article>
+</div>
+</div>
+</main>
+<div class="divider"></div>
+<footer class="footer footer-center bg-base-100 px-4 md:px-0">
+<div>
+<span class="footer-title text-2xl">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International" class="text-dark" style="text-decoration: none">
+              
+<svg class="icon" viewbox="0 0 96 24">
+ 
+                
+ <use href="/images/icons.svg#cc-by-nc-sa"></use>
+ 
+              
+</svg>
+
+            
+</a>
+
+          
+</span>
+<p>
+Except where otherwise noted, the content on this site is licenced
+            under
+            <a rel="license" itemprop="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"><abbr itemprop="license" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International">CC BY-NC-SA 4.0</abbr></a>. Attribute to <strong itemprop="author">Marijan</strong> including
+            a link to this <a href="https://marijan.pro/">site</a>.
+</p>
+</div>
+<div>
+<span class="footer-title">Get connected:</span>
+<ul class="menu menu-horizontal text-xl">
+<li>
+<a href="https://git.sr.ht/~marijan/">
+                
+<svg class="icon" viewbox="0 0 24 24">
+ 
+                  
+ <use href="/images/icons.svg#sourcehut"></use>
+ 
+                
+</svg>
+
+              
+</a>
+</li>
+<li>
+<a href="https://github.com/marijanp">
+                
+<svg class="icon" viewbox="0 0 24 24">
+
+                  
+<use href="/images/icons.svg#github"></use>
+
+                
+</svg>
+
+              
+</a>
+</li>
+<li>
+<a href="https://linkedin.com/in/marijanp">
+                
+<svg class="icon" viewbox="0 0 24 24">
+
+                  
+<use href="/images/icons.svg#linkedin"></use>
+
+                
+</svg>
+
+              
+</a>
+</li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

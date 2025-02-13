@@ -1,8 +1,11 @@
----
-title: NixOS - A PostgreSQL NixOS container (not Docker)
-author: Marijan
-description: Enhance Database Development with Rust sqlx and PostgreSQL using NixOS Containers. Benefit from streamlined dependency management, reduced system impact, and enhanced reproducibility. Learn how NixOS containers compare to conventional setups and Docker-like technologies. Find a detailed instruction on creating and running a NixOS container instance.
----
+<h1 id="title">NixOS - A PostgreSQL NixOS container (not Docker)</h1>
+<p>
+  <address>By <a rel="author">Marijan</a></address> on <time id="post-date" datetime="2023-08-09">2023-08-09</time>
+</p>
+
+<p id="excerpt">
+  Enhance Database Development with Rust sqlx and PostgreSQL using NixOS Containers. Benefit from streamlined dependency management, reduced system impact, and enhanced reproducibility. Learn how NixOS containers compare to conventional setups and Docker-like technologies. Find a detailed instruction on creating and running a NixOS container instance.
+</p>
 
 Recently, I was trying out several different database driver implementations for Rust. [sqlx](https://github.com/launchbadge/sqlx) sounded especially interesting to me since it enables compile-time verification of queries against the present database-schema state (produced by a series of migrations).
 

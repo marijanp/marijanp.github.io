@@ -1,8 +1,11 @@
----
-title: NixOS Ocean Sprint October 2023 - A report
-author: Marijan
-description: A report about the NixOS Ocean Sprint which is the ideal opportunity to meet fellow contributors and users from the Nix community. People from all over the world gathered in one house on the sunny Canary Island of Lanzarote to contribute and share insights or discuss topics about the Nix ecosystem. In addition, in between coding sessions, there are plenty of exciting activities like diving, surfing, cycling, drumming, etc. one can do together with amazing people.
----
+<h1 id="title">NixOS Ocean Sprint October 2023 - A report</h1>
+<p>
+  <address>By <a rel="author">Marijan</a></address> on <time id="post-date" datetime="2023-10-31">2023-10-31</time>
+</p>
+
+<p id="excerpt">
+  A report about the NixOS Ocean Sprint which is the ideal opportunity to meet fellow contributors and users from the Nix community. People from all over the world gathered in one house on the sunny Canary Island of Lanzarote to contribute and share insights or discuss topics about the Nix ecosystem. In addition, in between coding sessions, there are plenty of exciting activities like diving, surfing, cycling, drumming, etc. one can do together with amazing people.
+</p>
 
 The NixOS Ocean Sprint [oceansprint.org](https://oceansprint.org/) is the ideal opportunity to meet fellow contributors and users from the Nix community.
 People from all over the world gathered in one house on the sunny Canary Island of Lanzarote to contribute and share insights or discuss topics about the Nix ecosystem.
@@ -41,13 +44,11 @@ Afterward, we had dinner together. Like Paella, authentic Neapolitan pizza made 
 
 And on most evenings after dinner, some people didn't have enough Nix during the day and continued to be productive. A wise choice, given that you probably won't have a chance anytime soon to work in person.
 
-```{=html}
 <figure>
     <img class="m-auto md:h-72" src="/images/nixos-oceansprint-2023-10/pizza.jpg"
          alt="Authentic Neoplitan pizza." >
     <figcaption class="m-auto text-center">Authentic Neapolitan pizza made by a fellow Italian software engineer</figcaption>
 </figure>
-```
 
 ## The projects
 
@@ -75,13 +76,11 @@ NixOS tests are one of the most powerful features of the NixOS ecosystem as they
 
 [lassulus](https://github.com/lassulus) and [Mic92](https://github.com/Mic92/) worked together on the [nixpkgs-merge-bot](https://github.com/nixos/nixpkgs-merge-bot). The bot was designed to help nixpkgs maintainers merge pull requests that involve changes to their own packages. The bot enables maintainers to efficiently respond to user feedback and perform self-service merges. The bot is limited to packages within the "pkgs/by-name" directory in nixpkgs.
 
-```{=html}
 <figure>
     <img class="m-auto md:h-72" src="/images/nixos-oceansprint-2023-10/pool.jpg"
          alt="Lassulus, Mic92 and Kranzes about to deploy nixpkgs-merge-bot.">
     <figcaption class="m-auto text-center">Lassulus, Mic92 and Kranzes about to deploy nixpkgs-merge-bot.</figcaption>
 </figure>
-```
 
 ### GPU Access in the Nix Sandbox
 
@@ -91,7 +90,6 @@ Sergej [@SomeoneSerge](https://github.com/someoneserge) wrapped up his [pull req
 
 Because pictures say more than a thousand words: here are some impressions from the various activities (surfing, diving, drumming, etc.) people were able to participate in.
 
-```{=html}
 <div class="carousel carousel-center rounded-box bg-neutral p-4 space-x-4 not-prose w-full">
     <div class="carousel-item">
         <figure>
@@ -160,7 +158,6 @@ Because pictures say more than a thousand words: here are some impressions from 
         </figure>
     </div>
 </div>
-```
 
 ## Summary
 

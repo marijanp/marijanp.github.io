@@ -1,8 +1,12 @@
----
-title: Nix - Avoid overrideAttrs when wrapping an executable
-author: Marijan
-description: Explore a nuanced issue with overrideAttrs causing unnecessary recompilations.
----
+<h1 id="title">Nix - Avoid overrideAttrs when wrapping an executable </h1>
+<p>
+    <address>By <a rel="author">Marijan</a></address> on <time id="post-date" datetime="2022-06-03">2022-06-03</time>
+</p>
+
+<p id="excerpt">
+    Explore a subtle issue with using makeWrapper in combination with overrideAttrs causing unnecessary recompilations.
+</p>
+
 Let's say you created a program which requires another executable to be present in your environment i.e. in the `PATH` variable.
 
 Using Nix, there is a way to ensure that your program will only be distributed together with that executable by wrapping it. 

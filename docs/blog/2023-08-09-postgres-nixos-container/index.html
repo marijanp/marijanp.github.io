@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" itemscope="" itemtype="http://schema.org/WebPage">
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="alternate" type="application/rss+xml" title="Marijan's blog" href="/feed.xml">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="preload" href="/images/icons.svg" as="image" type="image/svg+xml">
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="/css/syntax.css">
+  <script src="https://marijan.pro/js/analytics.js"></script>
+  <script src="https://analytics.marijan.pro/matomo.js" async="" defer=""></script>
+  <script src="/js/theme-state.js"></script>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta name="robots" content="noai, noimageai">
+  <meta name="twitter:site" content="@marijanpe">
+  <title>
+   NixOS - A PostgreSQL NixOS container (not Docker) - Marijan's homepage
+  </title>
+  <meta content="Enhance Database Development with Rust sqlx and PostgreSQL using NixOS Containers. Benefit from streamlined dependency management, reduced system impact, and enhanced reproducibility. Learn how NixOS containers compare to conventional setups and Docker-like technologies. Find a detailed instruction on creating and running a NixOS container instance." name="description">
+ </head>
+ <body>
+  <header class="bg-base-100">
+   <div class="max-w-prose m-auto">
+    <nav class="navbar">
+     <div class="navbar-start">
+      <ul class="menu menu-horizontal">
+       <li>
+        <a href="/index.html">Home</a>
+       </li>
+       <li>
+        <a href="/blog/">Posts</a>
+       </li>
+      </ul>
+     </div>
+     <div class="navbar-end">
+      <div>
+       <ul class="menu menu-horizontal text-xl">
+        <li>
+         <a href="https://git.sr.ht/~marijan/">
+                      
+         <svg class="icon" viewbox="0 0 24 24">
+          
+                        
+          <use href="/images/icons.svg#sourcehut"></use>
+          
+                      
+         </svg>
+         
+                    
+        </a>
+       </li>
+       <li>
+        <a href="https://github.com/marijanp">
+                      
+        <svg class="icon" viewbox="0 0 24 24">
+         
+                        
+         <use href="/images/icons.svg#github"></use>
+         
+                      
+        </svg>
+        
+                    
+       </a>
+      </li>
+      <li>
+       <a href="https://linkedin.com/in/marijanp">
+                      
+       <svg class="icon" viewbox="0 0 24 24">
+        
+                        
+        <use href="/images/icons.svg#linkedin"></use>
+        
+                      
+       </svg>
+       
+                    
+      </a>
+     </li>
+     <li>
+      <label class="swap swap-rotate">
+                      
+                      <input id="themeController" onclick="saveThemeState()" type="checkbox" class="theme-controller" value="dim">
+                      
+      <svg class="swap-on icon" viewbox="0 0 24 24">
+       
+                        
+       <use href="/images/icons.svg#moon"></use>
+       
+                      
+      </svg>
+      
+                      
+      <svg class="swap-off icon" viewbox="0 0 24 24">
+       
+                        
+       <use href="/images/icons.svg#sun"></use>
+       
+                      
+      </svg>
+      
+                    
+     </label>
+    </li>
+   </ul>
+  </div>
+ </div>
+</nav>
+</div>
+</header>
+<main>
+<div class="max-w-prose m-auto">
+<div id="content" class="pt-4 px-4 md:px-0">
+ <article class="prose">
+  <h1 id="title">
+   NixOS - A PostgreSQL NixOS container (not Docker)
+  </h1>
+  <p></p>
+  <address>
+   By <a rel="author">Marijan</a>
+  </address>
+  on <time id="post-date" datetime="2023-08-09">2023-08-09</time>
+  <p></p>
+  <p>
+   Recently, I was trying out several different database driver
+implementations for Rust. <a href="https://github.com/launchbadge/sqlx">sqlx</a> sounded especially
+interesting to me since it enables compile-time verification of queries
+against the present database-schema state (produced by a series of
+migrations).
+  </p>
+  <p>
+   However, this powerful feature does come with a trade-off: the
+necessity of maintaining an active <a href="https://www.postgresql.org/">PostgreSQL</a> server that the
+verifier can communicate with.
+  </p>
+  <p>
+   In contrast to the conventional approach of enabling a PostgreSQL
+service system-wide, I opted to leverage the capabilities of <a href="https://nixos.wiki/wiki/NixOS_Containers">NixOS
+containers</a>.
+  </p>
+  <p>
+   If you have experience with <a href="https://www.docker.com/">Docker</a> or comparable technologies,
+you’ll discover that NixOS containers represent an enhanced solution
+compared to their counterparts. NixOS containers bring advantages like
+streamlined dependency management, reduced impact on your system
+(leveraging <a href="https://wiki.archlinux.org/title/systemd-nspawn">systemd-nspawn</a>),
+declarative configuration, and the ability to ensure reproducibility. To
+delve deeper into the benefits of Nix, visit the official <a href="https://nixos.org/">Nix &amp; NixOS website</a>.
+  </p>
+  <p>
+   In the remainder of this post I’ll explain what I did to obtain a
+running NixOS container instance serving a PostgreSQL service. I’ve
+created a new flake output in my projects flake called
+<code>nixosConfigurations.postgres-container</code>:
+  </p>
+  <p>
+   The example can be found on <a href="https://git.sr.ht/~marijan/website/tree/main/item/examples/postgres-container">Sourcehut</a>
+or <a href="https://github.com/marijanp/marijanp.github.io/tree/main/examples/postgres-container">GitHub</a>.
+  </p>
+  <div class="sourceCode" id="cb1">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">inputs</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">nixpkgs</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">"github:NixOS/nixpkgs/nixpkgs-unstable"</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">outputs</span> <span class="op">=</span> inputs@<span class="op">{</span> <span class="va">nixpkgs</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>:</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="va">nixosConfigurations</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">postgres-container</span> <span class="op">=</span> nixpkgs.lib.nixosSystem <span class="op">{</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>          <span class="va">system</span> <span class="op">=</span> <span class="st">"x86_64-linux"</span><span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>          <span class="va">modules</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">({</span> <span class="va">pkgs</span><span class="op">,</span> <span class="va">config</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>:</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>              <span class="kw">let</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                <span class="va">cfg</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                  <span class="va">pgUser</span> <span class="op">=</span> <span class="st">"helloworld"</span><span class="op">;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                  <span class="va">pgUserPassword</span> <span class="op">=</span> <span class="st">"helloworld"</span><span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># hash = $(echo -n "&lt;pgUser&gt;&lt;pgUserPassword&gt;" | md5sum)</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># prefix with md5 i.e. "md5$hash"</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                  <span class="va">pgUserPasswordMd5</span> <span class="op">=</span> <span class="st">"md58be363cf63c20050aaad7dbe737acd73"</span><span class="op">;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>                  <span class="va">pgDb</span> <span class="op">=</span> <span class="st">"helloworld"</span><span class="op">;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                <span class="op">};</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>              <span class="kw">in</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>              <span class="op">{</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                <span class="va">boot</span>.<span class="va">isContainer</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                <span class="va">users</span>.<span class="va">users</span>.${<span class="va">cfg</span>.<span class="va">pgUser</span><span class="op">}</span> = <span class="op">{</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                  <span class="va">name</span> <span class="op">=</span> cfg.pgUser<span class="op">;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                  <span class="va">group</span> <span class="op">=</span> cfg.pgUser<span class="op">;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>                  <span class="va">isSystemUser</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span>;</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>                users.groups.$<span class="op">{</span><span class="va">cfg</span>.<span class="va">pgUser</span><span class="op">}</span> = <span class="op">{</span> <span class="op">}</span>;</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>                networking.firewall.allowedTCPPorts =</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>                  <span class="op">[</span> config.services.postgresql.settings.port <span class="op">]</span>;</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                services.postgresql = <span class="op">{</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                  <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>                  <span class="va">enableTCPIP</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>                  <span class="va">settings</span>.<span class="va">port</span> <span class="op">=</span> <span class="dv">5432</span><span class="op">;</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>                  <span class="va">ensureDatabases</span> <span class="op">=</span> <span class="op">[</span> cfg.pgDb <span class="op">];</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>                  <span class="va">authentication</span> <span class="op">=</span> <span class="st">''</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="st">                    #type database DBuser origin-address auth-method</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="st">                    # ipv4</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="st">                    host  all      </span><span class="sc">${</span>cfg.pgUser<span class="sc">}</span><span class="st">     0.0.0.0/0      md5</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="st">                    # ipv6</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="st">                    host all       </span><span class="sc">${</span>cfg.pgUser<span class="sc">}</span><span class="st">     ::/0           md5</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="st">                  ''</span><span class="op">;</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>                  <span class="va">ensureUsers</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>                    <span class="op">{</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>                      <span class="va">name</span> <span class="op">=</span> cfg.pgUser<span class="op">;</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>                      <span class="va">ensureDBOwnership</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>                  <span class="op">];</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>                  <span class="va">initialScript</span> <span class="op">=</span> pkgs.writeText <span class="st">"backend-init-script"</span> <span class="st">''</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="st">                    CREATE ROLE </span><span class="sc">${</span>cfg.pgUser<span class="sc">}</span><span class="st"> WITH SUPERUSER LOGIN PASSWORD '</span><span class="sc">${</span>cfg.pgUserPasswordMd5<span class="sc">}</span><span class="st">' CREATEDB;</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="st">                  ''</span><span class="op">;</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span>;</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>              }<span class="op">)</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>          <span class="op">];</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
+  </div>
+  <p>
+   After adding this output you can use it in the following way using
+<code>nixos-container</code>:
+  </p>
+  <ol type="1">
+   <li>
+    Create a container called “postgres”, using the
+<code>nixosConfiguration.postgres-container</code> output of the current
+flake:
+   </li>
+  </ol>
+  <div class="sourceCode" id="cb2">
+   <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nixos-container create postgres <span class="at">--flake</span> .#postgres-container</span></code></pre>
+  </div>
+  <ol start="2" type="1">
+   <li>
+    Start the container
+   </li>
+  </ol>
+  <div class="sourceCode" id="cb3">
+   <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nixos-container start postgres</span></code></pre>
+  </div>
+  <ol start="3" type="1">
+   <li>
+    If not printed after startup, run the following to figure out the
+containers IP address.
+   </li>
+  </ol>
+  <div class="sourceCode" id="cb4">
+   <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nixos-container show-ip postgres</span></code></pre>
+  </div>
+  <ol start="4" type="1">
+   <li>
+    Test whether you can connect to the database that is running on the
+guest on your host. (other connection info was extracted from the
+<code>cfg</code> attrset, see flake output
+<code>postgres-container</code>)
+   </li>
+  </ol>
+  <div class="sourceCode" id="cb5">
+   <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-h</span> <span class="op">&lt;</span>IP address from step <span class="dv">3</span><span class="op">&gt;</span> -p 5432 <span class="at">-d</span> helloworld <span class="at">-U</span> helloworld <span class="at">-W</span></span></code></pre>
+  </div>
+  <p>
+   <code>-W</code> will ask you for the password, which is
+<code>cfg.pgUserPassword</code> i.e. <code>helloworld</code>.
+  </p>
+  <p>
+   For obvious reasons you should not use this container in
+production.
+  </p>
+ </article>
+</div>
+</div>
+</main>
+<div class="divider"></div>
+<footer class="footer footer-center bg-base-100 px-4 md:px-0">
+<div>
+<span class="footer-title text-2xl">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International" class="text-dark" style="text-decoration: none">
+              
+<svg class="icon" viewbox="0 0 96 24">
+ 
+                
+ <use href="/images/icons.svg#cc-by-nc-sa"></use>
+ 
+              
+</svg>
+
+            
+</a>
+
+          
+</span>
+<p>
+Except where otherwise noted, the content on this site is licenced
+            under
+            <a rel="license" itemprop="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"><abbr itemprop="license" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International">CC BY-NC-SA 4.0</abbr></a>. Attribute to <strong itemprop="author">Marijan</strong> including
+            a link to this <a href="https://marijan.pro/">site</a>.
+</p>
+</div>
+<div>
+<span class="footer-title">Get connected:</span>
+<ul class="menu menu-horizontal text-xl">
+<li>
+<a href="https://git.sr.ht/~marijan/">
+                
+<svg class="icon" viewbox="0 0 24 24">
+ 
+                  
+ <use href="/images/icons.svg#sourcehut"></use>
+ 
+                
+</svg>
+
+              
+</a>
+</li>
+<li>
+<a href="https://github.com/marijanp">
+                
+<svg class="icon" viewbox="0 0 24 24">
+
+                  
+<use href="/images/icons.svg#github"></use>
+
+                
+</svg>
+
+              
+</a>
+</li>
+<li>
+<a href="https://linkedin.com/in/marijanp">
+                
+<svg class="icon" viewbox="0 0 24 24">
+
+                  
+<use href="/images/icons.svg#linkedin"></use>
+
+                
+</svg>
+
+              
+</a>
+</li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

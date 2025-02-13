@@ -4,19 +4,15 @@
     <meta charset="utf-8" >
     <meta http-equiv="x-ua-compatible" content="ie=edge" >
     <meta name="viewport" content="width=device-width, initial-scale=1" >
-    $if(description)$
-    <meta name="description" content="$description$" >
-    $endif$
-    <title>Marijan's homepage - $title$</title>
     <link
       rel="alternate"
       type="application/rss+xml"
       title="Marijan's blog"
       href="/feed.xml"
     >
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
     <link rel="preload" href="/images/icons.svg" as="image" type="image/svg+xml">
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico" >
-    <link rel="stylesheet" type="text/css" href="/css/style.css" >
     <link rel="stylesheet" type="text/css" href="/css/syntax.css" >
     <!-- Matomo -->
     <script src="https://marijan.pro/js/analytics.js"></script>
@@ -35,7 +31,7 @@
             <div class="navbar-start">
               <ul class="menu menu-horizontal">
                 <li><a href="/index.html">Home</a></li>
-                <li><a href="/pages/posts.html">Posts</a></li>
+                <li><a href="/blog/">Posts</a></li>
               </ul>
             </div>
             <div class="navbar-end">
@@ -83,7 +79,8 @@
       </header>
       <main>
         <div class="max-w-prose m-auto">
-        <div class="pt-4 px-4 md:px-0">$body$</div>
+          <div id="content" class="pt-4 px-4 md:px-0">
+          </div>
         </div>
       </main>
       <div class="divider"></div>

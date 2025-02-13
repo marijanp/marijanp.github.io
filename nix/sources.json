@@ -1,0 +1,26 @@
+{
+    "nixpkgs": {
+        "branch": "nixos-unstable",
+        "description": "Nix Packages collection",
+        "homepage": null,
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "64e75cd44acf21c7933d61d7721e812eac1b5a0a",
+        "sha256": "0hzdqj5843sf4dsa78yx0b23rqy89q01w31gql8mdzxp1dagr8nv",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/64e75cd44acf21c7933d61d7721e812eac1b5a0a.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "npmlock2nix": {
+        "branch": "master",
+        "description": "nixify npm based packages [maintainer=@andir] ",
+        "homepage": "",
+        "owner": "nix-community",
+        "repo": "npmlock2nix",
+        "rev": "9197bbf397d76059a76310523d45df10d2e4ca81",
+        "sha256": "1ddfby72fsnpn4yw43g4zxvg6jzlk5hi5cfnnccg9jgw53ckr4xh",
+        "type": "tarball",
+        "url": "https://github.com/nix-community/npmlock2nix/archive/9197bbf397d76059a76310523d45df10d2e4ca81.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}

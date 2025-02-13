@@ -1,9 +1,12 @@
----
-title: NixOS - How to modify systemd services you don't own
-author: Marijan
-description: Learn how to modify external systemd services in your NixOS configuration.
-#https://nixos.org/manual/nixos/stable/#module-services-litestream-configuration
----
+<h1 id="title">NixOS - How to modify systemd services you don't own</h1>
+<p>
+  <address>By <a rel="author">Marijan</a></address> on <time id="post-date" datetime="2022-08-26">2022-08-26</time>
+</p>
+
+<p id="excerpt">
+  Learn how to modify external systemd services in your NixOS configuration.
+</p>
+
 ### Problem
 
 I imported and enabled a NixOS module i.e. a systemd service, that listens on a socket.

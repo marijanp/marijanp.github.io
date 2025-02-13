@@ -7,4 +7,3 @@ function saveThemeState(){
   var checkbox = document.getElementById('themeController');
   localStorage.setItem('themeState', checkbox.checked);
 }
-
