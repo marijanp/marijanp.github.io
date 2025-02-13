@@ -1,5 +1,4 @@
-*_cache
-*result
+.envrc
 .direnv
-.tmp
-node_modules
+build
+result
