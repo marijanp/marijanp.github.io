@@ -16,6 +16,7 @@ in
     inputsFrom = [ pkgs.dist ];
     nativeBuildInputs = [
       pkgs.simple-http-server
+      pkgs.nodejs
     ];
   };
 }
