@@ -8,10 +8,25 @@
     nixpkgs.follows = "haskellNix/nixpkgs-unstable";
   };
 
-  outputs = { self, flake-parts, nixpkgs, haskellNix, ... }:
+  outputs =
+    {
+      self,
+      flake-parts,
+      nixpkgs,
+      haskellNix,
+      ...
+    }:
     flake-parts.lib.mkFlake { inherit self; } {
       systems = [ "x86_64-linux" ];
-      perSystem = { config, self', inputs', pkgs, system, ... }:
+      perSystem =
+        {
+          config,
+          self',
+          inputs',
+          pkgs,
+          system,
+          ...
+        }:
         let
           projectName = "example";
 
@@ -40,7 +55,10 @@
           haskellNixFlake = pkgs.${projectName}.flake { };
         in
         pkgs.lib.recursiveUpdate
-          (builtins.removeAttrs haskellNixFlake [ "devShell" "hydraJobs" ]) # remove attributes which are not supported by flake-parts
+          (builtins.removeAttrs haskellNixFlake [
+            "devShell"
+            "hydraJobs"
+          ]) # remove attributes which are not supported by flake-parts
           {
             devShells.default = haskellNixFlake.devShell;
           };

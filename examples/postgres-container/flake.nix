@@ -2,13 +2,15 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
-  outputs = inputs@{ nixpkgs, ... }:
+  outputs =
+    inputs@{ nixpkgs, ... }:
     {
       nixosConfigurations = {
         postgres-container = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
-            ({ pkgs, config, ... }:
+            (
+              { pkgs, config, ... }:
               let
                 cfg = {
                   pgUser = "helloworld";
@@ -30,8 +32,7 @@
 
                 users.groups.${cfg.pgUser} = { };
 
-                networking.firewall.allowedTCPPorts =
-                  [ config.services.postgresql.settings.port ];
+                networking.firewall.allowedTCPPorts = [ config.services.postgresql.settings.port ];
 
                 services.postgresql = {
                   enable = true;
@@ -55,7 +56,8 @@
                     CREATE ROLE ${cfg.pgUser} WITH SUPERUSER LOGIN PASSWORD '${cfg.pgUserPasswordMd5}' CREATEDB;
                   '';
                 };
-              })
+              }
+            )
           ];
         };
       };
