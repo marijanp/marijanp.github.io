@@ -2,7 +2,7 @@
   description = "marijan's website";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/5e5402ecbcb27af32284d4a62553c019a3a49ea6";
+    nixpkgs.url = "github:NixOS/nixpkgs/8a2f738d9d1f1d986b5a4cd2fd2061a7127237d7";
     flake-parts.url = "github:hercules-ci/flake-parts";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";

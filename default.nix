@@ -44,9 +44,11 @@ runCommand "dist"
     cp -r ${NODE_PATH} build/css/node_modules
 
     echo "Running tailwind ..."
-    chmod +w build/css/style.css
-    tailwindcss -i build/css/style.css -o build/css/style.css
-    chmod -w build/css/style.css
+    tailwindcss -i build/css/style.in.css -o build/css/style.css
+    rm build/css/style.in.css
+
+    chmod -R +w build/css/node_modules
+    rm -r build/css/node_modules
 
     echo "Running syntax highlighter ..."
     tmp=$(mktemp)
