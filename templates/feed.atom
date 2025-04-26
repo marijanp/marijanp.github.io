@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <title>{{feed_title}}</title>
+  <id>{{feed_url}}</id>
+	<link rel="self" href="{{feed_url}}" type="application/atom+xml"/>
+	<link rel="alternate" href="{{site_url}}" type="text/html"/>
+  <updated>{{feed_last_updated}}</updated>
+  <author>
+    <name>{{feed_author}}</name>
+    {%- if feed_author_uri -%}<uri>{{feed_author_uri}}</uri>{%- endif %}
+    {%- if feed_author_email -%}<email>{{feed_author_email}}</email>{%- endif -%}
+  </author>
+  {%- if feed_icon -%}<icon>{{feed_icon}}</icon>{%- endif -%}
+  <generator uri="https://soupault.app" version="{{soupault_version}}">soupault</generator>
+  {%- for entry in entries %}
+  <entry>
+    <id>{{site_url}}{{entry.url}}</id>
+    <link rel="alternate" href="{{site_url}}{{entry.url}}" type="text/html"/>
+    <title>{{entry.title}}</title>
+    <published>{{entry.date}}</published>
+    <updated>{{entry.date}}</updated>
+    <summary>{{entry.excerpt | escape}}</summary>
+  </entry>
+  {% endfor %}
+</feed>

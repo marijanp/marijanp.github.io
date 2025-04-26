@@ -17,8 +17,9 @@
   <meta name="robots" content="noai, noimageai">
   <meta name="twitter:site" content="@marijanpe">
   <title>
-   marijan
+   NixOS - How to modify systemd services you don't ownmarijan
   </title>
+  <meta content="Learn how to modify external systemd services in your NixOS configuration." name="description">
  </head>
  <body>
   <header class="bg-base-100">
@@ -113,41 +114,64 @@
 <main>
 <div class="max-w-prose m-auto">
 <div id="content" class="pt-4 px-4 md:px-0">
- <div class="grid gap-4">
-  <h2 class="text-2xl">
-   Hello, my name is Marijan!
-  </h2>
-  <div class="grid md:grid-cols-2 gap-4">
-   <p>
-    I'm an independent consultant for Software Engineering and DevOps. I lay
-      great emphasis on software design as well as reproducible and
-      regression-free software development. I have experience in application-
-      and backend development and DevOps in different contexts. Some of these
-      contexts are Fintech, Robotics, and Deep Learning.
-   </p>
-   <div class="">
-    <img src="images/marijan.jpg" alt="Photo of Marijan" class="rounded-lg">
-   </div>
+ <article class="prose">
+  <h1 id="title">
+   NixOS - How to modify systemd services you don't own
+  </h1>
+  <p></p>
+  <address>
+   By <a rel="author">Marijan</a>
+  </address>
+  on <time id="post-date" datetime="2022-08-26">2022-08-26</time>
+  <p></p>
+  <h3>
+   Problem
+  </h3>
+  <p>
+   I imported and enabled a NixOS module i.e. a systemd service, that
+listens on a socket. The module options for the service allowed to
+specify the socket path manually and the application would take care of
+creating the socket at the given path. This socket had read-only file
+permissions and the problem was, that another service that is supposed
+to communicate with the prior service through that socket needed write
+permissions.
+  </p>
+  <p>
+   Neither of the two modules had options to configure the
+<code>group</code> or <code>user</code> of the service and I was stuck
+with the question: “How to add write permissions for that socket without
+modifying the upstream module definitions?”
+  </p>
+  <h3>
+   Solution
+  </h3>
+  <p>
+   Sometimes you think you know how <code>Nix</code> works, but for some
+reason the most obvious solutions just don’t come to your mind.
+Obviously the module system allows you to change configurations, and
+there is a configuration option for systemd services called
+<code>serviceConfig</code>. So what I’ve ended up doing is the
+following:
+  </p>
+  <p>
+   <code>socket-listener</code> being the NixOs module i.e. systemd
+service that listens on a socket.
+  </p>
+  <div class="sourceCode" id="cb1">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>services.socket<span class="op">-</span>listener = <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">socketPath</span> <span class="op">=</span> <span class="st">"/run/socket-listener/socket-listener.socket"</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>systemd.services.socket<span class="op">-</span>listener.serviceConfig.ExecStartPost = pkgs.writeShellScript <span class="st">"add-socket-write-permissions"</span> <span class="st">''</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="st">    while [ ! -S </span><span class="sc">${</span>config.socket<span class="op">-</span>listener.socketPath<span class="sc">}</span><span class="st"> ];</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="st">    do</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="st">      sleep 1</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="st">    done</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="st">    chmod 0666 </span><span class="sc">${</span>config.socket<span class="op">-</span>listener.socketPath<span class="sc">}</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="st">  ''</span>;</span></code></pre>
   </div>
-  <p>
-   I work with functional languages like Haskell and Nix/NixOS.
-    Moreover, I have experience with Rust and modern C++.
-  </p>
-  <p>
-   I was born and raised in Germany, graduated in Informatics at the
-    <a class="link" href="https://www.informatik.kit.edu/">Karlsruhe Institute of Technology</a>, and live in Croatia on the Dalmatian coast.
-  </p>
-  <p>
-   You can contact me in the following languages: English (professional),
-    German (native), Croatian (native), Spanish (basic).
-  </p>
-  <div>
-   <a class="btn btn-accent flex-none" href="https://cal.com/marijanp">
-      Schedule time with me
-      <i class="fa fa-external-link-square"></i>
-    </a>
-  </div>
- </div>
+ </article>
 </div>
 </div>
 </main>

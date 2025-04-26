@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <title>marijan</title>
+  <id>https://marijan.pro/posts/feed.atom</id>
+	<link rel="self" href="https://marijan.pro/posts/feed.atom" type="application/atom+xml"/>
+	<link rel="alternate" href="https://marijan.pro" type="text/html"/>
+  <updated>2023-10-31T00:00:00+00:00</updated>
+  <author>
+    <name>Marijan Petričević</name><email>marijan.petricevic94@gmail.com</email></author><icon>https://marijan.pro/images/favicon.ico</icon><generator uri="https://soupault.app" version="4.11.0">soupault</generator>
+  <entry>
+    <id>https://marijan.pro/posts/2023-10-31-nixos-oceansprint</id>
+    <link rel="alternate" href="https://marijan.pro/posts/2023-10-31-nixos-oceansprint" type="text/html"/>
+    <title>NixOS Ocean Sprint October 2023 - A report</title>
+    <published>2023-10-31T00:00:00+00:00</published>
+    <updated>2023-10-31T00:00:00+00:00</updated>
+    <summary>A report about the NixOS Ocean Sprint which is the ideal opportunity to meet fellow contributors and users from the Nix community. People from all over the world gathered in one house on the sunny Canary Island of Lanzarote to contribute and share insights or discuss topics about the Nix ecosystem. In addition, in between coding sessions, there are plenty of exciting activities like diving, surfing, cycling, drumming, etc. one can do together with amazing people.</summary>
+  </entry>
+  
+  <entry>
+    <id>https://marijan.pro/posts/2023-08-09-postgres-nixos-container</id>
+    <link rel="alternate" href="https://marijan.pro/posts/2023-08-09-postgres-nixos-container" type="text/html"/>
+    <title>NixOS - A PostgreSQL NixOS container (not Docker)</title>
+    <published>2023-08-09T00:00:00+00:00</published>
+    <updated>2023-08-09T00:00:00+00:00</updated>
+    <summary>Enhance Database Development with Rust sqlx and PostgreSQL using NixOS Containers. Benefit from streamlined dependency management, reduced system impact, and enhanced reproducibility. Learn how NixOS containers compare to conventional setups and Docker-like technologies. Find a detailed instruction on creating and running a NixOS container instance.</summary>
+  </entry>
+  
+  <entry>
+    <id>https://marijan.pro/posts/2022-10-19-haskell-nix-how-to-reliably-add-runime-deps</id>
+    <link rel="alternate" href="https://marijan.pro/posts/2022-10-19-haskell-nix-how-to-reliably-add-runime-deps" type="text/html"/>
+    <title>haskell.nix - How to reliably add runtime dependencies</title>
+    <published>2022-10-19T00:00:00+00:00</published>
+    <updated>2022-10-19T00:00:00+00:00</updated>
+    <summary>Discover how to optimize your Haskell program distribution using Nix with executable wrapping. Learn how to utilize &apos;haskell.nix&apos; and proper wrapping techniques to ensure seamless distribution of your program alongside required dependencies. Explore a practical example and see how you can unify &apos;haskell.nix&apos; outputs with flake outputs for wrapped executables.</summary>
+  </entry>
+  
+  <entry>
+    <id>https://marijan.pro/posts/2022-09-26-nixos-how-to-add-a-qemu-image--as-a-flake-output</id>
+    <link rel="alternate" href="https://marijan.pro/posts/2022-09-26-nixos-how-to-add-a-qemu-image--as-a-flake-output" type="text/html"/>
+    <title>NixOS - How to add a QEMU image of a NixOS-Configuration as a flake output</title>
+    <published>2022-09-26T00:00:00+00:00</published>
+    <updated>2022-09-26T00:00:00+00:00</updated>
+    <summary>Learn to how add a QEMU image of your NixOS-Configuration as a flake output.</summary>
+  </entry>
+  
+  <entry>
+    <id>https://marijan.pro/posts/2022-08-26-nixos-how-to-modify-systemd-services-you-dont-own</id>
+    <link rel="alternate" href="https://marijan.pro/posts/2022-08-26-nixos-how-to-modify-systemd-services-you-dont-own" type="text/html"/>
+    <title>NixOS - How to modify systemd services you don't own</title>
+    <published>2022-08-26T00:00:00+00:00</published>
+    <updated>2022-08-26T00:00:00+00:00</updated>
+    <summary>Learn how to modify external systemd services in your NixOS configuration.</summary>
+  </entry>
+  
+  <entry>
+    <id>https://marijan.pro/posts/2022-06-03-dont-override-and-wrap-only</id>
+    <link rel="alternate" href="https://marijan.pro/posts/2022-06-03-dont-override-and-wrap-only" type="text/html"/>
+    <title>Nix - Avoid overrideAttrs when wrapping an executable</title>
+    <published>2022-06-03T00:00:00+00:00</published>
+    <updated>2022-06-03T00:00:00+00:00</updated>
+    <summary>Explore a subtle issue with using makeWrapper in combination with overrideAttrs causing unnecessary recompilations.</summary>
+  </entry>
+  
+</feed>

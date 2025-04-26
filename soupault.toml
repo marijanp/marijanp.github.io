@@ -14,22 +14,24 @@
   # Where the output goes
   build_dir = "build"
 
+  # Work as a website generator
+  generator_mode = true
+
   # Files with other extensions are considered static assets
   # and copied to build/ unchanged.
-  page_file_extensions = ["htm", "html", "md", "rst", "adoc"]
+  page_file_extensions = ["htm", "html", "md"]
 
   # Files with these extensions are ignored.
   ignore_extensions = ["draft"]
 
   # Treat files as content to insert in the template,
   # unless they have an <html> element in them.
-  generator_mode = true
   complete_page_selector = "html"
 
   # Use templates/base.html file for the page template.
   default_template_file = "templates/base.html"
 
-  # The content will be inserted into its <main> element,
+  # The content will be inserted into its <div id="content"> element,
   # after its last already existing child.
   default_content_selector = "div#content"
   default_content_action = "append_child"
@@ -50,14 +52,30 @@
   plugin_discovery = true
   plugin_dirs = ["plugins"]
 
+[custom_options]
+  # Atom feed metadata:
+  site_url = "https://marijan.pro"
+
+  site_author = "Marijan Petričević"
+  site_author_email = "marijan.petricevic94@gmail.com"
+  site_title = "marijan"
+  site_icon = "https://marijan.pro/images/favicon.ico"
+
 [preprocessors]
   md = 'pandoc -f commonmark+smart -t html'
+
+[widgets.atom]
+  widget = "atom"
+  page = "posts/index.html"
+  feed_file = "feed.atom"
+  use_section = "posts"
+  template = "templates/feed.atom"
 
 [widgets.post-title]
   widget = "title"
   selector = [ "h1#post-title", "h1"]
-  default = "Marijan's homepage"
-  append = " - Marijan's homepage"
+  default = "marijan"
+  append = "marijan"
 
   # Insert a <title> element if a page doesn’t have one
   force = true
@@ -67,7 +85,7 @@
 
 [widgets.article-wrapper]
 widget = "article-wrapper"
-section = "blog"
+section = "posts"
 
 [widgets.add-meta-description]
 widget = "add-meta-description"
@@ -75,7 +93,7 @@ widget = "add-meta-description"
 [index]
   index = true
 
-  section = "blog"
+  section = "posts"
 
   sort_descending = true
   sort_type = "calendar"
@@ -93,9 +111,9 @@ widget = "add-meta-description"
   extract_attribute = "datetime"
   fallback_to_content = true
 
-[index.views.blog-index]
+[index.views.posts-index]
   index_selector = "div#blog-posts"
-  section = "blog"
+  section = "posts"
   index_template = """
     <table class="table table-zebra">
       <tbody>
@@ -111,7 +129,7 @@ widget = "add-meta-description"
             <div class="post-tags">
               <strong>Tags: </strong>
               {%- for t in e.tags -%}
-                <a href="/blog/tag/{{t}}"><span class="post-tag">{{t}}</span></a>{% if not loop.last %}, {% endif %}
+                <a href="/posts/tag/{{t}}"><span class="post-tag">{{t}}</span></a>{% if not loop.last %}, {% endif %}
               {%- endfor -%}
             </div>
             {% endif %}
