@@ -17,13 +17,13 @@
   <meta name="robots" content="noai, noimageai">
   <meta name="twitter:site" content="@marijanpe">
   <title>
-   NixOS - How to add a QEMU image of a NixOS-Configuration as a flake outputmarijan
+   NixOS - How to add a QEMU image of a NixOS-Configuration as a flake output - marijan
   </title>
   <meta content="Learn to how add a QEMU image of your NixOS-Configuration as a flake output." name="description">
  </head>
  <body>
   <header class="bg-base-100">
-   <div class="max-w-prose m-auto">
+   <div class="max-w-2xl m-auto">
     <nav class="navbar">
      <div class="navbar-start">
       <ul class="menu menu-horizontal">
@@ -67,70 +67,56 @@
        </a>
       </li>
       <li>
-       <a href="https://linkedin.com/in/marijanp">
+       <label class="swap swap-rotate">
                       
-       <svg class="icon" viewbox="0 0 24 24">
+                      <input id="themeController" onclick="saveThemeState()" type="checkbox" class="theme-controller" value="dim">
+                      
+       <svg class="swap-on icon" viewbox="0 0 24 24">
         
                         
-        <use href="/images/icons.svg#linkedin"></use>
+        <use href="/images/icons.svg#moon"></use>
+        
+                      
+       </svg>
+       
+                      
+       <svg class="swap-off icon" viewbox="0 0 24 24">
+        
+                        
+        <use href="/images/icons.svg#sun"></use>
         
                       
        </svg>
        
                     
-      </a>
+      </label>
      </li>
-     <li>
-      <label class="swap swap-rotate">
-                      
-                      <input id="themeController" onclick="saveThemeState()" type="checkbox" class="theme-controller" value="dim">
-                      
-      <svg class="swap-on icon" viewbox="0 0 24 24">
-       
-                        
-       <use href="/images/icons.svg#moon"></use>
-       
-                      
-      </svg>
-      
-                      
-      <svg class="swap-off icon" viewbox="0 0 24 24">
-       
-                        
-       <use href="/images/icons.svg#sun"></use>
-       
-                      
-      </svg>
-      
-                    
-     </label>
-    </li>
-   </ul>
+    </ul>
+   </div>
   </div>
- </div>
-</nav>
+ </nav>
 </div>
 </header>
 <main>
 <div class="max-w-prose m-auto">
-<div id="content" class="pt-4 px-4 md:px-0">
- <article class="prose">
-  <h1 id="title">
-   NixOS - How to add a QEMU image of a NixOS-Configuration as a flake output
-  </h1>
-  <p></p>
-  <address>
-   By <a rel="author">Marijan</a>
-  </address>
-  on <time id="post-date" datetime="2022-09-26">2022-09-26</time>
-  <p></p>
-  <p>
-   To create a QEMU image of a NixOS-Configuration you can use a
+ <div id="content" class="pt-4 px-4 md:px-0">
+  <article class="prose">
+   <h1 id="title">
+    NixOS - How to add a QEMU image of a NixOS-Configuration as a flake output
+   </h1>
+   <p></p>
+   <address>
+    By <a rel="author">Marijan</a>
+   </address>
+   on <time id="post-date" datetime="2022-09-26">2022-09-26</time>
+   <p></p>
+   <p>
+    To create a QEMU image of a NixOS-Configuration you can use a
 function called <a href="https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/make-disk-image.nix">make-disk-image</a>
 in the following way:
-  </p>
-  <div class="sourceCode" id="cb1">
-   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+   </p>
+   <div class="sourceCode" id="cb1">
+    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">description</span> <span class="op">=</span> <span class="st">"My QEMU images"</span><span class="op">;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">inputs</span> <span class="op">=</span> <span class="op">{</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">nixpkgs</span>.<span class="va">url</span> <span class="op">=</span> <span class="va">github</span><span class="op">:</span><span class="ss">NixOS/nixpkgs/nixpkgs-unstable</span><span class="op">;</span></span>
@@ -169,25 +155,27 @@ in the following way:
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
 <span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
 <span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
-  </div>
- </article>
-</div>
+   </div>
+  </article>
+ </div>
 </div>
 </main>
+<div class="max-w-2xl m-auto">
 <div class="divider"></div>
-<footer class="footer footer-horizontal footer-center bg-base-100 px-4 md:px-0">
-<div>
-<span class="footer-title text-2xl">
+</div>
+<footer class="footer sm:footer-horizontal bg-base-100 max-w-2xl m-auto px-4 mb-4">
+<aside>
+ <span class="footer-title text-2xl">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International" class="text-dark" style="text-decoration: none">
               
-<svg class="icon" viewbox="0 0 96 24">
- 
+ <svg class="icon" viewbox="0 0 96 24">
+  
                 
- <use href="/images/icons.svg#cc-by-nc-sa"></use>
- 
+  <use href="/images/icons.svg#cc-by-nc-sa"></use>
+  
               
-</svg>
-
+ </svg>
+ 
             
 </a>
 
@@ -199,54 +187,103 @@ Except where otherwise noted, the content on this site is licenced
             <a rel="license" itemprop="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"><abbr itemprop="license" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International">CC BY-NC-SA 4.0</abbr></a>. Attribute to <strong itemprop="author">Marijan</strong> including
             a link to this <a href="https://marijan.pro/">site</a>.
 </p>
-</div>
-<div>
-<span class="footer-title">Get connected:</span>
-<ul class="menu menu-horizontal text-xl">
-<li>
+</aside>
+<nav>
+<h6 class="footer-title">
+Code:
+</h6>
+<div class="grid grid-flow-col gap-4">
 <a href="https://git.sr.ht/~marijan/">
-                
+              
 <svg class="icon" viewbox="0 0 24 24">
  
-                  
+                
  <use href="/images/icons.svg#sourcehut"></use>
  
-                
+              
 </svg>
 
-              
+            
 </a>
-</li>
-<li>
-<a href="https://github.com/marijanp">
-                
+
+            <a href="https://github.com/marijanp">
+              
 <svg class="icon" viewbox="0 0 24 24">
 
-                  
+                
 <use href="/images/icons.svg#github"></use>
 
-                
+              
 </svg>
 
-              
+            
 </a>
-</li>
-<li>
-<a href="https://linkedin.com/in/marijanp">
-                
+</div>
+</nav>
+<nav>
+<h6 class="footer-title">
+Contact:
+</h6>
+<div class="grid grid-flow-col gap-4">
+<a href="xmpp:marijan@chat.marijan.pro">
+              
 <svg class="icon" viewbox="0 0 24 24">
 
-                  
-<use href="/images/icons.svg#linkedin"></use>
-
                 
-</svg>
+<use href="/images/icons.svg#xmpp"></use>
 
               
+</svg>
+
+            
 </a>
-</li>
-</ul>
+
+            <a href="mailto:marijan.petricevic94@gmail.com">
+              
+<svg class="icon" viewbox="0 0 100 100">
+
+                
+<use href="/images/icons.svg#envelope"></use>
+
+              
+</svg>
+
+            
+</a>
 </div>
+</nav>
+<nav>
+<h6 class="footer-title">
+Social:
+</h6>
+<div class="grid grid-flow-col gap-4">
+<a href="https://x.com/marijanpe">
+              
+<svg class="icon" viewbox="0 0 24 24">
+
+                
+<use href="/images/icons.svg#x"></use>
+
+              
+</svg>
+
+            
+</a>
+
+            <a href="https://linkedin.com/in/marijanp">
+              
+<svg class="icon" viewbox="0 0 24 24">
+
+                
+<use href="/images/icons.svg#linkedin"></use>
+
+              
+</svg>
+
+            
+</a>
+</div>
+</nav>
 </footer>
 </body>
 </html>

@@ -8,6 +8,7 @@
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
     monospace;
     --spacing: 0.25rem;
+    --container-2xl: 42rem;
     --text-xl: 1.25rem;
     --text-xl--line-height: calc(1.75 / 1.25);
     --text-2xl: 1.5rem;
@@ -1153,6 +1154,9 @@
     opacity: 60%;
     font-weight: 600;
   }
+  .mb-4 {
+    margin-bottom: calc(var(--spacing) * 4);
+  }
   .carousel-item {
     box-sizing: content-box;
     display: flex;
@@ -1328,6 +1332,9 @@
       }
     }
   }
+  .flex {
+    display: flex;
+  }
   .grid {
     display: grid;
   }
@@ -1339,6 +1346,9 @@
   }
   .w-full {
     width: 100%;
+  }
+  .max-w-2xl {
+    max-width: var(--container-2xl);
   }
   .max-w-prose {
     max-width: 65ch;
@@ -1381,11 +1391,11 @@
       scroll-snap-align: center;
     }
   }
-  .footer-horizontal {
+  .grid-flow-col {
     grid-auto-flow: column;
-    &.footer-center {
-      grid-auto-flow: row dense;
-    }
+  }
+  .justify-between {
+    justify-content: space-between;
   }
   .gap-4 {
     gap: calc(var(--spacing) * 4);
@@ -1461,6 +1471,14 @@
   .btn-accent {
     --btn-color: var(--color-accent);
     --btn-fg: var(--color-accent-content);
+  }
+  .sm\:footer-horizontal {
+    @media (width >= 40rem) {
+      grid-auto-flow: column;
+      &.footer-center {
+        grid-auto-flow: row dense;
+      }
+    }
   }
   .md\:h-72 {
     @media (width >= 48rem) {

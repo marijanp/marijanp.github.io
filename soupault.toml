@@ -75,7 +75,7 @@
   widget = "title"
   selector = [ "h1#post-title", "h1"]
   default = "marijan"
-  append = "marijan"
+  append = " - marijan"
 
   # Insert a <title> element if a page doesn’t have one
   force = true
@@ -116,11 +116,17 @@ widget = "add-meta-description"
   section = "posts"
   index_template = """
     <table class="table table-zebra">
+      <thead>
+        <tr>
+          <th>Post Title</th>
+          <th>Published</th>
+        </tr>
+      </thead>
       <tbody>
         {% for e in entries %}
         <tr>
           <td>
-            <a class="link" href="{{e.url}}">{{e.title}}</a>
+            <a class="link" href="{{e.url}}" title="{{e.title}}">{{e.title}}</a>
           </td>
           <td>
             {{e.date}}

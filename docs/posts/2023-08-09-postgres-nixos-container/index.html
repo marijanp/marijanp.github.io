@@ -17,13 +17,13 @@
   <meta name="robots" content="noai, noimageai">
   <meta name="twitter:site" content="@marijanpe">
   <title>
-   NixOS - A PostgreSQL NixOS container (not Docker)marijan
+   NixOS - A PostgreSQL NixOS container (not Docker) - marijan
   </title>
   <meta content="Enhance Database Development with Rust sqlx and PostgreSQL using NixOS Containers. Benefit from streamlined dependency management, reduced system impact, and enhanced reproducibility. Learn how NixOS containers compare to conventional setups and Docker-like technologies. Find a detailed instruction on creating and running a NixOS container instance." name="description">
  </head>
  <body>
   <header class="bg-base-100">
-   <div class="max-w-prose m-auto">
+   <div class="max-w-2xl m-auto">
     <nav class="navbar">
      <div class="navbar-start">
       <ul class="menu menu-horizontal">
@@ -67,101 +67,87 @@
        </a>
       </li>
       <li>
-       <a href="https://linkedin.com/in/marijanp">
+       <label class="swap swap-rotate">
                       
-       <svg class="icon" viewbox="0 0 24 24">
+                      <input id="themeController" onclick="saveThemeState()" type="checkbox" class="theme-controller" value="dim">
+                      
+       <svg class="swap-on icon" viewbox="0 0 24 24">
         
                         
-        <use href="/images/icons.svg#linkedin"></use>
+        <use href="/images/icons.svg#moon"></use>
+        
+                      
+       </svg>
+       
+                      
+       <svg class="swap-off icon" viewbox="0 0 24 24">
+        
+                        
+        <use href="/images/icons.svg#sun"></use>
         
                       
        </svg>
        
                     
-      </a>
+      </label>
      </li>
-     <li>
-      <label class="swap swap-rotate">
-                      
-                      <input id="themeController" onclick="saveThemeState()" type="checkbox" class="theme-controller" value="dim">
-                      
-      <svg class="swap-on icon" viewbox="0 0 24 24">
-       
-                        
-       <use href="/images/icons.svg#moon"></use>
-       
-                      
-      </svg>
-      
-                      
-      <svg class="swap-off icon" viewbox="0 0 24 24">
-       
-                        
-       <use href="/images/icons.svg#sun"></use>
-       
-                      
-      </svg>
-      
-                    
-     </label>
-    </li>
-   </ul>
+    </ul>
+   </div>
   </div>
- </div>
-</nav>
+ </nav>
 </div>
 </header>
 <main>
 <div class="max-w-prose m-auto">
-<div id="content" class="pt-4 px-4 md:px-0">
- <article class="prose">
-  <h1 id="title">
-   NixOS - A PostgreSQL NixOS container (not Docker)
-  </h1>
-  <p></p>
-  <address>
-   By <a rel="author">Marijan</a>
-  </address>
-  on <time id="post-date" datetime="2023-08-09">2023-08-09</time>
-  <p></p>
-  <p>
-   Recently, I was trying out several different database driver
+ <div id="content" class="pt-4 px-4 md:px-0">
+  <article class="prose">
+   <h1 id="title">
+    NixOS - A PostgreSQL NixOS container (not Docker)
+   </h1>
+   <p></p>
+   <address>
+    By <a rel="author">Marijan</a>
+   </address>
+   on <time id="post-date" datetime="2023-08-09">2023-08-09</time>
+   <p></p>
+   <p>
+    Recently, I was trying out several different database driver
 implementations for Rust. <a href="https://github.com/launchbadge/sqlx">sqlx</a> sounded especially
 interesting to me since it enables compile-time verification of queries
 against the present database-schema state (produced by a series of
 migrations).
-  </p>
-  <p>
-   However, this powerful feature does come with a trade-off: the
+   </p>
+   <p>
+    However, this powerful feature does come with a trade-off: the
 necessity of maintaining an active <a href="https://www.postgresql.org/">PostgreSQL</a> server that the
 verifier can communicate with.
-  </p>
-  <p>
-   In contrast to the conventional approach of enabling a PostgreSQL
+   </p>
+   <p>
+    In contrast to the conventional approach of enabling a PostgreSQL
 service system-wide, I opted to leverage the capabilities of <a href="https://nixos.wiki/wiki/NixOS_Containers">NixOS
 containers</a>.
-  </p>
-  <p>
-   If you have experience with <a href="https://www.docker.com/">Docker</a> or comparable technologies,
+   </p>
+   <p>
+    If you have experience with <a href="https://www.docker.com/">Docker</a> or comparable technologies,
 you’ll discover that NixOS containers represent an enhanced solution
 compared to their counterparts. NixOS containers bring advantages like
 streamlined dependency management, reduced impact on your system
 (leveraging <a href="https://wiki.archlinux.org/title/systemd-nspawn">systemd-nspawn</a>),
 declarative configuration, and the ability to ensure reproducibility. To
 delve deeper into the benefits of Nix, visit the official <a href="https://nixos.org/">Nix &amp; NixOS website</a>.
-  </p>
-  <p>
-   In the remainder of this post I’ll explain what I did to obtain a
+   </p>
+   <p>
+    In the remainder of this post I’ll explain what I did to obtain a
 running NixOS container instance serving a PostgreSQL service. I’ve
 created a new flake output in my projects flake called
 <code>nixosConfigurations.postgres-container</code>:
-  </p>
-  <p>
-   The example can be found on <a href="https://git.sr.ht/~marijan/website/tree/main/item/examples/postgres-container">Sourcehut</a>
+   </p>
+   <p>
+    The example can be found on <a href="https://git.sr.ht/~marijan/website/tree/main/item/examples/postgres-container">Sourcehut</a>
 or <a href="https://github.com/marijanp/marijanp.github.io/tree/main/examples/postgres-container">GitHub</a>.
-  </p>
-  <div class="sourceCode" id="cb1">
-   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+   </p>
+   <div class="sourceCode" id="cb1">
+    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">inputs</span> <span class="op">=</span> <span class="op">{</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">nixpkgs</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">"github:NixOS/nixpkgs/nixpkgs-unstable"</span><span class="op">;</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
@@ -224,75 +210,77 @@ or <a href="https://github.com/marijanp/marijanp.github.io/tree/main/examples/po
 <span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
 <span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
 <span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
-  </div>
-  <p>
-   After adding this output you can use it in the following way using
+   </div>
+   <p>
+    After adding this output you can use it in the following way using
 <code>nixos-container</code>:
-  </p>
-  <ol type="1">
-   <li>
-    Create a container called “postgres”, using the
+   </p>
+   <ol type="1">
+    <li>
+     Create a container called “postgres”, using the
 <code>nixosConfiguration.postgres-container</code> output of the current
 flake:
-   </li>
-  </ol>
-  <div class="sourceCode" id="cb2">
-   <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nixos-container create postgres <span class="at">--flake</span> .#postgres-container</span></code></pre>
-  </div>
-  <ol start="2" type="1">
-   <li>
-    Start the container
-   </li>
-  </ol>
-  <div class="sourceCode" id="cb3">
-   <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nixos-container start postgres</span></code></pre>
-  </div>
-  <ol start="3" type="1">
-   <li>
-    If not printed after startup, run the following to figure out the
+    </li>
+   </ol>
+   <div class="sourceCode" id="cb2">
+    <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nixos-container create postgres <span class="at">--flake</span> .#postgres-container</span></code></pre>
+   </div>
+   <ol start="2" type="1">
+    <li>
+     Start the container
+    </li>
+   </ol>
+   <div class="sourceCode" id="cb3">
+    <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nixos-container start postgres</span></code></pre>
+   </div>
+   <ol start="3" type="1">
+    <li>
+     If not printed after startup, run the following to figure out the
 containers IP address.
-   </li>
-  </ol>
-  <div class="sourceCode" id="cb4">
-   <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nixos-container show-ip postgres</span></code></pre>
-  </div>
-  <ol start="4" type="1">
-   <li>
-    Test whether you can connect to the database that is running on the
+    </li>
+   </ol>
+   <div class="sourceCode" id="cb4">
+    <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nixos-container show-ip postgres</span></code></pre>
+   </div>
+   <ol start="4" type="1">
+    <li>
+     Test whether you can connect to the database that is running on the
 guest on your host. (other connection info was extracted from the
 <code>cfg</code> attrset, see flake output
 <code>postgres-container</code>)
-   </li>
-  </ol>
-  <div class="sourceCode" id="cb5">
-   <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-h</span> <span class="op">&lt;</span>IP address from step <span class="dv">3</span><span class="op">&gt;</span> -p 5432 <span class="at">-d</span> helloworld <span class="at">-U</span> helloworld <span class="at">-W</span></span></code></pre>
-  </div>
-  <p>
-   <code>-W</code> will ask you for the password, which is
+    </li>
+   </ol>
+   <div class="sourceCode" id="cb5">
+    <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-h</span> <span class="op">&lt;</span>IP address from step <span class="dv">3</span><span class="op">&gt;</span> -p 5432 <span class="at">-d</span> helloworld <span class="at">-U</span> helloworld <span class="at">-W</span></span></code></pre>
+   </div>
+   <p>
+    <code>-W</code> will ask you for the password, which is
 <code>cfg.pgUserPassword</code> i.e. <code>helloworld</code>.
-  </p>
-  <p>
-   For obvious reasons you should not use this container in
+   </p>
+   <p>
+    For obvious reasons you should not use this container in
 production.
-  </p>
- </article>
-</div>
+   </p>
+  </article>
+ </div>
 </div>
 </main>
+<div class="max-w-2xl m-auto">
 <div class="divider"></div>
-<footer class="footer footer-horizontal footer-center bg-base-100 px-4 md:px-0">
-<div>
-<span class="footer-title text-2xl">
+</div>
+<footer class="footer sm:footer-horizontal bg-base-100 max-w-2xl m-auto px-4 mb-4">
+<aside>
+ <span class="footer-title text-2xl">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International" class="text-dark" style="text-decoration: none">
               
-<svg class="icon" viewbox="0 0 96 24">
- 
+ <svg class="icon" viewbox="0 0 96 24">
+  
                 
- <use href="/images/icons.svg#cc-by-nc-sa"></use>
- 
+  <use href="/images/icons.svg#cc-by-nc-sa"></use>
+  
               
-</svg>
-
+ </svg>
+ 
             
 </a>
 
@@ -304,54 +292,103 @@ Except where otherwise noted, the content on this site is licenced
             <a rel="license" itemprop="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"><abbr itemprop="license" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International">CC BY-NC-SA 4.0</abbr></a>. Attribute to <strong itemprop="author">Marijan</strong> including
             a link to this <a href="https://marijan.pro/">site</a>.
 </p>
-</div>
-<div>
-<span class="footer-title">Get connected:</span>
-<ul class="menu menu-horizontal text-xl">
-<li>
+</aside>
+<nav>
+<h6 class="footer-title">
+Code:
+</h6>
+<div class="grid grid-flow-col gap-4">
 <a href="https://git.sr.ht/~marijan/">
-                
+              
 <svg class="icon" viewbox="0 0 24 24">
  
-                  
+                
  <use href="/images/icons.svg#sourcehut"></use>
  
-                
+              
 </svg>
 
-              
+            
 </a>
-</li>
-<li>
-<a href="https://github.com/marijanp">
-                
+
+            <a href="https://github.com/marijanp">
+              
 <svg class="icon" viewbox="0 0 24 24">
 
-                  
+                
 <use href="/images/icons.svg#github"></use>
 
-                
+              
 </svg>
 
-              
+            
 </a>
-</li>
-<li>
-<a href="https://linkedin.com/in/marijanp">
-                
+</div>
+</nav>
+<nav>
+<h6 class="footer-title">
+Contact:
+</h6>
+<div class="grid grid-flow-col gap-4">
+<a href="xmpp:marijan@chat.marijan.pro">
+              
 <svg class="icon" viewbox="0 0 24 24">
 
-                  
-<use href="/images/icons.svg#linkedin"></use>
-
                 
-</svg>
+<use href="/images/icons.svg#xmpp"></use>
 
               
+</svg>
+
+            
 </a>
-</li>
-</ul>
+
+            <a href="mailto:marijan.petricevic94@gmail.com">
+              
+<svg class="icon" viewbox="0 0 100 100">
+
+                
+<use href="/images/icons.svg#envelope"></use>
+
+              
+</svg>
+
+            
+</a>
 </div>
+</nav>
+<nav>
+<h6 class="footer-title">
+Social:
+</h6>
+<div class="grid grid-flow-col gap-4">
+<a href="https://x.com/marijanpe">
+              
+<svg class="icon" viewbox="0 0 24 24">
+
+                
+<use href="/images/icons.svg#x"></use>
+
+              
+</svg>
+
+            
+</a>
+
+            <a href="https://linkedin.com/in/marijanp">
+              
+<svg class="icon" viewbox="0 0 24 24">
+
+                
+<use href="/images/icons.svg#linkedin"></use>
+
+              
+</svg>
+
+            
+</a>
+</div>
+</nav>
 </footer>
 </body>
 </html>
