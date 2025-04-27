@@ -14,9 +14,12 @@ in
   inherit (pkgs) dist;
   devShell = pkgs.mkShell {
     inputsFrom = [ pkgs.dist ];
-    nativeBuildInputs = [
-      pkgs.simple-http-server
-      pkgs.nodejs
+    nativeBuildInputs = with pkgs; [
+      simple-http-server
+      nodejs
+      nixpkgs-fmt
+      gh-deploy
+      srht-deploy
     ];
   };
 }

@@ -2,8 +2,8 @@
 @plugin "@tailwindcss/typography";
 @plugin "daisyui" {
   themes:
-    dim --default,
-    nord --prefersdark;
+    nord --default,
+    dim --prefersdark;
 }
 
 .sourceCode {

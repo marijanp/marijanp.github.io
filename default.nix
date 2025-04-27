@@ -1,11 +1,11 @@
-{
-  runCommand,
-  soupault,
-  tailwindcss_4,
-  pandoc,
-  nodejs,
-  npmlock2nix,
-  lib,
+{ runCommand
+, soupault
+, tailwindcss_4
+, pandoc
+, nodejs
+, npmlock2nix
+, lib
+,
 }:
 let
   NODE_PATH = "${
@@ -22,15 +22,15 @@ let
   }/node_modules";
 in
 runCommand "dist"
-  {
-    LANG = "en_US.UTF-8";
-    nativeBuildInputs = [
-      soupault
-      tailwindcss_4
-      pandoc
-    ];
-    inherit NODE_PATH;
-  }
+{
+  LANG = "en_US.UTF-8";
+  nativeBuildInputs = [
+    soupault
+    tailwindcss_4
+    pandoc
+  ];
+  inherit NODE_PATH;
+}
   ''
     set -euo pipefail
     cp -r ${./site} site
