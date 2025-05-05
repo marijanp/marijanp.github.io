@@ -9,7 +9,7 @@
 
 Assuming you use `haskell.nix` and have created a Haskell program that requires another executable to be present in the environment i.e. the `PATH` variable.
 
-Using Nix, you can [wrap](https://nixos.wiki/wiki/Nix_Cookbook#Wrapping_packages) your executable ([see related post](/posts/2022-06-03-dont-override-and-wrap-only.html)), which is the standard technique to ensure that your program will be distributed together with that executable.
+Using Nix, you can [wrap](https://nixos.wiki/wiki/Nix_Cookbook#Wrapping_packages) your executable ([see related post](/posts/2022-06-03-dont-override-and-wrap-only/)), which is the standard technique to ensure that your program will be distributed together with that executable.
 
 This standard approach, in combination with `haskell.nix`, could look like this:
 
