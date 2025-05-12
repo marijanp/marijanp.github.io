@@ -8,7 +8,7 @@
   <author>
     <name>Marijan Petričević</name><email>marijan.petricevic94@gmail.com</email></author><icon>https://marijan.pro/images/favicon.ico</icon><generator uri="https://soupault.app" version="4.11.0">soupault</generator>
   <entry>
-    <id>https://marijan.pro/posts/2023-10-31-nixos-oceansprint</id>
+    <id>https://marijan.pro/posts/2023-10-31-nixos-oceansprint/</id>
     <link rel="alternate" href="https://marijan.pro/posts/2023-10-31-nixos-oceansprint" type="text/html"/>
     <title>NixOS Ocean Sprint October 2023 - A report</title>
     <published>2023-10-31T00:00:00+00:00</published>
@@ -17,7 +17,7 @@
   </entry>
   
   <entry>
-    <id>https://marijan.pro/posts/2023-08-09-postgres-nixos-container</id>
+    <id>https://marijan.pro/posts/2023-08-09-postgres-nixos-container/</id>
     <link rel="alternate" href="https://marijan.pro/posts/2023-08-09-postgres-nixos-container" type="text/html"/>
     <title>NixOS - A PostgreSQL NixOS container (not Docker)</title>
     <published>2023-08-09T00:00:00+00:00</published>
@@ -26,7 +26,7 @@
   </entry>
   
   <entry>
-    <id>https://marijan.pro/posts/2022-10-19-haskell-nix-how-to-reliably-add-runime-deps</id>
+    <id>https://marijan.pro/posts/2022-10-19-haskell-nix-how-to-reliably-add-runime-deps/</id>
     <link rel="alternate" href="https://marijan.pro/posts/2022-10-19-haskell-nix-how-to-reliably-add-runime-deps" type="text/html"/>
     <title>haskell.nix - How to reliably add runtime dependencies</title>
     <published>2022-10-19T00:00:00+00:00</published>
@@ -35,7 +35,7 @@
   </entry>
   
   <entry>
-    <id>https://marijan.pro/posts/2022-09-26-nixos-how-to-add-a-qemu-image--as-a-flake-output</id>
+    <id>https://marijan.pro/posts/2022-09-26-nixos-how-to-add-a-qemu-image--as-a-flake-output/</id>
     <link rel="alternate" href="https://marijan.pro/posts/2022-09-26-nixos-how-to-add-a-qemu-image--as-a-flake-output" type="text/html"/>
     <title>NixOS - How to add a QEMU image of a NixOS-Configuration as a flake output</title>
     <published>2022-09-26T00:00:00+00:00</published>
@@ -44,7 +44,7 @@
   </entry>
   
   <entry>
-    <id>https://marijan.pro/posts/2022-08-26-nixos-how-to-modify-systemd-services-you-dont-own</id>
+    <id>https://marijan.pro/posts/2022-08-26-nixos-how-to-modify-systemd-services-you-dont-own/</id>
     <link rel="alternate" href="https://marijan.pro/posts/2022-08-26-nixos-how-to-modify-systemd-services-you-dont-own" type="text/html"/>
     <title>NixOS - How to modify systemd services you don't own</title>
     <published>2022-08-26T00:00:00+00:00</published>
@@ -53,7 +53,7 @@
   </entry>
   
   <entry>
-    <id>https://marijan.pro/posts/2022-06-03-dont-override-and-wrap-only</id>
+    <id>https://marijan.pro/posts/2022-06-03-dont-override-and-wrap-only/</id>
     <link rel="alternate" href="https://marijan.pro/posts/2022-06-03-dont-override-and-wrap-only" type="text/html"/>
     <title>Nix - Avoid overrideAttrs when wrapping an executable</title>
     <published>2022-06-03T00:00:00+00:00</published>

@@ -132,7 +132,7 @@ widget = "add-meta-description"
         {% for e in entries %}
         <tr>
           <td>
-            <a class="link" href="{{e.url}}" title="{{e.title}}">{{e.title}}</a>
+            <a class="link" href="{{e.url}}/" title="{{e.title}}">{{e.title}}</a>
           </td>
           <td>
             {{e.date}}
