@@ -71,6 +71,12 @@
   use_section = "posts"
   template = "templates/feed.atom"
 
+[widgets.sitemap]
+  widget = "sitemap"
+  page = "posts/index.html"
+  use_section = "posts"
+  template = "templates/sitemap.xml"
+
 [widgets.post-title]
   widget = "title"
   selector = [ "h1#post-title", "h1"]
