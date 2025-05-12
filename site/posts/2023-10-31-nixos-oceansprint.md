@@ -56,7 +56,7 @@ In the following, I've tried to summarize some of the projects people were worki
 
 ### lighthouse-flake
 
-With the help of David ([@DavHau](https://github.com/DavHau)) and Johannes ([@hsjobeki](https://github.com/hsjobeki)), I finally managed to package [Google lightouse](https://github.com/GoogleChrome/lighthouse) a web page and web app auditing tool. It was packaged using [dream2nix](https://github.com/nix-community/dream2nix) and was added to [dreampkgs](https://github.com/nix-community/dreampkgs/blob/main/packages/lighthouse/default.nix).
+With the help of David ([@DavHau](https://github.com/DavHau)) and Johannes ([@hsjobeki](https://github.com/hsjobeki)), I finally managed to package [Google lightouse](https://github.com/GoogleChrome/lighthouse) a web page and web app auditing tool. It was packaged using [dream2nix](https://github.com/nix-community/dream2nix) and was added to [dreampkgs](https://github.com/nix-community/dreampkgs/blob/fe55c40a0fb1652d5ef5cc74d9d86d0249c6d244/packages/lighthouse/default.nix).
 
 Packaging Google lighthouse was the first step towards creating [lighthouse-flake](https://github.com/marijanp/lighthouse-flake), which is a [flake-parts](https://flake.parts/) module that enables you to add one or more audit checks to your flake by simply defining the path to your frontend and the criteria score (performance, accessibility, SEO, and best-practices) you want to be met.
 
