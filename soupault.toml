@@ -96,6 +96,9 @@ section = "posts"
 [widgets.add-meta-description]
 widget = "add-meta-description"
 
+[widgets.extract-canonical]
+widget = "extract-canonical"
+
 [index]
   index = true
 
