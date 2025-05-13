@@ -14,7 +14,7 @@ However, this powerful feature does come with a trade-off: the necessity of main
 In contrast to the conventional approach of enabling a PostgreSQL service system-wide, I opted to leverage the capabilities of [NixOS containers](https://nixos.wiki/wiki/NixOS_Containers).
 
 If you have experience with [Docker](https://www.docker.com/) or comparable technologies, you'll discover that NixOS containers represent an enhanced solution compared to their counterparts.
-NixOS containers bring advantages like streamlined dependency management, reduced impact on your system (leveraging [systemd-nspawn](https://wiki.archlinux.org/title/systemd-nspawn)), declarative configuration, and the ability to ensure reproducibility.
+NixOS containers bring advantages like streamlined dependency management, reduced impact on your system (leveraging [systemd-nspawn](https://wiki.archlinux.org/title/Systemd-nspawn)), declarative configuration, and the ability to ensure reproducibility.
 To delve deeper into the benefits of Nix, visit the official [Nix & NixOS website](https://nixos.org/).
 
 In the remainder of this post I'll explain what I did to obtain a running NixOS container instance serving a PostgreSQL service.
