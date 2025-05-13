@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en" itemscope="" itemtype="http://schema.org/WebPage">
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="alternate" type="application/atom+xml" title="marijan" href="/posts/feed.atom">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="preload" href="/images/icons.svg" as="image" type="image/svg+xml">
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="/css/syntax.css">
+  <script src="/js/analytics.js"></script>
+  <script src="https://analytics.marijan.pro/matomo.js" async="" defer=""></script>
+  <script src="/js/theme-state.js"></script>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta name="robots" content="noai, noimageai">
+  <meta name="twitter:site" content="@marijanpe">
+  <title>
+   Kairos: Automated Integration Testing - marijan
+  </title>
+  <link rel="canonical" href="https://medium.com/casperblockchain/kairos-automated-integration-testing-71e2398f340d">
+  <meta content="Learn how to build reproducible, automated system tests using NixOS and virtual machines. Ideal for CI pipelines and verifying end-to-end functionality." name="description">
+ </head>
+ <body>
+  <header class="bg-base-100">
+   <div class="max-w-2xl m-auto">
+    <nav class="navbar">
+     <div class="navbar-start">
+      <ul class="menu menu-horizontal">
+       <li>
+        <a href="/">Home</a>
+       </li>
+       <li>
+        <a href="/posts/">Posts</a>
+       </li>
+      </ul>
+     </div>
+     <div class="navbar-end">
+      <div>
+       <ul class="menu menu-horizontal text-xl">
+        <li>
+         <a href="https://git.sr.ht/~marijan/">
+                      
+         <svg class="icon" viewbox="0 0 24 24">
+          
+                        
+          <use href="/images/icons.svg#sourcehut"></use>
+          
+                      
+         </svg>
+         
+                    
+        </a>
+       </li>
+       <li>
+        <a href="https://github.com/marijanp">
+                      
+        <svg class="icon" viewbox="0 0 24 24">
+         
+                        
+         <use href="/images/icons.svg#github"></use>
+         
+                      
+        </svg>
+        
+                    
+       </a>
+      </li>
+      <li>
+       <label class="swap swap-rotate">
+                      
+                      <input id="themeController" onclick="saveThemeState()" type="checkbox" class="theme-controller" value="nord">
+                      
+       <svg class="swap-on icon" viewbox="0 0 24 24">
+        
+                        
+        <use href="/images/icons.svg#moon"></use>
+        
+                      
+       </svg>
+       
+                      
+       <svg class="swap-off icon" viewbox="0 0 24 24">
+        
+                        
+        <use href="/images/icons.svg#sun"></use>
+        
+                      
+       </svg>
+       
+                    
+      </label>
+     </li>
+    </ul>
+   </div>
+  </div>
+ </nav>
+</div>
+</header>
+<main>
+<div class="max-w-prose m-auto">
+ <div id="content" class="pt-4 px-4 md:px-0">
+  <article class="prose">
+   <h1 id="title">
+    Kairos: Automated Integration Testing
+   </h1>
+   <p></p>
+   <address>
+    By <a rel="author">Marijan</a>
+   </address>
+   on <time id="post-date" datetime="2024-09-29">2024-09-29</time>
+   <p></p>
+   <blockquote>
+    <p>
+     <strong>Note:</strong> Originally published on <a href="https://medium.com/casperblockchain/kairos-automated-integration-testing-71e2398f340d">Medium</a>
+for Casper Association R&amp;D
+    </p>
+   </blockquote>
+   <h2>
+    Foundations
+   </h2>
+   <p>
+    According to <a href="https://www.istqb.org/">ISTQB’s</a> <a href="https://books.google.de/books/about/Foundations_of_Software_Testing.html?id=h6h2AQAACAAJ">Foundations
+of Software Testing</a>, testing can be grouped into various levels:
+unit, integration, system, and acceptance testing. The primary goals of
+system testing are:
+   </p>
+   <ul>
+    <li>
+     To <strong>verify</strong> that the system performs end-to-end tasks
+as specified by the requirements.
+    </li>
+    <li>
+     To <strong>validate</strong> that the delivered system meets users’
+needs and expectations in its operational environment.
+    </li>
+    <li>
+     To <strong>identify</strong> defects and <strong>prevent</strong>
+them from escaping to production.
+    </li>
+   </ul>
+   <p>
+    To achieve these goals, system testing should cover the end-to-end
+behavior of functional aspects of the system. In the case of <a href="https://github.com/cspr-rad/kairos">Kairos</a>, our <a href="https://ethereum.org/en/developers/docs/scaling/validium/">zero-knowledge
+validium</a>, this includes the deposit, transfer, withdrawal of funds,
+and querying the data availability layer.
+   </p>
+   <p>
+    A crucial requirement for system tests is that the test environment
+should closely mirror the final production environment to detect
+environment-related defects during testing. This means that we need to
+be able to create controlled test environments with consistent system
+configurations (including software versions) and configuration data.
+Furthermore, reproducibility of the tests is imoportant to ensure
+consistent test outcomes and to increase the confidence in the quality
+of the software. Additionally, having automated system-level tests that
+can run in a continuous integration (CI) pipeline also serve as
+regression tests, detecting changes that might break existing system
+functionality as early as possible.
+   </p>
+   <p>
+    In practice, unit and integration testing are typically performed by
+the development team, while system testing is often handled by
+specialist testers, either internal or external to the organization.
+This separation has advantages, as developers may have a biased view of
+the system, potentially overlooking specific usage scenarios or failing
+to uncover critical defects. However, for small organizations or teams
+in the early stages of a development project, maintaining a dedicated
+specialist testing team is costly and could delay feedback for the
+developer. Rapid feedback is important to ensure that developers quickly
+learn whether their changes have broken critical end-to-end behavior
+while they still have fresh knowledge about the feature they are
+implementing. To reduce feedback time, it is desirable to have automated
+system tests that closely replicate the production environment and can
+be integrated into a CI pipeline. This is why we decided to leverage
+NixOS tests.
+   </p>
+   <p>
+    <a href="https://nix.dev/tutorials/nixos/integration-testing-using-virtual-machines.html#introduction">NixOS
+tests</a> offer a powerful solution for achieving automated, controlled,
+reproducible test environments. <a href="https://nixos.org/">NixOS</a>
+is a Linux distribution that allows us to define an entire system’s
+configuration, from the operating system to specific application
+versions and dependencies in a declarative manner. One or more NixOS
+configurations can then be passed to a NixOS test function, which will
+create one or more virtual machines (VMs), where each VM is deployed
+with the respective NixOS configuration activated. The test function
+allows us to define interactions between multiple VMs programatically
+using Python, allowing us to simulate complex scenarios involving
+network communication, query and assert system states, and more. In the
+event of a failing test, we can start an interactive test session that
+allows us to log into the defined virtual machines. This enables us to
+use tools like <code>journalctl</code> and other applications for
+debugging. Towards the end of this blog post, we will demonstrate how to
+initiate such an interactive test session. To get a better idea how such
+a NixOS test looks like, let’s take a look at the end-to-end test we
+defined for Kairos and go through the relevant snippets.
+   </p>
+   <hr>
+   <h2>
+    NixOS Test Walkthrough
+   </h2>
+   <p>
+    As mentioned previously, the <code>nixosTest</code> function allows
+us to declare one or more NixOS configurations, which will be
+instantiated and started as VMs in our test. In this case, we define
+both a server and a client node. For the server node, we leverage Nix
+and use our predefined function called <code>mkKairosHostConfig</code>,
+which produces a deployable production configuration for our Kairos
+application. This function takes a single parameter to set the hostname
+to “kairos”, allowing us to refer to the server as <code>kairos</code>
+later in the test script. We then make some test-specific modifications
+to that production configuration to adjust it for testing:
+   </p>
+   <ul>
+    <li>
+     We disable HTTPS for convenience, to avoid issuing SSL certificates
+in the test environment.
+    </li>
+    <li>
+     We add and enable the cctl NixOS module, which starts a one-shot
+systemd service that initiates a new network of Casper nodes and deploys
+the defined smart contract once the genesis has passed.
+    </li>
+    <li>
+     We configure Kairos to connect to one of the nodes spun up by cctl,
+and we modify the systemd service to start after the cctl service and to
+use the contract hash that we receive after the smart contract is
+deployed. This step is fortunately only required for testing; in
+production, we would simply set the contract hash to the appropriate
+value once the deployment is complete.
+    </li>
+   </ul>
+   <p>
+    On the client node, we install the <code>kairos-cli</code> and
+<code>wget</code>, which is required to download the test wallets
+generated by <code>cctl</code>.
+   </p>
+   <div class="sourceCode" id="cb1">
+    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>nixosTest <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">nodes</span> = {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">server</span> = { <span class="va">config</span><span class="op">,</span> <span class="va">lib</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>: <span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="va">imports</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>mkKairosHostConfig <span class="st">"kairos"</span><span class="op">)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        cctlModule</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      <span class="op">];</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="va">virtualisation</span>.<span class="va">cores</span> <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="va">virtualisation</span>.<span class="va">memorySize</span> <span class="op">=</span> <span class="dv">4096</span><span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="co"># allow HTTP for nixos-test environment</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="va">services</span>.<span class="va">nginx</span>.<span class="va">virtualHosts</span>.${<span class="va">config</span>.<span class="va">networking</span>.<span class="va">hostName</span><span class="op">}</span> = <span class="op">{</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">forceSSL</span> <span class="op">=</span> lib.mkForce <span class="cn">false</span><span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">enableACME</span> <span class="op">=</span> lib.mkForce <span class="cn">false</span><span class="op">;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span>;</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Required to await successful contract deployment</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>      environment.systemPackages = <span class="op">[</span> casper-client-rs <span class="op">]</span>;</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>      services.cctl = <span class="op">{</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        <span class="va">contract</span> <span class="op">=</span> <span class="op">{</span> <span class="st">"</span>kairos_contract_package_hash<span class="st">"</span> <span class="op">=</span> kairos<span class="op">-</span>contracts <span class="op">+</span> <span class="st">"/bin/demo-contract-optimized.wasm"</span><span class="op">;</span> <span class="op">};</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">chainspec</span> <span class="op">=</span> casper<span class="op">-</span>chainspec<span class="op">;</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">config</span> <span class="op">=</span> casper<span class="op">-</span>node<span class="op">-</span>config<span class="op">;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span>;</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>      services.kairos = <span class="op">{</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>        <span class="va">casperRpcUrl</span> <span class="op">=</span> <span class="st">"http://localhost:</span><span class="sc">${</span><span class="bu">builtins</span>.<span class="bu">toString</span> config.services.cctl.port<span class="sc">}</span><span class="st">/rpc"</span><span class="op">;</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        <span class="va">casperSseUrl</span> <span class="op">=</span> <span class="st">"http://localhost:18101/events/main"</span><span class="op">;</span> <span class="co"># has to be hardcoded since cctl is not configurable</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        <span class="co"># This is a mandatory module option, we set it to 0. This will be overwritten, see systemd.services.kairos.serviceConfig.ExecStart.</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="va">demoContractHash</span> <span class="op">=</span> <span class="st">"0000000000000000000000000000000000000000000000000000000000000000"</span><span class="op">;</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        <span class="va">casperSyncInterval</span> <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span>;</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>      systemd.services.kairos = <span class="op">{</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># We have to wait for cctl to deploy the contract to be able to obtain and export the contract hash</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        <span class="va">after</span> <span class="op">=</span> <span class="op">[</span> <span class="st">"network-online.target"</span> <span class="st">"cctl.service"</span> <span class="op">];</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>        <span class="va">requires</span> <span class="op">=</span> <span class="op">[</span> <span class="st">"network-online.target"</span> <span class="st">"cctl.service"</span> <span class="op">];</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>        <span class="va">serviceConfig</span>.<span class="va">ExecStart</span> <span class="op">=</span> lib.mkForce <span class="op">(</span>writeShellScript <span class="st">"start-kairos"</span> <span class="st">''</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="st">          # cctl will write the deployed contract hash to a file whose name is configured by services.cctl.contracts</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="st">          export KAIROS_SERVER_DEMO_CONTRACT_HASH=$(cat "</span><span class="sc">${</span>config.services.cctl.workingDirectory<span class="sc">}</span><span class="st">/contracts/kairos_contract_package_hash")</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="st">          </span><span class="sc">${</span>lib.getExe kairos<span class="sc">}</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="st">        ''</span><span class="op">);</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span>;</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    client = <span class="op">{</span> <span class="va">pkgs</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>: <span class="op">{</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>      <span class="va">environment</span>.<span class="va">systemPackages</span> <span class="op">=</span> <span class="op">[</span> pkgs.wget kairos <span class="op">];</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>;</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
+   </div>
+   <p>
+    Now that we have defined the participants in the test, we need to
+define the test script that will be executed. The script is written in
+Python, a language that is widely accessible and understood by almost
+anyone, and provides many useful packages that we can leverage in our
+tests, such as <code>json</code> and <code>backoff</code>.
+   </p>
+   <p>
+    We define three utility functions that will be used later in the
+script: one to wait for a deployment to be successfully completed on the
+L1 (i.e., the Casper network), and another to wait for a transaction to
+be submitted to the L2 (i.e., Kairos).
+   </p>
+   <p>
+    The test script begins with some synchronization instructions. The
+NixOS test driver makes the previously defined nodes available as
+variables that we can use to perform synchronization or execute commands
+on the command line. The list of available methods can be found here. We
+wait for the server’s systemd services - cctl, kairos, and nginx-to
+start. For the client, we simply wait for the multi-user target to be
+reached.
+   </p>
+   <p>
+    Next, we copy the cctl-generated test wallets to the client machine
+so that we can use the respective secret keys when invoking the
+kairos-cli.
+   </p>
+   <p>
+    Now, the actual test definition begins. We test deposit, transfer,
+withdraw, and we query the data availability layer, simulating how a
+user would interact with the system in the real world, on a completely
+separate machine over a network (NixOS tests run in an isolated
+environment with a virtual network).
+   </p>
+   <div class="sourceCode" id="cb2">
+    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>extraPythonPackages = <span class="va">p</span><span class="op">:</span> <span class="op">[</span> p.backoff <span class="op">]</span>;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>testScript = <span class="op">{</span> <span class="va">nodes</span> <span class="op">}</span>:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">casperNodeAddress</span> <span class="op">=</span> <span class="st">"http://localhost:</span><span class="sc">${</span><span class="bu">builtins</span>.<span class="bu">toString</span> nodes.server.config.services.cctl.port<span class="sc">}</span><span class="st">"</span><span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This is the directory wget will copy to, see script below</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">clientUsersDirectory</span> <span class="op">=</span> <span class="st">"kairos/cctl/users"</span><span class="op">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">in</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">''</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">    import json</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">    import backoff</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="st">    # Utils</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="st">    def verify_deploy_success(json_data):</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="st">      # Check if the "Success" key is present</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="st">      try:</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="st">        if "result" in json_data and "execution_results" in json_data["result"]:</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="st">          for execution_result in json_data["result"]["execution_results"]:</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="st">            if "result" in execution_result and "Success" in execution_result["result"]:</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="st">              return True</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="st">      except KeyError:</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="st">        pass</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="st">      return False</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="st">    @backoff.on_exception(backoff.expo, Exception, max_tries=5, jitter=backoff.full_jitter)</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="st">    def wait_for_successful_deploy(deploy_hash):</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="st">      client_output = kairos.succeed("casper-client get-deploy --node-address </span><span class="sc">${</span>casperNodeAddress<span class="sc">}</span><span class="st"> {}".format(deploy_hash))</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="st">      get_deploy_result = json.loads(client_output)</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="st">      if not verify_deploy_success(get_deploy_result):</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="st">        raise Exception("Success key not found in JSON")</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="st">    @backoff.on_exception(backoff.expo, Exception, max_tries=5, jitter=backoff.full_jitter)</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="st">    def wait_for_transaction(sender, transaction_type, amount):</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="st">      transactions_result = client.succeed("kairos-cli --kairos-server-address http://kairos fetch --sender {} --transaction-type {}".format(sender, transaction_type))</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="st">      transactions = json.loads(transactions_result)</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="st">      if not any(transaction.get("public_key") == sender and transaction.get("amount") == str(amount) for transaction in transactions):</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="st">        raise Exception("Couldn't find {} for sender {} with amount {} in transactions\n:{}".format(transaction_type, sender, amount, transactions))</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="st">    # Test</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="st">    start_all()</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="st">    kairos.wait_for_unit("cctl.service")</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="st">    kairos.wait_for_unit("kairos.service")</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="st">    kairos.wait_for_unit("nginx.service")</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="st">    kairos.wait_for_open_port(80)</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="st">    client.wait_for_unit ("multi-user.target")</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="st">    # We need to copy the cctl generated assets from the server to the client machine,</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="st">    # because the invocations of the kairos-cli on the client make use of them.</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="st">    # The cctl module enables serving of those generated assets on the server,</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="st">    client.succeed("wget --no-parent -r http://kairos/cctl/users/")</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="st">    # CLI with ed25519</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="st">    # deposit</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="st">    deposit_amount = 3000000000 </span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="st">    depositor = client.succeed("cat </span><span class="sc">${</span>clientUsersDirectory<span class="sc">}</span><span class="st">/user-2/public_key_hex")</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="st">    depositor_private_key = "</span><span class="sc">${</span>clientUsersDirectory<span class="sc">}</span><span class="st">/user-2/secret_key.pem"</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="st">    deposit_deploy_hash = client.succeed("kairos-cli --kairos-server-address http://kairos deposit --amount {} --recipient {} --private-key {}".format(deposit_amount, depositor, depositor_private_key))</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="st">    assert int(deposit_deploy_hash, 16), "The deposit command did not output a hex encoded deploy hash. The output was {}".format(deposit_deploy_hash)</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="st">    wait_for_successful_deploy(deposit_deploy_hash)</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="st">    wait_for_transaction(depositor, "deposit", deposit_amount)</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="st">    # transfer</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="st">    transfer_amount = 1000</span></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="st">    beneficiary = client.succeed("cat </span><span class="sc">${</span>clientUsersDirectory<span class="sc">}</span><span class="st">/user-3/public_key_hex")</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="st">    transfer_output = client.succeed("kairos-cli --kairos-server-address http://kairos transfer --amount {} --recipient {} --private-key {}".format(transfer_amount, beneficiary, depositor_private_key))</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="st">    assert "Transfer successfully sent to L2\n" in transfer_output, "The transfer command was not successful: {}".format(transfer_output)</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="st">    # data availability</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="st">    transactions_result = client.succeed("kairos-cli --kairos-server-address http://kairos fetch --recipient {}".format(beneficiary))</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="st">    transactions = json.loads(transactions_result)</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="st">    assert any(transaction.get("recipient") == beneficiary and transaction.get("amount") == str(transfer_amount) for transaction in transactions), "Couldn't find the transfer in the L2's DA: {}".format(transactions)</span></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="st">    # withdraw</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="st">    withdrawal_amount = 800</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="st">    withdrawer = client.succeed("cat </span><span class="sc">${</span>clientUsersDirectory<span class="sc">}</span><span class="st">/user-3/public_key_hex")</span></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="st">    withdrawer_private_key = "</span><span class="sc">${</span>clientUsersDirectory<span class="sc">}</span><span class="st">/user-3/secret_key.pem"</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="st">    withdraw_output = client.succeed("kairos-cli --kairos-server-address http://kairos withdraw --amount {} --private-key {}".format(withdrawal_amount, withdrawer_private_key))</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="st">    assert "Withdrawal successfully sent to L2\n" in withdraw_output, "The withdraw command was not successful: {}".format(withdraw_output)</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="st">    wait_for_transaction(withdrawer, "withdrawal", withdrawal_amount)</span></span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="st">  ''</span>;</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>...</span></code></pre>
+   </div>
+   <p>
+    The complete test definition in package-normal-form can be found
+here: <a href="https://github.com/cspr-rad/kairos/blob/0.1.0/nixos/tests/end-to-end.nix">https://github.com/cspr-rad/kairos/blob/0.1.0/nixos/tests/end-to-end.nix</a>
+   </p>
+   <p>
+    To run our Kairos end-to-end test you can execute the following
+command after installing Nix:
+   </p>
+   <pre class="console"><code>$ nix build github:cspr-rad/kairos#kairos#checks.x86_64-linux.kairos-end-to-end-test -L</code></pre>
+   <p>
+    An interactive session that allows you to log into the server and
+client can be started by running:
+   </p>
+   <pre class="console"><code>$ nix build github:cspr-rad/kairos#kairos#checks.x86_64-linux.kairos-end-to-end-test.driverInteractive</code></pre>
+   <p>
+    The interactive test driver will be symlinked to
+<code>result/bin/nixos-test-driver</code>. You can execute this binary,
+and once you are dropped into an Emacs session, you can run
+<code>start_all()</code> to start all the nodes. You can then log into
+the machines as root with an empty password. For more sophisticated
+usage, please refer to the blog posts linked at the end of this post and
+the NixOS manual.
+   </p>
+   <hr>
+   <p>
+    This is by no means everything that NixOS tests can do. In the
+<code>nixpkgs</code> package set, you can find tests for multiplayer
+games, BitTorrent, desktop environments, and more. To learn more about
+NixOS tests, I recommend reading the following resources:
+   </p>
+   <ul>
+    <li>
+     <a href="https://nixcademy.com/posts/nixos-integration-tests/">https://nixcademy.com/posts/nixos-integration-tests/</a>
+    </li>
+    <li>
+     <a href="https://nixcademy.com/posts/nixos-integration-tests/">https://nixcademy.com/posts/nixos-integration-tests-part-2/</a>
+    </li>
+    <li>
+     <a href="https://nix.dev/tutorials/nixos/integration-testing-using-virtual-machines.html">https://nix.dev/tutorials/nixos/integration-testing-using-virtual-machines.html</a>
+    </li>
+   </ul>
+   <p>
+    To run NixOS tests on MacOS, please refer to:
+   </p>
+   <ul>
+    <li>
+     <a href="https://nixcademy.com/posts/running-nixos-integration-tests-on-macos/">https://nixcademy.com/posts/running-nixos-integration-tests-on-macos/</a>
+    </li>
+   </ul>
+  </article>
+ </div>
+</div>
+</main>
+<div class="max-w-2xl m-auto">
+<div class="divider"></div>
+</div>
+<footer class="footer sm:footer-horizontal bg-base-100 max-w-2xl m-auto px-4 mb-4">
+<aside>
+ <span class="footer-title text-2xl">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International" class="text-dark" style="text-decoration: none">
+              
+ <svg class="icon" viewbox="0 0 96 24">
+  
+                
+  <use href="/images/icons.svg#cc-by-nc-sa"></use>
+  
+              
+ </svg>
+ 
+            
+</a>
+
+          
+</span>
+<p>
+Except where otherwise noted, the content on this site is licenced
+            under
+            <a rel="license" itemprop="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"><abbr itemprop="license" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International">CC BY-NC-SA 4.0</abbr></a>. Attribute to <strong itemprop="author">Marijan Petričević</strong> including
+            a link to this <a href="https://marijan.pro/">site</a>.
+</p>
+</aside>
+<nav>
+<h6 class="footer-title">
+Code:
+</h6>
+<div class="grid grid-flow-col gap-4">
+<a href="https://git.sr.ht/~marijan/">
+              
+<svg class="icon" viewbox="0 0 24 24">
+ 
+                
+ <use href="/images/icons.svg#sourcehut"></use>
+ 
+              
+</svg>
+
+            
+</a>
+
+            <a href="https://github.com/marijanp">
+              
+<svg class="icon" viewbox="0 0 24 24">
+
+                
+<use href="/images/icons.svg#github"></use>
+
+              
+</svg>
+
+            
+</a>
+</div>
+</nav>
+<nav>
+<h6 class="footer-title">
+Contact:
+</h6>
+<div class="grid grid-flow-col gap-4">
+<a href="xmpp:marijan@chat.marijan.pro">
+              
+<svg class="icon" viewbox="0 0 24 24">
+
+                
+<use href="/images/icons.svg#xmpp"></use>
+
+              
+</svg>
+
+            
+</a>
+
+            <a href="mailto:marijan.petricevic94@gmail.com">
+              
+<svg class="icon" viewbox="0 0 100 100">
+
+                
+<use href="/images/icons.svg#envelope"></use>
+
+              
+</svg>
+
+            
+</a>
+</div>
+</nav>
+<nav>
+<h6 class="footer-title">
+Social:
+</h6>
+<div class="grid grid-flow-col gap-4">
+<a href="https://x.com/marijanpe">
+              
+<svg class="icon" viewbox="0 0 24 24">
+
+                
+<use href="/images/icons.svg#x"></use>
+
+              
+</svg>
+
+            
+</a>
+
+            <a href="https://linkedin.com/in/marijanp">
+              
+<svg class="icon" viewbox="0 0 24 24">
+
+                
+<use href="/images/icons.svg#linkedin"></use>
+
+              
+</svg>
+
+            
+</a>
+</div>
+</nav>
+</footer>
+</body>
+</html>
