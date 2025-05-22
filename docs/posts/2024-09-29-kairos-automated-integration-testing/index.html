@@ -380,7 +380,7 @@ environment with a virtual network).
 <span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="st">    # CLI with ed25519</span></span>
 <span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="st">    # deposit</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="st">    deposit_amount = 3000000000 </span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="st">    deposit_amount = 3000000000</span></span>
 <span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="st">    depositor = client.succeed("cat </span><span class="sc">${</span>clientUsersDirectory<span class="sc">}</span><span class="st">/user-2/public_key_hex")</span></span>
 <span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="st">    depositor_private_key = "</span><span class="sc">${</span>clientUsersDirectory<span class="sc">}</span><span class="st">/user-2/secret_key.pem"</span></span>
 <span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="st">    deposit_deploy_hash = client.succeed("kairos-cli --kairos-server-address http://kairos deposit --amount {} --recipient {} --private-key {}".format(deposit_amount, depositor, depositor_private_key))</span></span>
