@@ -4,9 +4,18 @@
   <id>https://marijan.pro/posts/feed.atom</id>
 	<link rel="self" href="https://marijan.pro/posts/feed.atom" type="application/atom+xml"/>
 	<link rel="alternate" href="https://marijan.pro" type="text/html"/>
-  <updated>2024-09-29T00:00:00+00:00</updated>
+  <updated>2025-05-26T00:00:00+00:00</updated>
   <author>
     <name>Marijan Petričević</name><email>marijan.petricevic94@gmail.com</email></author><icon>https://marijan.pro/images/favicon.ico</icon><generator uri="https://soupault.app" version="4.11.0">soupault</generator>
+  <entry>
+    <id>https://marijan.pro/posts/2025-05-26-1000-instances-of-flake-utils/</id>
+    <link rel="alternate" href="https://marijan.pro/posts/2025-05-26-1000-instances-of-flake-utils" type="text/html"/>
+    <title>1000 instances of flake-utils</title>
+    <published>2025-05-26T00:00:00+00:00</published>
+    <updated>2025-05-26T00:00:00+00:00</updated>
+    <summary>Learn about an alternative to flake-utils for creating Nix Flake outputs. Use nixpkgs.lib.genAttrs to support multiple systems and avoid dependency bloat.</summary>
+  </entry>
+  
   <entry>
     <id>https://marijan.pro/posts/2024-09-29-kairos-automated-integration-testing/</id>
     <link rel="alternate" href="https://marijan.pro/posts/2024-09-29-kairos-automated-integration-testing" type="text/html"/>
