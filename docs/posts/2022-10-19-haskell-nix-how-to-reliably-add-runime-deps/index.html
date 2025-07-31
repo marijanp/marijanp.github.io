@@ -150,47 +150,47 @@ could look like this:
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="va">outputs</span> <span class="op">=</span> <span class="op">{</span> <span class="va">self</span><span class="op">,</span> <span class="va">flake-parts</span><span class="op">,</span> <span class="va">nixpkgs</span><span class="op">,</span> <span class="va">haskellNix</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>:</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    flake<span class="op">-</span>parts.lib.mkFlake <span class="op">{</span> <span class="kw">inherit</span> self<span class="op">;</span> <span class="op">}</span> <span class="op">{</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    flake<span class="op">-</span>parts<span class="op">.</span>lib<span class="op">.</span>mkFlake <span class="op">{</span> <span class="kw">inherit</span> <span class="va">self</span><span class="op">;</span> <span class="op">}</span> <span class="op">{</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      <span class="va">systems</span> <span class="op">=</span> <span class="op">[</span> <span class="st">"x86_64-linux"</span> <span class="op">];</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="va">perSystem</span> <span class="op">=</span> <span class="op">{</span> <span class="va">config</span><span class="op">,</span> <span class="va">self'</span><span class="op">,</span> <span class="va">inputs'</span><span class="op">,</span> <span class="va">pkgs</span><span class="op">,</span> <span class="va">system</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>:</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>          <span class="va">projectName</span> <span class="op">=</span> <span class="st">"example"</span><span class="op">;</span></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>          <span class="va">overlays</span> <span class="op">=</span> <span class="op">[</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>            haskellNix.overlay</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>            haskellNix<span class="op">.</span>overlay</span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>            <span class="op">(</span><span class="va">final</span><span class="op">:</span> <span class="va">prev</span><span class="op">:</span> <span class="op">{</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>              ${<span class="va">projectName</span><span class="op">}</span> = final.haskell<span class="op">-</span>nix.cabalProject <span class="op">{</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>              <span class="sc">${</span>projectName<span class="sc">}</span> <span class="op">=</span> final<span class="op">.</span>haskell<span class="op">-</span>nix<span class="op">.</span>cabalProject <span class="op">{</span></span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>                <span class="va">src</span> <span class="op">=</span> <span class="ss">../example</span><span class="op">;</span></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                <span class="va">compiler-nix-name</span> <span class="op">=</span> <span class="st">"ghc924"</span><span class="op">;</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>              <span class="op">}</span>;</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>            }<span class="op">)</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>          <span class="op">];</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>          <span class="va">pkgs</span> <span class="op">=</span> <span class="bu">import</span> nixpkgs <span class="op">{</span> <span class="kw">inherit</span> system overlays<span class="op">;</span> <span class="op">};</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>          <span class="va">haskellNixFlake</span> <span class="op">=</span> pkgs.$<span class="op">{</span><span class="va">projectName</span><span class="op">}</span>.flake <span class="op">{</span> <span class="op">};</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>              <span class="op">};</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>          ]<span class="op">;</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>          <span class="va">pkgs</span> <span class="op">=</span> <span class="bu">import</span> nixpkgs <span class="op">{</span> <span class="kw">inherit</span> <span class="va">system</span> <span class="va">overlays</span><span class="op">;</span> <span class="op">};</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>          <span class="va">haskellNixFlake</span> <span class="op">=</span> pkgs<span class="op">.</span><span class="sc">${</span>projectName<span class="sc">}</span><span class="op">.</span>flake <span class="op">{</span> <span class="op">};</span></span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>          <span class="va">wrappedExample</span> <span class="op">=</span> pkgs.runCommand <span class="st">"demo-wrapped-better"</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>          <span class="va">wrappedExample</span> <span class="op">=</span> pkgs<span class="op">.</span>runCommand <span class="st">"demo-wrapped-better"</span></span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>            <span class="op">{</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>              <span class="va">buildInputs</span> <span class="op">=</span> <span class="op">[</span> pkgs.makeWrapper <span class="op">];</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>              <span class="va">buildInputs</span> <span class="op">=</span> <span class="op">[</span> pkgs<span class="op">.</span>makeWrapper <span class="op">];</span></span>
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>            <span class="st">''</span></span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="st">              mkdir -p $out/bin</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="st">              makeWrapper </span><span class="sc">${</span>self'.packages.<span class="st">"example:exe:example"</span><span class="sc">}</span><span class="st">/bin/example $out/bin/example \</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="st">                --set PATH </span><span class="sc">${</span>pkgs.lib.makeBinPath <span class="op">[</span> pkgs.hello <span class="op">]</span><span class="sc">}</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="st">              makeWrapper </span><span class="sc">${</span>self'<span class="op">.</span>packages<span class="op">.</span><span class="st">"example:exe:example"</span><span class="sc">}</span><span class="st">/bin/example $out/bin/example \</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="st">                --set PATH </span><span class="sc">${</span>pkgs<span class="op">.</span>lib<span class="op">.</span>makeBinPath <span class="op">[</span> pkgs<span class="op">.</span>hello <span class="op">]</span><span class="sc">}</span></span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="st">            ''</span><span class="op">;</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        <span class="kw">in</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        <span class="va">in</span></span>
 <span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>        <span class="co"># remove attributes which are not supported by flake-parts</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>        pkgs.lib.recursiveUpdate</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span><span class="bu">builtins</span>.<span class="bu">removeAttrs</span> haskellNixFlake <span class="op">[</span> <span class="st">"devShell"</span> <span class="st">"hydraJobs"</span> <span class="op">])</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>          <span class="op">{</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>            <span class="va">devShells</span>.<span class="va">default</span> <span class="op">=</span> haskellNixFlake.devShell<span class="op">;</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>        <span class="va">pkgs</span>.<span class="va">lib</span>.<span class="va">recursiveUpdate</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>          (<span class="va">builtins</span>.<span class="va">removeAttrs</span> <span class="va">haskellNixFlake</span> [ <span class="st">"devShell"</span> <span class="st">"hydraJobs"</span> ])</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>          {</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>            <span class="va">devShells</span>.<span class="va">default</span> <span class="op">=</span> haskellNixFlake<span class="op">.</span>devShell<span class="op">;</span></span>
 <span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>            <span class="va">apps</span>.<span class="va">example</span> <span class="op">=</span> <span class="op">{</span></span>
 <span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>              <span class="va">type</span> <span class="op">=</span> <span class="st">"app"</span><span class="op">;</span></span>
 <span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>              <span class="va">program</span> <span class="op">=</span> <span class="st">"</span><span class="sc">${</span>wrappedExample<span class="sc">}</span><span class="st">/bin/example"</span><span class="op">;</span></span>
 <span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>            <span class="op">};</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>          <span class="op">};</span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>          <span class="op">}</span>;</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
   </div>
   <p>
    We unify the <code>haskell.nix</code>-generated <code>flake</code>
@@ -269,43 +269,43 @@ options:
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="va">outputs</span> <span class="op">=</span> <span class="op">{</span> <span class="va">self</span><span class="op">,</span> <span class="va">flake-parts</span><span class="op">,</span> <span class="va">nixpkgs</span><span class="op">,</span> <span class="va">haskellNix</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>:</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    flake<span class="op">-</span>parts.lib.mkFlake <span class="op">{</span> <span class="kw">inherit</span> self<span class="op">;</span> <span class="op">}</span> <span class="op">{</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    flake<span class="op">-</span>parts<span class="op">.</span>lib<span class="op">.</span>mkFlake <span class="op">{</span> <span class="kw">inherit</span> <span class="va">self</span><span class="op">;</span> <span class="op">}</span> <span class="op">{</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      <span class="va">systems</span> <span class="op">=</span> <span class="op">[</span> <span class="st">"x86_64-linux"</span> <span class="op">];</span></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>      <span class="va">perSystem</span> <span class="op">=</span> <span class="op">{</span> <span class="va">config</span><span class="op">,</span> <span class="va">self'</span><span class="op">,</span> <span class="va">inputs'</span><span class="op">,</span> <span class="va">pkgs</span><span class="op">,</span> <span class="va">system</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>:</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span></span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>          <span class="va">projectName</span> <span class="op">=</span> <span class="st">"example"</span><span class="op">;</span></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>          <span class="va">overlays</span> <span class="op">=</span> <span class="op">[</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>            haskellNix.overlay</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>            haskellNix<span class="op">.</span>overlay</span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">(</span><span class="va">final</span><span class="op">:</span> <span class="va">prev</span><span class="op">:</span> <span class="op">{</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>              ${<span class="va">projectName</span><span class="op">}</span> = final.haskell<span class="op">-</span>nix.cabalProject <span class="op">{</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>              <span class="sc">${</span>projectName<span class="sc">}</span> <span class="op">=</span> final<span class="op">.</span>haskell<span class="op">-</span>nix<span class="op">.</span>cabalProject <span class="op">{</span></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                <span class="va">src</span> <span class="op">=</span> <span class="ss">../example</span><span class="op">;</span></span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                <span class="va">compiler-nix-name</span> <span class="op">=</span> <span class="st">"ghc924"</span><span class="op">;</span></span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                <span class="va">modules</span> <span class="op">=</span> <span class="op">[</span></span>
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                  <span class="op">{</span></span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>                    <span class="va">packages</span> <span class="op">=</span> <span class="op">{</span></span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>                      <span class="va">example</span>.<span class="va">components</span>.<span class="va">exes</span>.<span class="va">example</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>                        <span class="va">build-tools</span> <span class="op">=</span> <span class="op">[</span> pkgs.makeWrapper <span class="op">];</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>                        <span class="va">build-tools</span> <span class="op">=</span> <span class="op">[</span> pkgs<span class="op">.</span>makeWrapper <span class="op">];</span></span>
 <span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>                        <span class="va">postInstall</span> <span class="op">=</span> <span class="st">''</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="st">                          wrapProgram $out/bin/example --set PATH </span><span class="sc">${</span>pkgs.lib.makeBinPath <span class="op">[</span> pkgs.hello <span class="op">]</span><span class="sc">}</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="st">                          wrapProgram $out/bin/example --set PATH </span><span class="sc">${</span>pkgs<span class="op">.</span>lib<span class="op">.</span>makeBinPath <span class="op">[</span> pkgs<span class="op">.</span>hello <span class="op">]</span><span class="sc">}</span></span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="st">                        ''</span><span class="op">;</span></span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>                      <span class="op">};</span></span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>                    <span class="op">};</span></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>                  <span class="op">}</span></span>
 <span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>                <span class="op">];</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>              <span class="op">}</span>;</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>            }<span class="op">)</span></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>          <span class="op">];</span></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>          <span class="va">pkgs</span> <span class="op">=</span> <span class="bu">import</span> nixpkgs <span class="op">{</span> <span class="kw">inherit</span> system overlays<span class="op">;</span> <span class="op">};</span></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>          <span class="va">haskellNixFlake</span> <span class="op">=</span> pkgs.$<span class="op">{</span><span class="va">projectName</span><span class="op">}</span>.flake <span class="op">{</span> <span class="op">};</span></span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        <span class="kw">in</span></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        pkgs.lib.recursiveUpdate</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span><span class="bu">builtins</span>.<span class="bu">removeAttrs</span> haskellNixFlake <span class="op">[</span> <span class="st">"devShell"</span> <span class="st">"hydraJobs"</span> <span class="op">])</span> <span class="co"># remove attributes which are not supported by flake-parts</span></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>          <span class="op">{</span></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>            <span class="va">devShells</span>.<span class="va">default</span> <span class="op">=</span> haskellNixFlake.devShell<span class="op">;</span></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>          <span class="op">};</span></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>              <span class="op">};</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>          ]<span class="op">;</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>          <span class="va">pkgs</span> <span class="op">=</span> <span class="bu">import</span> nixpkgs <span class="op">{</span> <span class="kw">inherit</span> <span class="va">system</span> <span class="va">overlays</span><span class="op">;</span> <span class="op">};</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>          <span class="va">haskellNixFlake</span> <span class="op">=</span> pkgs<span class="op">.</span><span class="sc">${</span>projectName<span class="sc">}</span><span class="op">.</span>flake <span class="op">{</span> <span class="op">};</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        <span class="va">in</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        <span class="va">pkgs</span>.<span class="va">lib</span>.<span class="va">recursiveUpdate</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>          (<span class="va">builtins</span>.<span class="va">removeAttrs</span> <span class="va">haskellNixFlake</span> [ <span class="st">"devShell"</span> <span class="st">"hydraJobs"</span> ]) <span class="co"># remove attributes which are not supported by flake-parts</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>          {</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>            <span class="va">devShells</span>.<span class="va">default</span> <span class="op">=</span> haskellNixFlake<span class="op">.</span>devShell<span class="op">;</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>          <span class="op">}</span>;</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
   </div>
   <p>
    This way, the generated <code>haskell.nix</code> flake output will

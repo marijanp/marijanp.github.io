@@ -168,7 +168,7 @@ or <a href="https://github.com/marijanp/marijanp.github.io/tree/main/examples/po
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">outputs</span> <span class="op">=</span> inputs@<span class="op">{</span> <span class="va">nixpkgs</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>:</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="va">nixosConfigurations</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">postgres-container</span> <span class="op">=</span> nixpkgs.lib.nixosSystem <span class="op">{</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">postgres-container</span> <span class="op">=</span> nixpkgs<span class="op">.</span>lib<span class="op">.</span>nixosSystem <span class="op">{</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>          <span class="va">system</span> <span class="op">=</span> <span class="st">"x86_64-linux"</span><span class="op">;</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>          <span class="va">modules</span> <span class="op">=</span> <span class="op">[</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">({</span> <span class="va">pkgs</span><span class="op">,</span> <span class="va">config</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>:</span>
@@ -185,40 +185,40 @@ or <a href="https://github.com/marijanp/marijanp.github.io/tree/main/examples/po
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>              <span class="op">{</span></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                <span class="va">boot</span>.<span class="va">isContainer</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                <span class="va">users</span>.<span class="va">users</span>.${<span class="va">cfg</span>.<span class="va">pgUser</span><span class="op">}</span> = <span class="op">{</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                  <span class="va">name</span> <span class="op">=</span> cfg.pgUser<span class="op">;</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                  <span class="va">group</span> <span class="op">=</span> cfg.pgUser<span class="op">;</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                <span class="va">users</span>.<span class="va">users</span>.<span class="sc">${</span>cfg<span class="op">.</span>pgUser<span class="sc">}</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                  <span class="va">name</span> <span class="op">=</span> cfg<span class="op">.</span>pgUser<span class="op">;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                  <span class="va">group</span> <span class="op">=</span> cfg<span class="op">.</span>pgUser<span class="op">;</span></span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>                  <span class="va">isSystemUser</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span>;</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>                <span class="op">};</span></span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>                users.groups.$<span class="op">{</span><span class="va">cfg</span>.<span class="va">pgUser</span><span class="op">}</span> = <span class="op">{</span> <span class="op">}</span>;</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>                <span class="va">users</span>.<span class="va">groups</span>.<span class="sc">${</span>cfg<span class="op">.</span>pgUser<span class="sc">}</span> <span class="op">=</span> <span class="op">{</span> <span class="op">};</span></span>
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>                networking.firewall.allowedTCPPorts =</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>                  <span class="op">[</span> config.services.postgresql.settings.port <span class="op">]</span>;</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>                <span class="va">networking</span>.<span class="va">firewall</span>.<span class="va">allowedTCPPorts</span> <span class="op">=</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>                  <span class="op">[</span> config<span class="op">.</span>services<span class="op">.</span>postgresql<span class="op">.</span>settings<span class="op">.</span>port <span class="op">];</span></span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                services.postgresql = <span class="op">{</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                <span class="va">services</span>.<span class="va">postgresql</span> <span class="op">=</span> <span class="op">{</span></span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                  <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
 <span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>                  <span class="va">enableTCPIP</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
 <span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>                  <span class="va">settings</span>.<span class="va">port</span> <span class="op">=</span> <span class="dv">5432</span><span class="op">;</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>                  <span class="va">ensureDatabases</span> <span class="op">=</span> <span class="op">[</span> cfg.pgDb <span class="op">];</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>                  <span class="va">ensureDatabases</span> <span class="op">=</span> <span class="op">[</span> cfg<span class="op">.</span>pgDb <span class="op">];</span></span>
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>                  <span class="va">authentication</span> <span class="op">=</span> <span class="st">''</span></span>
 <span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="st">                    #type database DBuser origin-address auth-method</span></span>
 <span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="st">                    # ipv4</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="st">                    host  all      </span><span class="sc">${</span>cfg.pgUser<span class="sc">}</span><span class="st">     0.0.0.0/0      md5</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="st">                    host  all      </span><span class="sc">${</span>cfg<span class="op">.</span>pgUser<span class="sc">}</span><span class="st">     0.0.0.0/0      md5</span></span>
 <span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="st">                    # ipv6</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="st">                    host all       </span><span class="sc">${</span>cfg.pgUser<span class="sc">}</span><span class="st">     ::/0           md5</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="st">                    host all       </span><span class="sc">${</span>cfg<span class="op">.</span>pgUser<span class="sc">}</span><span class="st">     ::/0           md5</span></span>
 <span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="st">                  ''</span><span class="op">;</span></span>
 <span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>                  <span class="va">ensureUsers</span> <span class="op">=</span> <span class="op">[</span></span>
 <span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>                    <span class="op">{</span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>                      <span class="va">name</span> <span class="op">=</span> cfg.pgUser<span class="op">;</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>                      <span class="va">name</span> <span class="op">=</span> cfg<span class="op">.</span>pgUser<span class="op">;</span></span>
 <span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>                      <span class="va">ensureDBOwnership</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
 <span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
 <span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>                  <span class="op">];</span></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>                  <span class="va">initialScript</span> <span class="op">=</span> pkgs.writeText <span class="st">"backend-init-script"</span> <span class="st">''</span></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="st">                    CREATE ROLE </span><span class="sc">${</span>cfg.pgUser<span class="sc">}</span><span class="st"> WITH SUPERUSER LOGIN PASSWORD '</span><span class="sc">${</span>cfg.pgUserPasswordMd5<span class="sc">}</span><span class="st">' CREATEDB;</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>                  <span class="va">initialScript</span> <span class="op">=</span> pkgs<span class="op">.</span>writeText <span class="st">"backend-init-script"</span> <span class="st">''</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="st">                    CREATE ROLE </span><span class="sc">${</span>cfg<span class="op">.</span>pgUser<span class="sc">}</span><span class="st"> WITH SUPERUSER LOGIN PASSWORD '</span><span class="sc">${</span>cfg<span class="op">.</span>pgUserPasswordMd5<span class="sc">}</span><span class="st">' CREATEDB;</span></span>
 <span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="st">                  ''</span><span class="op">;</span></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span>;</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>              }<span class="op">)</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>                <span class="op">};</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>              <span class="op">})</span></span>
 <span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>          <span class="op">];</span></span>
 <span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
 <span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>

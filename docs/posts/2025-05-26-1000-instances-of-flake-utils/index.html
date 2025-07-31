@@ -139,29 +139,29 @@ example:
   </p>
   <div class="sourceCode" id="cb1">
    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>..</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>outputs = <span class="op">{</span> <span class="va">self</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>: <span class="op">{</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="va">packages</span>.<span class="va">x86_64-linux</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">packageA</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="va">packageB</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">packageC</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="va">packages</span>.<span class="va">aarch64-linux</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="va">packageA</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="va">packageB</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="va">packageC</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="va">packages</span>.<span class="va">x86_64-darwin</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="va">packageA</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="va">packageB</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="va">packageC</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">packageA</span> <span class="op">=</span> <span class="op">.</span>..;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    packageB = <span class="op">.</span>..;</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    packageC = <span class="op">.</span>..;</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  };</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  packages<span class="op">.</span>aarch64<span class="op">-</span>linux = <span class="op">{</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="va">packageA</span> <span class="op">=</span> <span class="op">.</span>..;</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    packageB = <span class="op">.</span>..;</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    packageC = <span class="op">.</span>..;</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  };</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  packages<span class="op">.</span>x86_64<span class="op">-</span>darwin = <span class="op">{</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="va">packageA</span> <span class="op">=</span> <span class="op">.</span>..;</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    packageB = <span class="op">.</span>..;</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    packageC = <span class="op">.</span>..;</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  };</span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  ...</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="va">devShells</span>.<span class="va">x86_64-linux</span>.<span class="va">default</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="va">devShells</span>.<span class="va">aarch64-linux</span>.<span class="va">default</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="va">devShells</span>.<span class="va">x86_64-darwin</span>.<span class="va">default</span> <span class="op">=</span> ...<span class="op">;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  devShells<span class="op">.</span>x86_64<span class="op">-</span>linux<span class="op">.</span>default = <span class="op">.</span>..;</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  devShells<span class="op">.</span>aarch64<span class="op">-</span>linux<span class="op">.</span>default = <span class="op">.</span>..;</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  devShells<span class="op">.</span>x86_64<span class="op">-</span>darwin<span class="op">.</span>default = <span class="op">.</span>..;</span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  ...</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
   </div>
   <p>
    This repetition is annoying, but declaring as many systems as
@@ -231,15 +231,15 @@ solves the repetition problem:
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">inputs</span>.<span class="va">flake-utils</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">"github:numtide/flake-utils"</span><span class="op">;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">outputs</span> <span class="op">=</span> <span class="op">{</span> <span class="va">self</span><span class="op">,</span> <span class="va">flake-utils</span> <span class="op">}</span>:</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    flake<span class="op">-</span>utils.eachDefaultSystem <span class="op">(</span><span class="va">system</span><span class="op">:</span> <span class="op">{</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    flake<span class="op">-</span>utils<span class="op">.</span>eachDefaultSystem <span class="op">(</span><span class="va">system</span><span class="op">:</span> <span class="op">{</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">packages</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="va">packageA</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="va">packageB</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            <span class="va">packageC</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">devShells</span>.<span class="va">default</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">});</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="va">packageA</span> <span class="op">=</span> <span class="op">.</span>..;</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            packageB = <span class="op">.</span>..;</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            packageC = <span class="op">.</span>..;</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        };</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        devShells<span class="op">.</span>default = <span class="op">.</span>..;</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    });</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
   </div>
   <p>
    You call <code>eachDefaultSystem</code> with a callback that produces
@@ -295,15 +295,15 @@ eliminate the obscurity:
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">supportedSystems</span> <span class="op">=</span> <span class="op">[</span> <span class="st">"x86_64-linux"</span> <span class="st">"aarch64-linux"</span> <span class="st">"i686-linux"</span> <span class="op">];</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">in</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    flake<span class="op">-</span>utils.eachSystem supportedSystems <span class="op">(</span><span class="va">system</span><span class="op">:</span> <span class="op">{</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    flake<span class="op">-</span>utils<span class="op">.</span>eachSystem supportedSystems <span class="op">(</span><span class="va">system</span><span class="op">:</span> <span class="op">{</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">packages</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            <span class="va">packageA</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>            <span class="va">packageB</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>            <span class="va">packageC</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">devShells</span>.<span class="va">default</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">});</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            <span class="va">packageA</span> <span class="op">=</span> <span class="op">.</span>..;</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>            packageB = <span class="op">.</span>..;</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>            packageC = <span class="op">.</span>..;</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        };</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        devShells<span class="op">.</span>default = <span class="op">.</span>..;</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    });</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
   </div>
   <p>
    This is clearer, but the dependency on <em>flake-utils</em> remains.
@@ -329,7 +329,7 @@ because it doesn’t have one. That is, you avoid needing to write:
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">nixpkgs</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">"github:NixOS/nixpkgs/nixpkgs-unstable"</span><span class="op">;</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="va">flake-utils</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">"github:numtide/flake-utils"</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We don't have to do this:</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  flake<span class="op">-</span>utils.input.nixpkgs.follows = <span class="st">"nixpkgs"</span><span class="op">;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  flake<span class="op">-</span>utils<span class="op">.</span>input<span class="op">.</span>nixpkgs<span class="op">.</span>follows = <span class="st">"nixpkgs"</span><span class="op">;</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>;</span></code></pre>
   </div>
   <p>
@@ -345,8 +345,8 @@ override for <em>flake-utils</em>:
    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>inputs = <span class="op">{</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">flake-utils</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">"github:numtide/flake-utils"</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  flake<span class="op">-</span>a.url = ...<span class="op">;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">flake-a</span>.<span class="va">inputs</span>.<span class="va">flake-utils</span>.<span class="va">follows</span> <span class="op">=</span> <span class="st">"flake-utils"</span><span class="op">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  flake<span class="op">-</span>a<span class="op">.</span>url = <span class="op">.</span>..;</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  flake<span class="op">-</span>a<span class="op">.</span>inputs<span class="op">.</span>flake<span class="op">-</span>utils<span class="op">.</span>follows = <span class="st">"flake-utils"</span><span class="op">;</span></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>;</span></code></pre>
   </div>
   <p>
@@ -429,19 +429,19 @@ expects. Let’s rewrite our Flake using <code>genAttrs</code>:
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">outputs</span> <span class="op">=</span> <span class="op">{</span> <span class="va">self</span><span class="op">,</span> <span class="va">nixpkgs</span> <span class="op">}</span>:</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">supportedSystems</span> <span class="op">=</span> <span class="op">[</span> <span class="st">"x86_64-linux"</span> <span class="st">"aarch64-linux"</span> <span class="st">"i686-linux"</span> <span class="op">];</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">eachSupportedSystem</span> <span class="op">=</span> nixpkgs.lib.genAttrs supportedSystems<span class="op">;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">eachSupportedSystem</span> <span class="op">=</span> nixpkgs<span class="op">.</span>lib<span class="op">.</span>genAttrs supportedSystems<span class="op">;</span></span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">in</span></span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">packages</span> <span class="op">=</span> eachSupportedSystem <span class="op">(</span><span class="va">system</span><span class="op">:</span> <span class="op">{</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>            <span class="va">packageA</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>            <span class="va">packageB</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>            <span class="va">packageC</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">});</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">devShells</span> <span class="op">=</span> eachSupportedSystem <span class="op">(</span><span class="va">system</span><span class="op">:</span> <span class="op">{</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>            <span class="va">default</span> <span class="op">=</span> ...<span class="op">;</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">});</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>            <span class="va">packageA</span> <span class="op">=</span> <span class="op">.</span>..;</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>            packageB = <span class="op">.</span>..;</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>            packageC = <span class="op">.</span>..;</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        });</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        devShells = eachSupportedSystem <span class="op">(</span><span class="va">system</span><span class="op">:</span> <span class="op">{</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>            <span class="va">default</span> <span class="op">=</span> <span class="op">.</span>..;</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        });</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
   </div>
   <p>
    We’ve eliminated a dependency with a simple helper! We still have
@@ -461,7 +461,7 @@ a list of common systems relevant to Flakes, which you can use with
 obscurity, but sometimes we have to or want to be pragmatic.
   </p>
   <div class="sourceCode" id="cb13">
-   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>nix<span class="op">-</span>repl&gt; lib.systems.flakeExposed</span>
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>nix<span class="op">-</span>repl&gt; lib<span class="op">.</span>systems<span class="op">.</span>flakeExposed</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="op">[</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"x86_64-linux"</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"aarch64-linux"</span></span>
@@ -481,7 +481,7 @@ obscurity, but sometimes we have to or want to be pragmatic.
 defining:
   </p>
   <div class="sourceCode" id="cb14">
-   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>eachSupportedSystem = lib.genAttrs lib.systems.flakeExposed</span></code></pre>
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>eachSupportedSystem = lib<span class="op">.</span>genAttrs lib<span class="op">.</span>systems<span class="op">.</span>flakeExposed</span></code></pre>
   </div>
   <p>
    without introducing another dependency.

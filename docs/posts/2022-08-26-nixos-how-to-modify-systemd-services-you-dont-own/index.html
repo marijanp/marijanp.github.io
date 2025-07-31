@@ -158,17 +158,17 @@ following:
 service that listens on a socket.
   </p>
   <div class="sourceCode" id="cb1">
-   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>services.socket<span class="op">-</span>listener = <span class="op">{</span></span>
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>services<span class="op">.</span>socket<span class="op">-</span>listener = <span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">enable</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">socketPath</span> <span class="op">=</span> <span class="st">"/run/socket-listener/socket-listener.socket"</span><span class="op">;</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>;</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>systemd.services.socket<span class="op">-</span>listener.serviceConfig.ExecStartPost = pkgs.writeShellScript <span class="st">"add-socket-write-permissions"</span> <span class="st">''</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="st">    while [ ! -S </span><span class="sc">${</span>config.socket<span class="op">-</span>listener.socketPath<span class="sc">}</span><span class="st"> ];</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>systemd<span class="op">.</span>services<span class="op">.</span>socket<span class="op">-</span>listener<span class="op">.</span>serviceConfig<span class="op">.</span>ExecStartPost = pkgs<span class="op">.</span>writeShellScript <span class="st">"add-socket-write-permissions"</span> <span class="st">''</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="st">    while [ ! -S </span><span class="sc">${</span>config<span class="op">.</span>socket<span class="op">-</span>listener<span class="op">.</span>socketPath<span class="sc">}</span><span class="st"> ];</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="st">    do</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="st">      sleep 1</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="st">    done</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="st">    chmod 0666 </span><span class="sc">${</span>config.socket<span class="op">-</span>listener.socketPath<span class="sc">}</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="st">    chmod 0666 </span><span class="sc">${</span>config<span class="op">.</span>socket<span class="op">-</span>listener<span class="op">.</span>socketPath<span class="sc">}</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="st">  ''</span>;</span></code></pre>
   </div>
  </article>

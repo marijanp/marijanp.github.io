@@ -21,7 +21,7 @@
 
 {%- for entry in entries %}
   <url>
-    <loc>{{site_url}}{{entry.url}}/</loc>
+    <loc>{{site_url}}{{entry.url}}</loc>
     <lastmod>{{entry.date}}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>

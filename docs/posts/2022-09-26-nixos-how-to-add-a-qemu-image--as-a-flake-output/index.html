@@ -140,22 +140,22 @@ in the following way:
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">qemu-image</span> <span class="op">=</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="kw">let</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">system</span> <span class="op">=</span> <span class="st">"x86_64-linux"</span><span class="op">;</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">pkgs</span> <span class="op">=</span> nixpkgs.legacyPackages.$<span class="op">{</span><span class="va">system</span><span class="op">};</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">lib</span> <span class="op">=</span> pkgs.lib<span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">pkgs</span> <span class="op">=</span> nixpkgs<span class="op">.</span>legacyPackages<span class="op">.</span><span class="sc">${</span>system<span class="sc">}</span><span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">lib</span> <span class="op">=</span> pkgs<span class="op">.</span>lib<span class="op">;</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="kw">in</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="co"># see https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/make-disk-image.nix</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>      <span class="co"># for an overview of available parameters</span></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>      <span class="bu">import</span> <span class="st">"</span><span class="sc">${</span>nixpkgs<span class="sc">}</span><span class="st">/nixos/lib/make-disk-image.nix"</span> <span class="op">{</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">inherit</span> pkgs lib<span class="op">;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">inherit</span> <span class="va">pkgs</span> <span class="va">lib</span><span class="op">;</span></span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">format</span> <span class="op">=</span> <span class="st">"qcow2"</span><span class="op">;</span></span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">diskSize</span> <span class="op">=</span> <span class="st">"8000"</span><span class="op">;</span></span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="va">config</span> <span class="op">=</span> <span class="op">(</span><span class="bu">import</span> <span class="st">"</span><span class="sc">${</span>nixpkgs<span class="sc">}</span><span class="st">/nixos/lib/eval-config.nix"</span> <span class="op">{</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>          <span class="kw">inherit</span> pkgs system<span class="op">;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>          <span class="kw">inherit</span> <span class="va">pkgs</span> <span class="va">system</span><span class="op">;</span></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>          <span class="va">modules</span> <span class="op">=</span> <span class="op">[</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>            nixpkgs.nixosModules.notDetected</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>            nixpkgs<span class="op">.</span>nixosModules<span class="op">.</span>notDetected</span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">"</span><span class="sc">${</span>nixpkgs<span class="sc">}</span><span class="st">/nixos/modules/profiles/qemu-guest.nix"</span></span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>            <span class="op">({</span> <span class="va">pkgs</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>: <span class="op">{</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>              <span class="va">fileSystems</span>.<span class="st">"</span>/<span class="st">"</span>.<span class="va">device</span> <span class="op">=</span> <span class="st">"/dev/disk/by-label/nixos"</span><span class="op">;</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>              <span class="va">fileSystems</span>.<span class="st">"/"</span>.<span class="va">device</span> <span class="op">=</span> <span class="st">"/dev/disk/by-label/nixos"</span><span class="op">;</span></span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>              <span class="va">boot</span>.<span class="va">loader</span>.<span class="va">grub</span>.<span class="va">device</span> <span class="op">=</span> <span class="st">"/dev/vda"</span><span class="op">;</span></span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>              <span class="va">boot</span>.<span class="va">loader</span>.<span class="va">timeout</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>              <span class="va">users</span>.<span class="va">extraUsers</span>.<span class="va">root</span>.<span class="va">password</span> <span class="op">=</span> <span class="st">""</span><span class="op">;</span></span>
@@ -165,7 +165,7 @@ in the following way:
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>              <span class="op">];</span></span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>            <span class="op">})</span></span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>          <span class="op">];</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        <span class="op">})</span>.config<span class="op">;</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        <span class="op">}).</span>config<span class="op">;</span></span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
 <span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
 <span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
