@@ -14,7 +14,7 @@ in
   inherit (pkgs) dist;
   devShell = pkgs.mkShell {
     inputsFrom = [ pkgs.dist ];
-    nativeBuildInputs = with pkgs; [
+    packages = with pkgs; [
       simple-http-server
       nodejs
       nixpkgs-fmt
