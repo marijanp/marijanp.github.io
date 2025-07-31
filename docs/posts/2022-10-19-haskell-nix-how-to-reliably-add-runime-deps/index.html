@@ -67,66 +67,80 @@
        </a>
       </li>
       <li>
-       <label class="swap swap-rotate">
+       <a href="https://gitlab.com/marijanpe">
                       
-                      <input id="themeController" onclick="saveThemeState()" type="checkbox" class="theme-controller" value="nord">
-                      
-       <svg class="swap-on icon" viewbox="0 0 24 24">
+       <svg class="icon" viewbox="0 0 24 24">
         
                         
-        <use href="/images/icons.svg#moon"></use>
-        
-                      
-       </svg>
-       
-                      
-       <svg class="swap-off icon" viewbox="0 0 24 24">
-        
-                        
-        <use href="/images/icons.svg#sun"></use>
+        <use href="/images/icons.svg#gitlab"></use>
         
                       
        </svg>
        
                     
-      </label>
+      </a>
      </li>
-    </ul>
-   </div>
+     <li>
+      <label class="swap swap-rotate">
+                      
+                      <input id="themeController" onclick="saveThemeState()" type="checkbox" class="theme-controller" value="nord">
+                      
+      <svg class="swap-on icon" viewbox="0 0 24 24">
+       
+                        
+       <use href="/images/icons.svg#moon"></use>
+       
+                      
+      </svg>
+      
+                      
+      <svg class="swap-off icon" viewbox="0 0 24 24">
+       
+                        
+       <use href="/images/icons.svg#sun"></use>
+       
+                      
+      </svg>
+      
+                    
+     </label>
+    </li>
+   </ul>
   </div>
- </nav>
+ </div>
+</nav>
 </div>
 </header>
 <main>
 <div class="max-w-prose m-auto">
- <div id="content" class="pt-4 px-4 md:px-0">
-  <article class="prose">
-   <h1 id="title">
-    haskell.nix - How to reliably add runtime dependencies
-   </h1>
-   <p></p>
-   <address>
-    By <a rel="author">Marijan</a>
-   </address>
-   on <time id="post-date" datetime="2022-10-19">2022-10-19</time>
-   <p></p>
-   <p>
-    Assuming you use <code>haskell.nix</code> and have created a Haskell
+<div id="content" class="pt-4 px-4 md:px-0">
+ <article class="prose">
+  <h1 id="title">
+   haskell.nix - How to reliably add runtime dependencies
+  </h1>
+  <p></p>
+  <address>
+   By <a rel="author">Marijan</a>
+  </address>
+  on <time id="post-date" datetime="2022-10-19">2022-10-19</time>
+  <p></p>
+  <p>
+   Assuming you use <code>haskell.nix</code> and have created a Haskell
 program that requires another executable to be present in the
 environment i.e. the <code>PATH</code> variable.
-   </p>
-   <p>
-    Using Nix, you can <a href="https://nixos.wiki/wiki/Nix_Cookbook#Wrapping_packages">wrap</a>
+  </p>
+  <p>
+   Using Nix, you can <a href="https://nixos.wiki/wiki/Nix_Cookbook#Wrapping_packages">wrap</a>
 your executable (<a href="/posts/2022-06-03-dont-override-and-wrap-only/">see related
 post</a>), which is the standard technique to ensure that your program
 will be distributed together with that executable.
-   </p>
-   <p>
-    This standard approach, in combination with <code>haskell.nix</code>,
+  </p>
+  <p>
+   This standard approach, in combination with <code>haskell.nix</code>,
 could look like this:
-   </p>
-   <div class="sourceCode" id="cb1">
-    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+  </p>
+  <div class="sourceCode" id="cb1">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">description</span> <span class="op">=</span> <span class="st">"naive"</span><span class="op">;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="va">inputs</span> <span class="op">=</span> <span class="op">{</span></span>
@@ -177,19 +191,19 @@ could look like this:
 <span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>          <span class="op">};</span></span>
 <span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
 <span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
-   </div>
-   <p>
-    We unify the <code>haskell.nix</code>-generated <code>flake</code>
+  </div>
+  <p>
+   We unify the <code>haskell.nix</code>-generated <code>flake</code>
 attribute set that contains: the generated library, executable, and test
 outputs, with our flake output attribute set, which in turn outputs the
 wrapped app called <code>example</code>.
-   </p>
-   <p>
-    Running <code>nix flake show --allow-input-from-derivation</code> we
+  </p>
+  <p>
+   Running <code>nix flake show --allow-input-from-derivation</code> we
 get the following output:
-   </p>
-   <div class="sourceCode" id="cb2">
-    <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">├───apps</span></span>
+  </p>
+  <div class="sourceCode" id="cb2">
+   <pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">├───apps</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   └───x86_64-linux</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>       ├───example: app</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>       ├───<span class="st">"example:exe:example"</span>: app</span>
@@ -212,39 +226,39 @@ get the following output:
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├───</span><span class="st">"example:exe:example"</span><span class="ex">:</span> package <span class="st">'example-exe-example-0.1.0.0'</span></span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├───</span><span class="st">"example:lib:example"</span><span class="ex">:</span> package <span class="st">'example-lib-example-0.1.0.0'</span></span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        <span class="ex">└───</span><span class="st">"example:test:example-test"</span><span class="ex">:</span> package <span class="st">'example-test-example-test-0.1.0.0'</span></span></code></pre>
-   </div>
-   <p>
-    These flake outputs we get from <code>haskell.nix</code> are
+  </div>
+  <p>
+   These flake outputs we get from <code>haskell.nix</code> are
 desirable as we don’t want to define everything ourselves. And this
 brings the problem to the surface when we use the standard approach to
 wrap our executable: take a closer look at the outputs!
-   </p>
-   <p>
-    Some flake outputs are not wrapped with the required runtime
+  </p>
+  <p>
+   Some flake outputs are not wrapped with the required runtime
 dependencies, namely
 <code>apps.x86_64-linux."example:exe:example"</code> and
 <code>packages.x86_64-linux."example:exe:example"</code>.
-   </p>
-   <p>
-    Since we do not want users to accidentally use one of the output
+  </p>
+  <p>
+   Since we do not want users to accidentally use one of the output
 executables without all the required runtime dependencies, we would need
 to replace all the unwrapped executable outputs with the wrapped
 executable. That means removing the attribute from
 <code>haskell.nix's</code> flake outputs and redefining them in our
 flake outputs.
-   </p>
-   <p>
-    This process of removing and adding new outputs is very error-prone.
+  </p>
+  <p>
+   This process of removing and adding new outputs is very error-prone.
 And it gets tedious the more apps our potentially huge monorepo exports.
 It would be better if <code>haskell.nix</code> would take our runtime
 dependencies into account when generating the flake outputs.
-   </p>
-   <p>
-    Fortunately, we can do that using <code>haskell.nix's</code> module
+  </p>
+  <p>
+   Fortunately, we can do that using <code>haskell.nix's</code> module
 options:
-   </p>
-   <div class="sourceCode" id="cb3">
-    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+  </p>
+  <div class="sourceCode" id="cb3">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">description</span> <span class="op">=</span> <span class="st">"better"</span><span class="op">;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="va">inputs</span> <span class="op">=</span> <span class="op">{</span></span>
@@ -292,18 +306,18 @@ options:
 <span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>          <span class="op">};</span></span>
 <span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
 <span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
-   </div>
-   <p>
-    This way, the generated <code>haskell.nix</code> flake output will
+  </div>
+  <p>
+   This way, the generated <code>haskell.nix</code> flake output will
 contain our wrapped executables reliably without the extra work of
 redefining outputs.
-   </p>
-   <p>
-    The working flakes and the <code>example</code> Cabal package can be
+  </p>
+  <p>
+   The working flakes and the <code>example</code> Cabal package can be
 found <a href="https://git.sr.ht/~marijan/website/tree/main/item/examples/haskell-nix/wrap">here</a>.
-   </p>
-  </article>
- </div>
+  </p>
+ </article>
+</div>
 </div>
 </main>
 <div class="max-w-2xl m-auto">
@@ -311,17 +325,17 @@ found <a href="https://git.sr.ht/~marijan/website/tree/main/item/examples/haskel
 </div>
 <footer class="footer sm:footer-horizontal bg-base-100 max-w-2xl m-auto px-4 mb-4">
 <aside>
- <span class="footer-title text-2xl">
+<span class="footer-title text-2xl">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International" class="text-dark" style="text-decoration: none">
               
- <svg class="icon" viewbox="0 0 96 24">
-  
-                
-  <use href="/images/icons.svg#cc-by-nc-sa"></use>
-  
-              
- </svg>
+<svg class="icon" viewbox="0 0 96 24">
  
+                
+ <use href="/images/icons.svg#cc-by-nc-sa"></use>
+ 
+              
+</svg>
+
             
 </a>
 
@@ -342,10 +356,10 @@ Code:
 <a href="https://git.sr.ht/~marijan/">
               
 <svg class="icon" viewbox="0 0 24 24">
- 
+
                 
- <use href="/images/icons.svg#sourcehut"></use>
- 
+<use href="/images/icons.svg#sourcehut"></use>
+
               
 </svg>
 
@@ -358,6 +372,19 @@ Code:
 
                 
 <use href="/images/icons.svg#github"></use>
+
+              
+</svg>
+
+            
+</a>
+
+            <a href="https://gitlab.com/marijanpe">
+              
+<svg class="icon" viewbox="0 0 24 24">
+
+                
+<use href="/images/icons.svg#gitlab"></use>
 
               
 </svg>

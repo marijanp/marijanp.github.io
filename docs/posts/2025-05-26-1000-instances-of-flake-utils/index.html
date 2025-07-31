@@ -68,63 +68,77 @@
        </a>
       </li>
       <li>
-       <label class="swap swap-rotate">
+       <a href="https://gitlab.com/marijanpe">
                       
-                      <input id="themeController" onclick="saveThemeState()" type="checkbox" class="theme-controller" value="nord">
-                      
-       <svg class="swap-on icon" viewbox="0 0 24 24">
+       <svg class="icon" viewbox="0 0 24 24">
         
                         
-        <use href="/images/icons.svg#moon"></use>
-        
-                      
-       </svg>
-       
-                      
-       <svg class="swap-off icon" viewbox="0 0 24 24">
-        
-                        
-        <use href="/images/icons.svg#sun"></use>
+        <use href="/images/icons.svg#gitlab"></use>
         
                       
        </svg>
        
                     
-      </label>
+      </a>
      </li>
-    </ul>
-   </div>
+     <li>
+      <label class="swap swap-rotate">
+                      
+                      <input id="themeController" onclick="saveThemeState()" type="checkbox" class="theme-controller" value="nord">
+                      
+      <svg class="swap-on icon" viewbox="0 0 24 24">
+       
+                        
+       <use href="/images/icons.svg#moon"></use>
+       
+                      
+      </svg>
+      
+                      
+      <svg class="swap-off icon" viewbox="0 0 24 24">
+       
+                        
+       <use href="/images/icons.svg#sun"></use>
+       
+                      
+      </svg>
+      
+                    
+     </label>
+    </li>
+   </ul>
   </div>
- </nav>
+ </div>
+</nav>
 </div>
 </header>
 <main>
 <div class="max-w-prose m-auto">
- <div id="content" class="pt-4 px-4 md:px-0">
-  <article class="prose">
-   <h1 id="title">
-    1000 instances of flake-utils
-   </h1>
-   <p></p>
-   <address>
-    By <a rel="author">Marijan</a>
-   </address>
-   on <time id="post-date" datetime="2025-05-26">2025-05-26</time>
-   <p></p>
-   <blockquote>
-    <p>
-     <strong>Note:</strong> Originally published on <a href="https://nixcademy.com/posts/1000-instances-of-flake-utils/">nixcademy.com</a>
-    </p>
-   </blockquote>
+<div id="content" class="pt-4 px-4 md:px-0">
+ <article class="prose">
+  <h1 id="title">
+   1000 instances of flake-utils
+  </h1>
+  <p></p>
+  <address>
+   By <a rel="author">Marijan</a>
+  </address>
+  on <time id="post-date" datetime="2025-05-26">2025-05-26</time>
+  <p></p>
+  <blockquote>
    <p>
-    When writing a Nix Flake, one tedious yet important task is to expose
+    <strong>Note:</strong> Originally published on <a href="https://nixcademy.com/posts/1000-instances-of-flake-utils/">nixcademy.com</a>
+   </p>
+  </blockquote>
+  <p>
+   When writing a Nix Flake, one tedious yet important task is to expose
 your packages and other outputs for different platforms. You want to
 declare them not just for the platforms you’re officially supporting and
 testing on, but ideally for many more. Let’s take a look at an
 example:
-   </p>
-   <div class="sourceCode" id="cb1">
-    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
+  </p>
+  <div class="sourceCode" id="cb1">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>...</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>outputs = <span class="op">{</span> <span class="va">self</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>: <span class="op">{</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="va">packages</span>.<span class="va">x86_64-linux</span> <span class="op">=</span> <span class="op">{</span></span>
@@ -148,19 +162,19 @@ example:
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="va">devShells</span>.<span class="va">x86_64-darwin</span>.<span class="va">default</span> <span class="op">=</span> ...<span class="op">;</span></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  ...</span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
-   </div>
-   <p>
-    This repetition is annoying, but declaring as many systems as
+  </div>
+  <p>
+   This repetition is annoying, but declaring as many systems as
 possible is important because Flakes don’t support a way to externally
 override the system parameter when invoking the Nix command. If a
 consumer of this Flake is on a <code>i686-linux</code> machine, for
 example, and tries to run <code>packageA</code>, they’ll get an
 error:
-   </p>
-   <pre class="console"><code>$ nix run .#packageA
+  </p>
+  <pre class="console"><code>$ nix run .#packageA
 error: flake 'git+file:///...' does not provide attribute 'apps.i686-linux.packageA', 'packages.i686-linux.packageA', 'legacyPackages.i686-linux.packageA' or 'packageA'</code></pre>
-   <p>
-    Even if we didn’t intend for users on <code>i686-linux</code> to use
+  <p>
+   Even if we didn’t intend for users on <code>i686-linux</code> to use
 our package, and we haven’t built or tested for that platform, it’s good
 practice to empower any user to attempt to consume the package if they
 want to on whatever system they run. While exposing packages via an <a href="https://nixcademy.com/posts/mastering-nixpkgs-overlays-techniques-and-best-practice/">overlay</a>
@@ -168,26 +182,26 @@ is also an option, it’s an additional step for them. (We recommend doing
 that in any case, though it’s a separate topic and it requires users to
 instantiate <code>nixpkgs</code> configured with their system and that
 overlay).
-   </p>
-   <p>
-    Unfortunately, there is also no command-line option that allows a
+  </p>
+  <p>
+   Unfortunately, there is also no command-line option that allows a
 user to override the Flake author’s declared systems. You might think
 <code>--system</code> would do the trick, but it merely looks for an
 output matching that system:
-   </p>
-   <pre class="console"><code>$ nix run .#packageA --system i686-linux
+  </p>
+  <pre class="console"><code>$ nix run .#packageA --system i686-linux
 error: flake 'git+file:///...' does not provide attribute 'packages.i686-linux.packageA', 'legacyPackages.i686-linux.packageA' or 'packageA'
        Did you mean packages?</code></pre>
-   <p>
-    Therefore, as a Flake author, you’d ideally want to declare all
+  <p>
+   Therefore, as a Flake author, you’d ideally want to declare all
 platforms you’ve built and tested for, and many more , moreover you
 would like to achieve that without excessive repetition.
-   </p>
-   <h2>
-    The Allure of <em>flake-utils</em>
-   </h2>
-   <p>
-    Many people in the Nix community facing this issue of repetition have
+  </p>
+  <h2>
+   The Allure of <em>flake-utils</em>
+  </h2>
+  <p>
+   Many people in the Nix community facing this issue of repetition have
 decided to introduce <em><a href="https://github.com/numtide/flake-utils">flake-utils</a></em> as a
 dependency to solve this issue. It provides helper functions, notably
 <code>eachSystem</code> and <code>eachDefaultSystem</code>, to create
@@ -195,25 +209,25 @@ outputs for different systems without being repetitive.
 <code>eachDefaultSystem</code> is simply <code>eachSystem</code>
 partially applied with a predefined <code>defaultSystems</code>
 list:
-   </p>
-   <div class="sourceCode" id="cb4">
-    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>eachDefaultSystem = eachSystem defaultSystems</span></code></pre>
-   </div>
-   <p>
-    In this post, we’ll highlight some issues with introducing
+  </p>
+  <div class="sourceCode" id="cb4">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>eachDefaultSystem = eachSystem defaultSystems</span></code></pre>
+  </div>
+  <p>
+   In this post, we’ll highlight some issues with introducing
 <em>flake-utils</em> as an evaluation dependency and argue that you
 often don’t need it, as you can easily craft your own
 <code>eachSystem</code>-like function with a single line of code.
-   </p>
-   <h2>
-    The Obscurity Problem with <em>flake-utils</em>
-   </h2>
-   <p>
-    Let’s start by taking a look at how <code>eachDefaultSystem</code>
+  </p>
+  <h2>
+   The Obscurity Problem with <em>flake-utils</em>
+  </h2>
+  <p>
+   Let’s start by taking a look at how <code>eachDefaultSystem</code>
 solves the repetition problem:
-   </p>
-   <div class="sourceCode" id="cb5">
-    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
+  </p>
+  <div class="sourceCode" id="cb5">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">inputs</span>.<span class="va">flake-utils</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">"github:numtide/flake-utils"</span><span class="op">;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">outputs</span> <span class="op">=</span> <span class="op">{</span> <span class="va">self</span><span class="op">,</span> <span class="va">flake-utils</span> <span class="op">}</span>:</span>
@@ -226,21 +240,21 @@ solves the repetition problem:
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">devShells</span>.<span class="va">default</span> <span class="op">=</span> ...<span class="op">;</span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">});</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
-   </div>
-   <p>
-    You call <code>eachDefaultSystem</code> with a callback that produces
+  </div>
+  <p>
+   You call <code>eachDefaultSystem</code> with a callback that produces
 your outputs attribute set for a given system. <em>flake-utils</em> then
 invokes this callback for each of its “default” systems.
-   </p>
-   <p>
-    This solves the repetition, which is nice. But an observation: What
+  </p>
+  <p>
+   This solves the repetition, which is nice. But an observation: What
 exactly is a “default system”? Is <code>x86_64-linux</code> one? How
 about <code>i686-linux</code>? As a reader of this code, I have two ways
 to find out: consult the <em>flake-utils</em> documentation or run
 <code>nix flake show</code> to see the produced outputs.
-   </p>
-   <p>
-    What was obvious in the earlier, more verbose code now introduces a
+  </p>
+  <p>
+   What was obvious in the earlier, more verbose code now introduces a
 bit of cognitive overhead. The author is implicitly requiring prior
 knowledge or extra steps from users or future maintainers to understand
 what’s happening. What if the <em>flake-utils</em> maintainers decide
@@ -249,9 +263,9 @@ what’s happening. What if the <em>flake-utils</em> maintainers decide
 Discovering this change isn’t hard - check the documentation or run
 <code>nix flake show</code> - but it’s an extra step and it’s not
 obvious from reading the code.
-   </p>
-   <p>
-    According to <a href="https://web.stanford.edu/~ouster/cgi-bin/book.php">A Philosophy of
+  </p>
+  <p>
+   According to <a href="https://web.stanford.edu/~ouster/cgi-bin/book.php">A Philosophy of
 Software Design</a> by John Ousterhout, two causes of complexity are
 <em>dependencies</em> and <em>obscurity</em>. Dependencies are often
 intentionally introduced to manage complexity and improve
@@ -260,21 +274,21 @@ be a cause of complexity we want to introduce them wisely. Obscurity
 occurs when important information is not apparent, e.g. when a too
 generic variable forces you to consult the documentation. A clean design
 tends to minimize the amount of required documentation.
-   </p>
-   <p>
-    With <em>flake-utils</em>, we’ve introduced a dependency, and
+  </p>
+  <p>
+   With <em>flake-utils</em>, we’ve introduced a dependency, and
 <code>eachDefaultSystem</code> is arguably obscure regarding its
 “default” systems.
-   </p>
-   <p>
-    Code is typically written once by a few people but read many times by
+  </p>
+  <p>
+   Code is typically written once by a few people but read many times by
 many people with varying levels of expertise. I’d argue we can do
 better, even when using <em>flake-utils</em>. Instead of
 <code>eachDefaultSystem</code>, let’s use <code>eachSystem</code> to
 eliminate the obscurity:
-   </p>
-   <div class="sourceCode" id="cb6">
-    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
+  </p>
+  <div class="sourceCode" id="cb6">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">inputs</span>.<span class="va">flake-utils</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">"github:numtide/flake-utils"</span><span class="op">;</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">outputs</span> <span class="op">=</span> <span class="op">{</span> <span class="va">self</span><span class="op">,</span> <span class="va">flake-utils</span> <span class="op">}</span>:</span>
@@ -290,17 +304,17 @@ eliminate the obscurity:
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">devShells</span>.<span class="va">default</span> <span class="op">=</span> ...<span class="op">;</span></span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">});</span></span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
-   </div>
-   <p>
-    This is clearer, but the dependency on <em>flake-utils</em> remains.
+  </div>
+  <p>
+   This is clearer, but the dependency on <em>flake-utils</em> remains.
 While seemingly small, this dependency can lead to bloat in real-world
 scenarios.
-   </p>
-   <h2>
-    The Dependency Problem with flake-utils
-   </h2>
-   <p>
-    The <em>flake-utils</em> <a href="https://github.com/numtide/flake-utils/blob/main/README.md">README</a>
+  </p>
+  <h2>
+   The Dependency Problem with flake-utils
+  </h2>
+  <p>
+   The <em>flake-utils</em> <a href="https://github.com/numtide/flake-utils/blob/main/README.md">README</a>
 highlights a nice property: it doesn’t depend on <em>nixpkgs</em>. So,
 if your Flake’s outputs don’t need <em>nixpkgs</em>, you could depend
 only on <em>flake-utils</em>, which is much smaller than
@@ -308,35 +322,35 @@ only on <em>flake-utils</em>, which is much smaller than
 other case, if you do depend on <em>nixpkgs</em>, you don’t have to
 explicitly override <em>flake-utils</em>’s <em>nixpkgs</em> input,
 because it doesn’t have one. That is, you avoid needing to write:
-   </p>
-   <div class="sourceCode" id="cb7">
-    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
+  </p>
+  <div class="sourceCode" id="cb7">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>inputs = <span class="op">{</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">nixpkgs</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">"github:NixOS/nixpkgs/nixpkgs-unstable"</span><span class="op">;</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="va">flake-utils</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">"github:numtide/flake-utils"</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We don't have to do this:</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  flake<span class="op">-</span>utils.input.nixpkgs.follows = <span class="st">"nixpkgs"</span><span class="op">;</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>;</span></code></pre>
-   </div>
-   <p>
-    However, projects often grow to depend on many Flakes, not just
+  </div>
+  <p>
+   However, projects often grow to depend on many Flakes, not just
 <em>nixpkgs</em> and <em>flake-utils</em>. We’ve observed many projects
 using <em>flake-utils</em> solely for this per-system output generation.
 Often, authors are unaware that another Flake they depend on also uses
 f<em>lake-utils</em>, and they forget to make their dependencies follow
 a single <em>flake-utils</em> instance. I.e. they forget to do that
 override for <em>flake-utils</em>:
-   </p>
-   <div class="sourceCode" id="cb8">
-    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
+  </p>
+  <div class="sourceCode" id="cb8">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>inputs = <span class="op">{</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">flake-utils</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">"github:numtide/flake-utils"</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  flake<span class="op">-</span>a.url = ...<span class="op">;</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">flake-a</span>.<span class="va">inputs</span>.<span class="va">flake-utils</span>.<span class="va">follows</span> <span class="op">=</span> <span class="st">"flake-utils"</span><span class="op">;</span></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>;</span></code></pre>
-   </div>
-   <p>
-    If these follows directives are missing, your <code>flake.lock</code>
+  </div>
+  <p>
+   If these follows directives are missing, your <code>flake.lock</code>
 file can end up with multiple pins for <em>flake-utils</em>.
 Consequently, when you build a package that relies on these other
 Flakes, you might have download the <em>flake-utils</em> checkout
@@ -344,40 +358,40 @@ multiple times in order to evaluate your Flake. This issue is
 widespread: <a href="https://sourcegraph.com/search?q=context:global+flake-utils_+file:flake.lock&amp;patternType=keyword&amp;sm=0">a
 Sourcegraph query</a> for <code>flake.lock</code> files mentioning
 <code>flake-utils_*</code> yields over 4100 results.
-   </p>
-   <p>
-    Moreover <a href="https://sourcegraph.com/search?q=context:global+flake-utils.url+and+nixpkgs.url+file:flake.nix&amp;patternType=keyword&amp;sm=0">another
+  </p>
+  <p>
+   Moreover <a href="https://sourcegraph.com/search?q=context:global+flake-utils.url+and+nixpkgs.url+file:flake.nix&amp;patternType=keyword&amp;sm=0">another
 Sourcegraph query</a> shows over 4200 <code>flake.nix</code> files
 mentioning both <code>flake-utils.url</code> and
 <code>nixpkgs.url</code>, implying that the property of not depending on
 <em>nixpkgs</em> is often irrelevant, as most projects do depend it
 anyway.
-   </p>
-   <p>
-    So, the observation is: while <em>flake-utils</em> itself doesn’t
+  </p>
+  <p>
+   So, the observation is: while <em>flake-utils</em> itself doesn’t
 depend on <em>nixpkgs</em>, many projects use both. Furthermore,
 projects often depend on other Flakes that also use
 <em>flake-utils</em>, and their authors might not consistently override
 evaluation inputs, leading to bloat.
-   </p>
-   <p>
-    Let’s leverage this fact and break this cycle: The <em>nixpkgs</em>
+  </p>
+  <p>
+   Let’s leverage this fact and break this cycle: The <em>nixpkgs</em>
 library offers <code>genAttrs</code>, a function that can achieve a
 similar outcome to <code>eachSystem</code>.
-   </p>
-   <h2>
-    The Alternative
-   </h2>
-   <p>
-    The <em>flake-utils</em> <a href="https://github.com/numtide/flake-utils?tab=readme-ov-file#eachsystem--system---system---attrs">documentation</a>
+  </p>
+  <h2>
+   The Alternative
+  </h2>
+  <p>
+   The <em>flake-utils</em> <a href="https://github.com/numtide/flake-utils?tab=readme-ov-file#eachsystem--system---system---attrs">documentation</a>
 mentions a type signature for <code>eachSystem</code>:
-   </p>
-   <pre class="text"><code>eachSystem :: [&lt;system&gt;] -&gt; (&lt;system&gt; -&gt; attrs)</code></pre>
-   <p>
-    We can look up the type signature for <code>genAttrs</code> in the
+  </p>
+  <pre class="text"><code>eachSystem :: [&lt;system&gt;] -&gt; (&lt;system&gt; -&gt; attrs)</code></pre>
+  <p>
+   We can look up the type signature for <code>genAttrs</code> in the
 Nix repl:
-   </p>
-   <pre class="console"><code>nix-repl&gt;:doc lib.genAttrs
+  </p>
+  <pre class="console"><code>nix-repl&gt;:doc lib.genAttrs
 ...
 Type
 
@@ -393,23 +407,23 @@ Examples
       | =&gt; { foo = "x_foo"; bar = "x_bar"; }
 
     :::</code></pre>
-   <p>
-    It looks quite similar, actually identical. The <em>flake-utils</em>
+  <p>
+   It looks quite similar, actually identical. The <em>flake-utils</em>
 documentation just omits the return type of the function. So If we pass
 a list of system strings to <code>genAttrs</code> and have the callback
 produce an attribute set, we get this:
-   </p>
-   <pre class="console"><code>nix-repl&gt;:p lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (system: { packageA = "..."; })
+  </p>
+  <pre class="console"><code>nix-repl&gt;:p lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (system: { packageA = "..."; })
 {
   aarch64-linux = { hello = "..."; };
   x86_64-linux = { hello = "..."; };
 }</code></pre>
-   <p>
-    This output structure is quite close to what the Flake schema
+  <p>
+   This output structure is quite close to what the Flake schema
 expects. Let’s rewrite our Flake using <code>genAttrs</code>:
-   </p>
-   <div class="sourceCode" id="cb12">
-    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
+  </p>
+  <div class="sourceCode" id="cb12">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flake.nix</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">inputs</span>.<span class="va">nixpkgs</span>.<span class="va">url</span> <span class="op">=</span> <span class="st">"github:NixOS/nixpkgs"</span><span class="op">;</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">outputs</span> <span class="op">=</span> <span class="op">{</span> <span class="va">self</span><span class="op">,</span> <span class="va">nixpkgs</span> <span class="op">}</span>:</span>
@@ -428,9 +442,9 @@ expects. Let’s rewrite our Flake using <code>genAttrs</code>:
 <span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">});</span></span>
 <span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
 <span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre>
-   </div>
-   <p>
-    We’ve eliminated a dependency with a simple helper! We still have
+  </div>
+  <p>
+   We’ve eliminated a dependency with a simple helper! We still have
 some repetition because <code>genAttrs</code> itself doesn’t restructure
 nested attributes (like <code>flake-utils</code>’
 <code>eachSystem</code> can), meaning we call
@@ -438,16 +452,16 @@ nested attributes (like <code>flake-utils</code>’
 again for <code>devShells</code>. This seems like a slight drawback, but
 this is a small price to pay to get rid of a dependency which itself is
 just used for a single functionality.
-   </p>
-   <p>
-    It’s also worth mentioning that the <em>nixpkgs</em> library exposes
+  </p>
+  <p>
+   It’s also worth mentioning that the <em>nixpkgs</em> library exposes
 a list of common systems relevant to Flakes, which you can use with
 <code>genAttrs</code> or your custom helpers:
 <code>lib.systems.flakeExposed</code>. That arguably introduces a bit of
 obscurity, but sometimes we have to or want to be pragmatic.
-   </p>
-   <div class="sourceCode" id="cb13">
-    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>nix<span class="op">-</span>repl&gt; lib.systems.flakeExposed</span>
+  </p>
+  <div class="sourceCode" id="cb13">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>nix<span class="op">-</span>repl&gt; lib.systems.flakeExposed</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="op">[</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"x86_64-linux"</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"aarch64-linux"</span></span>
@@ -460,46 +474,46 @@ obscurity, but sometimes we have to or want to be pragmatic.
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"riscv64-linux"</span></span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"x86_64-freebsd"</span></span>
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="op">]</span></span></code></pre>
-   </div>
-   <p>
-    With these two library members you can replicate
+  </div>
+  <p>
+   With these two library members you can replicate
 <code>eachDefaultSystem</code> if you depend on <em>nixpkgs</em> by
 defining:
-   </p>
-   <div class="sourceCode" id="cb14">
-    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>eachSupportedSystem = lib.genAttrs lib.systems.flakeExposed</span></code></pre>
-   </div>
-   <p>
-    without introducing another dependency.
-   </p>
-   <h2>
-    Conclusion
-   </h2>
-   <p>
-    Defining Flake outputs supporting multiple systems is an important
+  </p>
+  <div class="sourceCode" id="cb14">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>eachSupportedSystem = lib.genAttrs lib.systems.flakeExposed</span></code></pre>
+  </div>
+  <p>
+   without introducing another dependency.
+  </p>
+  <h2>
+   Conclusion
+  </h2>
+  <p>
+   Defining Flake outputs supporting multiple systems is an important
 and tedious task, since users can’t easily override the system. While
 <em>flake-utils</em> helps reduce repetition, it can also introduce
 obscurity and dependency issues, as we’ve seen.
-   </p>
-   <p>
-    <code>nixpkgs.lib.genAttrs</code> offers a more direct, built-in
+  </p>
+  <p>
+   <code>nixpkgs.lib.genAttrs</code> offers a more direct, built-in
 alternative. Using it with an explicit list of systems gives you clear
 control without an extra dependency. You avoid increasing the amount of
 evaluation dependencies for yourself and users, achieving the same goal
 of reducing repetition in your Flake outputs just as with
 <code>flake-utils</code>.
-   </p>
-   <p>
-    But this is just the beginning. By handling the per-system generation
+  </p>
+  <p>
+   But this is just the beginning. By handling the per-system generation
 ourselves with <code>lib.genAttrs</code>, we can now build more
 powerful, custom behaviors directly into our Flake logic. Stay tuned for
 a follow-up where we’ll explain how to extend this foundation to
 conveniently manage per-system <code>pkgs</code> instances and other
 advanced configurations - going beyond what simple per-system helpers
 typically offer.
-   </p>
-  </article>
- </div>
+  </p>
+ </article>
+</div>
 </div>
 </main>
 <div class="max-w-2xl m-auto">
@@ -507,17 +521,17 @@ typically offer.
 </div>
 <footer class="footer sm:footer-horizontal bg-base-100 max-w-2xl m-auto px-4 mb-4">
 <aside>
- <span class="footer-title text-2xl">
+<span class="footer-title text-2xl">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International" class="text-dark" style="text-decoration: none">
               
- <svg class="icon" viewbox="0 0 96 24">
-  
-                
-  <use href="/images/icons.svg#cc-by-nc-sa"></use>
-  
-              
- </svg>
+<svg class="icon" viewbox="0 0 96 24">
  
+                
+ <use href="/images/icons.svg#cc-by-nc-sa"></use>
+ 
+              
+</svg>
+
             
 </a>
 
@@ -538,10 +552,10 @@ Code:
 <a href="https://git.sr.ht/~marijan/">
               
 <svg class="icon" viewbox="0 0 24 24">
- 
+
                 
- <use href="/images/icons.svg#sourcehut"></use>
- 
+<use href="/images/icons.svg#sourcehut"></use>
+
               
 </svg>
 
@@ -554,6 +568,19 @@ Code:
 
                 
 <use href="/images/icons.svg#github"></use>
+
+              
+</svg>
+
+            
+</a>
+
+            <a href="https://gitlab.com/marijanpe">
+              
+<svg class="icon" viewbox="0 0 24 24">
+
+                
+<use href="/images/icons.svg#gitlab"></use>
 
               
 </svg>

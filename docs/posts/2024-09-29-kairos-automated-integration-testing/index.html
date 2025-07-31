@@ -68,86 +68,100 @@
        </a>
       </li>
       <li>
-       <label class="swap swap-rotate">
+       <a href="https://gitlab.com/marijanpe">
                       
-                      <input id="themeController" onclick="saveThemeState()" type="checkbox" class="theme-controller" value="nord">
-                      
-       <svg class="swap-on icon" viewbox="0 0 24 24">
+       <svg class="icon" viewbox="0 0 24 24">
         
                         
-        <use href="/images/icons.svg#moon"></use>
-        
-                      
-       </svg>
-       
-                      
-       <svg class="swap-off icon" viewbox="0 0 24 24">
-        
-                        
-        <use href="/images/icons.svg#sun"></use>
+        <use href="/images/icons.svg#gitlab"></use>
         
                       
        </svg>
        
                     
-      </label>
+      </a>
      </li>
-    </ul>
-   </div>
+     <li>
+      <label class="swap swap-rotate">
+                      
+                      <input id="themeController" onclick="saveThemeState()" type="checkbox" class="theme-controller" value="nord">
+                      
+      <svg class="swap-on icon" viewbox="0 0 24 24">
+       
+                        
+       <use href="/images/icons.svg#moon"></use>
+       
+                      
+      </svg>
+      
+                      
+      <svg class="swap-off icon" viewbox="0 0 24 24">
+       
+                        
+       <use href="/images/icons.svg#sun"></use>
+       
+                      
+      </svg>
+      
+                    
+     </label>
+    </li>
+   </ul>
   </div>
- </nav>
+ </div>
+</nav>
 </div>
 </header>
 <main>
 <div class="max-w-prose m-auto">
- <div id="content" class="pt-4 px-4 md:px-0">
-  <article class="prose">
-   <h1 id="title">
-    Kairos: Automated Integration Testing
-   </h1>
-   <p></p>
-   <address>
-    By <a rel="author">Marijan</a>
-   </address>
-   on <time id="post-date" datetime="2024-09-29">2024-09-29</time>
-   <p></p>
-   <blockquote>
-    <p>
-     <strong>Note:</strong> Originally published on <a href="https://medium.com/casperblockchain/kairos-automated-integration-testing-71e2398f340d">Medium</a>
-for Casper Association R&amp;D
-    </p>
-   </blockquote>
-   <h2>
-    Foundations
-   </h2>
+<div id="content" class="pt-4 px-4 md:px-0">
+ <article class="prose">
+  <h1 id="title">
+   Kairos: Automated Integration Testing
+  </h1>
+  <p></p>
+  <address>
+   By <a rel="author">Marijan</a>
+  </address>
+  on <time id="post-date" datetime="2024-09-29">2024-09-29</time>
+  <p></p>
+  <blockquote>
    <p>
-    According to <a href="https://www.istqb.org/">ISTQB’s</a> <a href="https://books.google.de/books/about/Foundations_of_Software_Testing.html?id=h6h2AQAACAAJ">Foundations
+    <strong>Note:</strong> Originally published on <a href="https://medium.com/casperblockchain/kairos-automated-integration-testing-71e2398f340d">Medium</a>
+for Casper Association R&amp;D
+   </p>
+  </blockquote>
+  <h2>
+   Foundations
+  </h2>
+  <p>
+   According to <a href="https://www.istqb.org/">ISTQB’s</a> <a href="https://books.google.de/books/about/Foundations_of_Software_Testing.html?id=h6h2AQAACAAJ">Foundations
 of Software Testing</a>, testing can be grouped into various levels:
 unit, integration, system, and acceptance testing. The primary goals of
 system testing are:
-   </p>
-   <ul>
-    <li>
-     To <strong>verify</strong> that the system performs end-to-end tasks
+  </p>
+  <ul>
+   <li>
+    To <strong>verify</strong> that the system performs end-to-end tasks
 as specified by the requirements.
-    </li>
-    <li>
-     To <strong>validate</strong> that the delivered system meets users’
+   </li>
+   <li>
+    To <strong>validate</strong> that the delivered system meets users’
 needs and expectations in its operational environment.
-    </li>
-    <li>
-     To <strong>identify</strong> defects and <strong>prevent</strong>
+   </li>
+   <li>
+    To <strong>identify</strong> defects and <strong>prevent</strong>
 them from escaping to production.
-    </li>
-   </ul>
-   <p>
-    To achieve these goals, system testing should cover the end-to-end
+   </li>
+  </ul>
+  <p>
+   To achieve these goals, system testing should cover the end-to-end
 behavior of functional aspects of the system. In the case of <a href="https://github.com/cspr-rad/kairos">Kairos</a>, our <a href="https://ethereum.org/en/developers/docs/scaling/validium/">zero-knowledge
 validium</a>, this includes the deposit, transfer, withdrawal of funds,
 and querying the data availability layer.
-   </p>
-   <p>
-    A crucial requirement for system tests is that the test environment
+  </p>
+  <p>
+   A crucial requirement for system tests is that the test environment
 should closely mirror the final production environment to detect
 environment-related defects during testing. This means that we need to
 be able to create controlled test environments with consistent system
@@ -158,9 +172,9 @@ of the software. Additionally, having automated system-level tests that
 can run in a continuous integration (CI) pipeline also serve as
 regression tests, detecting changes that might break existing system
 functionality as early as possible.
-   </p>
-   <p>
-    In practice, unit and integration testing are typically performed by
+  </p>
+  <p>
+   In practice, unit and integration testing are typically performed by
 the development team, while system testing is often handled by
 specialist testers, either internal or external to the organization.
 This separation has advantages, as developers may have a biased view of
@@ -175,9 +189,9 @@ implementing. To reduce feedback time, it is desirable to have automated
 system tests that closely replicate the production environment and can
 be integrated into a CI pipeline. This is why we decided to leverage
 NixOS tests.
-   </p>
-   <p>
-    <a href="https://nix.dev/tutorials/nixos/integration-testing-using-virtual-machines.html#introduction">NixOS
+  </p>
+  <p>
+   <a href="https://nix.dev/tutorials/nixos/integration-testing-using-virtual-machines.html#introduction">NixOS
 tests</a> offer a powerful solution for achieving automated, controlled,
 reproducible test environments. <a href="https://nixos.org/">NixOS</a>
 is a Linux distribution that allows us to define an entire system’s
@@ -196,13 +210,13 @@ debugging. Towards the end of this blog post, we will demonstrate how to
 initiate such an interactive test session. To get a better idea how such
 a NixOS test looks like, let’s take a look at the end-to-end test we
 defined for Kairos and go through the relevant snippets.
-   </p>
-   <hr>
-   <h2>
-    NixOS Test Walkthrough
-   </h2>
-   <p>
-    As mentioned previously, the <code>nixosTest</code> function allows
+  </p>
+  <hr>
+  <h2>
+   NixOS Test Walkthrough
+  </h2>
+  <p>
+   As mentioned previously, the <code>nixosTest</code> function allows
 us to declare one or more NixOS configurations, which will be
 instantiated and started as VMs in our test. In this case, we define
 both a server and a client node. For the server node, we leverage Nix
@@ -212,33 +226,33 @@ application. This function takes a single parameter to set the hostname
 to “kairos”, allowing us to refer to the server as <code>kairos</code>
 later in the test script. We then make some test-specific modifications
 to that production configuration to adjust it for testing:
-   </p>
-   <ul>
-    <li>
-     We disable HTTPS for convenience, to avoid issuing SSL certificates
+  </p>
+  <ul>
+   <li>
+    We disable HTTPS for convenience, to avoid issuing SSL certificates
 in the test environment.
-    </li>
-    <li>
-     We add and enable the cctl NixOS module, which starts a one-shot
+   </li>
+   <li>
+    We add and enable the cctl NixOS module, which starts a one-shot
 systemd service that initiates a new network of Casper nodes and deploys
 the defined smart contract once the genesis has passed.
-    </li>
-    <li>
-     We configure Kairos to connect to one of the nodes spun up by cctl,
+   </li>
+   <li>
+    We configure Kairos to connect to one of the nodes spun up by cctl,
 and we modify the systemd service to start after the cctl service and to
 use the contract hash that we receive after the smart contract is
 deployed. This step is fortunately only required for testing; in
 production, we would simply set the contract hash to the appropriate
 value once the deployment is complete.
-    </li>
-   </ul>
-   <p>
-    On the client node, we install the <code>kairos-cli</code> and
+   </li>
+  </ul>
+  <p>
+   On the client node, we install the <code>kairos-cli</code> and
 <code>wget</code>, which is required to download the test wallets
 generated by <code>cctl</code>.
-   </p>
-   <div class="sourceCode" id="cb1">
-    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>nixosTest <span class="op">{</span></span>
+  </p>
+  <div class="sourceCode" id="cb1">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>nixosTest <span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">nodes</span> = {</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">server</span> = { <span class="va">config</span><span class="op">,</span> <span class="va">lib</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>: <span class="op">{</span></span>
@@ -289,43 +303,43 @@ generated by <code>cctl</code>.
 <span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>;</span>
 <span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>...</span>
 <span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
-   </div>
-   <p>
-    Now that we have defined the participants in the test, we need to
+  </div>
+  <p>
+   Now that we have defined the participants in the test, we need to
 define the test script that will be executed. The script is written in
 Python, a language that is widely accessible and understood by almost
 anyone, and provides many useful packages that we can leverage in our
 tests, such as <code>json</code> and <code>backoff</code>.
-   </p>
-   <p>
-    We define three utility functions that will be used later in the
+  </p>
+  <p>
+   We define three utility functions that will be used later in the
 script: one to wait for a deployment to be successfully completed on the
 L1 (i.e., the Casper network), and another to wait for a transaction to
 be submitted to the L2 (i.e., Kairos).
-   </p>
-   <p>
-    The test script begins with some synchronization instructions. The
+  </p>
+  <p>
+   The test script begins with some synchronization instructions. The
 NixOS test driver makes the previously defined nodes available as
 variables that we can use to perform synchronization or execute commands
 on the command line. The list of available methods can be found here. We
 wait for the server’s systemd services - cctl, kairos, and nginx-to
 start. For the client, we simply wait for the multi-user target to be
 reached.
-   </p>
-   <p>
-    Next, we copy the cctl-generated test wallets to the client machine
+  </p>
+  <p>
+   Next, we copy the cctl-generated test wallets to the client machine
 so that we can use the respective secret keys when invoking the
 kairos-cli.
-   </p>
-   <p>
-    Now, the actual test definition begins. We test deposit, transfer,
+  </p>
+  <p>
+   Now, the actual test definition begins. We test deposit, transfer,
 withdraw, and we query the data availability layer, simulating how a
 user would interact with the system in the real world, on a completely
 separate machine over a network (NixOS tests run in an isolated
 environment with a virtual network).
-   </p>
-   <div class="sourceCode" id="cb2">
-    <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>...</span>
+  </p>
+  <div class="sourceCode" id="cb2">
+   <pre class="sourceCode nix"><code class="sourceCode nix"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>...</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>extraPythonPackages = <span class="va">p</span><span class="op">:</span> <span class="op">[</span> p.backoff <span class="op">]</span>;</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>testScript = <span class="op">{</span> <span class="va">nodes</span> <span class="op">}</span>:</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span></span>
@@ -411,58 +425,58 @@ environment with a virtual network).
 <span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="st">    wait_for_transaction(withdrawer, "withdrawal", withdrawal_amount)</span></span>
 <span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="st">  ''</span>;</span>
 <span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>...</span></code></pre>
-   </div>
-   <p>
-    The complete test definition in package-normal-form can be found
+  </div>
+  <p>
+   The complete test definition in package-normal-form can be found
 here: <a href="https://github.com/cspr-rad/kairos/blob/0.1.0/nixos/tests/end-to-end.nix">https://github.com/cspr-rad/kairos/blob/0.1.0/nixos/tests/end-to-end.nix</a>
-   </p>
-   <p>
-    To run our Kairos end-to-end test you can execute the following
+  </p>
+  <p>
+   To run our Kairos end-to-end test you can execute the following
 command after installing Nix:
-   </p>
-   <pre class="console"><code>$ nix build github:cspr-rad/kairos#kairos#checks.x86_64-linux.kairos-end-to-end-test -L</code></pre>
-   <p>
-    An interactive session that allows you to log into the server and
+  </p>
+  <pre class="console"><code>$ nix build github:cspr-rad/kairos#kairos#checks.x86_64-linux.kairos-end-to-end-test -L</code></pre>
+  <p>
+   An interactive session that allows you to log into the server and
 client can be started by running:
-   </p>
-   <pre class="console"><code>$ nix build github:cspr-rad/kairos#kairos#checks.x86_64-linux.kairos-end-to-end-test.driverInteractive</code></pre>
-   <p>
-    The interactive test driver will be symlinked to
+  </p>
+  <pre class="console"><code>$ nix build github:cspr-rad/kairos#kairos#checks.x86_64-linux.kairos-end-to-end-test.driverInteractive</code></pre>
+  <p>
+   The interactive test driver will be symlinked to
 <code>result/bin/nixos-test-driver</code>. You can execute this binary,
 and once you are dropped into an Emacs session, you can run
 <code>start_all()</code> to start all the nodes. You can then log into
 the machines as root with an empty password. For more sophisticated
 usage, please refer to the blog posts linked at the end of this post and
 the NixOS manual.
-   </p>
-   <hr>
-   <p>
-    This is by no means everything that NixOS tests can do. In the
+  </p>
+  <hr>
+  <p>
+   This is by no means everything that NixOS tests can do. In the
 <code>nixpkgs</code> package set, you can find tests for multiplayer
 games, BitTorrent, desktop environments, and more. To learn more about
 NixOS tests, I recommend reading the following resources:
-   </p>
-   <ul>
-    <li>
-     <a href="https://nixcademy.com/posts/nixos-integration-tests/">https://nixcademy.com/posts/nixos-integration-tests/</a>
-    </li>
-    <li>
-     <a href="https://nixcademy.com/posts/nixos-integration-tests/">https://nixcademy.com/posts/nixos-integration-tests-part-2/</a>
-    </li>
-    <li>
-     <a href="https://nix.dev/tutorials/nixos/integration-testing-using-virtual-machines.html">https://nix.dev/tutorials/nixos/integration-testing-using-virtual-machines.html</a>
-    </li>
-   </ul>
-   <p>
-    To run NixOS tests on MacOS, please refer to:
-   </p>
-   <ul>
-    <li>
-     <a href="https://nixcademy.com/posts/running-nixos-integration-tests-on-macos/">https://nixcademy.com/posts/running-nixos-integration-tests-on-macos/</a>
-    </li>
-   </ul>
-  </article>
- </div>
+  </p>
+  <ul>
+   <li>
+    <a href="https://nixcademy.com/posts/nixos-integration-tests/">https://nixcademy.com/posts/nixos-integration-tests/</a>
+   </li>
+   <li>
+    <a href="https://nixcademy.com/posts/nixos-integration-tests/">https://nixcademy.com/posts/nixos-integration-tests-part-2/</a>
+   </li>
+   <li>
+    <a href="https://nix.dev/tutorials/nixos/integration-testing-using-virtual-machines.html">https://nix.dev/tutorials/nixos/integration-testing-using-virtual-machines.html</a>
+   </li>
+  </ul>
+  <p>
+   To run NixOS tests on MacOS, please refer to:
+  </p>
+  <ul>
+   <li>
+    <a href="https://nixcademy.com/posts/running-nixos-integration-tests-on-macos/">https://nixcademy.com/posts/running-nixos-integration-tests-on-macos/</a>
+   </li>
+  </ul>
+ </article>
+</div>
 </div>
 </main>
 <div class="max-w-2xl m-auto">
@@ -470,17 +484,17 @@ NixOS tests, I recommend reading the following resources:
 </div>
 <footer class="footer sm:footer-horizontal bg-base-100 max-w-2xl m-auto px-4 mb-4">
 <aside>
- <span class="footer-title text-2xl">
+<span class="footer-title text-2xl">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International" class="text-dark" style="text-decoration: none">
               
- <svg class="icon" viewbox="0 0 96 24">
-  
-                
-  <use href="/images/icons.svg#cc-by-nc-sa"></use>
-  
-              
- </svg>
+<svg class="icon" viewbox="0 0 96 24">
  
+                
+ <use href="/images/icons.svg#cc-by-nc-sa"></use>
+ 
+              
+</svg>
+
             
 </a>
 
@@ -501,10 +515,10 @@ Code:
 <a href="https://git.sr.ht/~marijan/">
               
 <svg class="icon" viewbox="0 0 24 24">
- 
+
                 
- <use href="/images/icons.svg#sourcehut"></use>
- 
+<use href="/images/icons.svg#sourcehut"></use>
+
               
 </svg>
 
@@ -517,6 +531,19 @@ Code:
 
                 
 <use href="/images/icons.svg#github"></use>
+
+              
+</svg>
+
+            
+</a>
+
+            <a href="https://gitlab.com/marijanpe">
+              
+<svg class="icon" viewbox="0 0 24 24">
+
+                
+<use href="/images/icons.svg#gitlab"></use>
 
               
 </svg>
