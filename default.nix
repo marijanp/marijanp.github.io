@@ -4,6 +4,7 @@
 , pandoc
 , nodejs
 , npmlock2nix
+, minify
 , lib
 ,
 }:
@@ -28,6 +29,7 @@ runCommand "dist"
     soupault
     tailwindcss_4
     pandoc
+    minify
   ];
   inherit NODE_PATH;
 }
@@ -55,6 +57,6 @@ runCommand "dist"
     echo '$highlighting-css$' > "$tmp"
     echo '`test`{.c}' | pandoc --highlight-style=zenburn --template="$tmp" > build/css/syntax.css
 
-    mkdir -p $out
-    cp -r build/* $out/
+    echo "Minifying ..."
+    minify --recursive --sync --output $out/ build/
   ''
