@@ -1,9 +1,1 @@
-document.addEventListener('DOMContentLoaded', () => {
-  var checked = JSON.parse(localStorage.getItem('themeState'));
-  document.getElementById("themeController").checked = checked;
-});
-
-function saveThemeState(){
-  var checkbox = document.getElementById('themeController');
-  localStorage.setItem('themeState', checkbox.checked);
-}
+document.addEventListener("DOMContentLoaded",()=>{var e=document.getElementById("themeController");e.checked=JSON.parse(localStorage.getItem("themeState")),e.addEventListener("change",()=>{localStorage.setItem("themeState",e.checked)})})
