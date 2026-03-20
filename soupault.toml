@@ -139,7 +139,6 @@ widget = "extract-canonical"
           </td>
           <td>
             {{e.date}}
-          </td>
             {% if e.tags %}
             <div class="post-tags">
               <strong>Tags: </strong>
