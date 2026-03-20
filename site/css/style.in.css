@@ -10,6 +10,6 @@
   overflow: scroll !important;
 }
 .icon {
-  height: 1em;
-  fill: currentColor;
+  height: 1.25em;
+  width: auto;
 }
